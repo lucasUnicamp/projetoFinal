@@ -14,8 +14,8 @@ public class PacMan {
     private int posicaoX;
     private int posicaoY;
     private int velocidade;
-    private int estadoBoca;
-    private int contadorSprite;
+    private int estadoBoca; // boca aberta ou fechada
+    private int contadorSprite; // usado para saber quando mudar o sprite (animação)
     private BufferedImage cima, baixo, esquerda, direita, repouso;
     private String direcao;
 
@@ -36,6 +36,7 @@ public class PacMan {
         this.leitor = leitor;
     }
 
+    // atualiza o estado do pac-man dependo do input do usuário
     public void atualizar() {
         if(leitor.cimaPressionado) {
             direcao = "cima";  
@@ -53,7 +54,7 @@ public class PacMan {
             direcao = "baixo";
         }
 
-        switch (direcao) {
+        switch (direcao) { // pac-man move continuamente para a direção que está apontando
             case "cima":
                 if((getY() - painelJogo.getTamanhoTile()/2) > velocidade)
                     setY(getY() - getVelocidade());
@@ -85,7 +86,7 @@ public class PacMan {
 
         contadorSprite++;
 
-        if(contadorSprite > 10) {
+        if(contadorSprite > 10) { // muda o sprite após um certo número de quadros
             contadorSprite = 0;
             if(estadoBoca == 1)
                 estadoBoca = 0;
@@ -94,6 +95,7 @@ public class PacMan {
         }
     }
 
+    // instruções para desenhar o pac-man na tela
     public void desenhar(Graphics2D caneta) {
         BufferedImage imagem = null;
 
@@ -121,6 +123,7 @@ public class PacMan {
         caneta.drawImage(imagem, getX()  - (painelJogo.getTamanhoTile())/2, getY() - (painelJogo.getTamanhoTile())/2, painelJogo.getTamanhoTile(), painelJogo.getTamanhoTile(), null);
     }
 
+    // importa os sprites
     public void getImagem() {
         try {
             // Substituir por sprites com transparência

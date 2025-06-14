@@ -10,20 +10,20 @@ import javax.swing.JPanel;
 import Modelo.PacMan;
 
 public class PainelJogo extends JPanel implements Runnable {
-    private final int tamanhoPadraoTile = 16;
-    private final int escala = 2;
+    private final int tamanhoPadraoTile = 16; // tamanho em pixels do tile original
+    private final int escala = 2; // taxa de escalonamento do sprite na tela
 
-    private final int tamanhoTile = tamanhoPadraoTile * escala;
-    private final int numeroColunas = 40;
-    private final int numeroLinhas = 20;
-    private final int larguraTela = tamanhoTile * numeroColunas;
-    private final int alturaTela = tamanhoTile * numeroLinhas;
+    private final int tamanhoTile = tamanhoPadraoTile * escala; // tamanho em pixel de cada lado do tile
+    private final int numeroColunas = 40; // numero de linhas de tiles
+    private final int numeroLinhas = 20; // numero de colunas de tiles
+    private final int larguraTela = tamanhoTile * numeroColunas; // largura em pixels do painel
+    private final int alturaTela = tamanhoTile * numeroLinhas; // altura em pixels do painel
 
     int FPS = 60;
 
     PacMan pacman;
 
-    LeitorTeclado leitor = new LeitorTeclado();
+    LeitorTeclado leitor = new LeitorTeclado(); // listener do teclado
 
     Thread gameThread;
 
@@ -64,7 +64,7 @@ public class PainelJogo extends JPanel implements Runnable {
                 numeroDesenhos++;
             }
 
-            if(timer >= 1000000000) {
+            if(timer >= 1000000000) { // quantas atualizações de estado foram feitas no último segundo
                 System.out.printf("FPS: %d\n", numeroDesenhos);
                 numeroDesenhos = 0;
                 timer = 0;
@@ -72,10 +72,12 @@ public class PainelJogo extends JPanel implements Runnable {
         }
     }
 
+    // atualiza estado de todos os objetos
     public void atualizar() {
         pacman.atualizar();
     }
 
+    // desenha tudo na tela
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
