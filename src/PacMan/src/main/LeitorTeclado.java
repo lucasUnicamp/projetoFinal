@@ -16,20 +16,36 @@ public class LeitorTeclado implements KeyListener{
     public void keyPressed(KeyEvent e) {
         int codigo = e.getKeyCode();
 
-        if (codigo == KeyEvent.VK_W) {
+        if (!cimaPressionado && codigo == KeyEvent.VK_W) {
             cimaPressionado = true;
+            esquerdaPressionado = false;
+            direitaPressionado = false;
+            baixoPressionado = false;
+            System.out.println("1");
         }
 
-        if (codigo == KeyEvent.VK_A) {
+        if (!esquerdaPressionado && codigo == KeyEvent.VK_A) {
+            cimaPressionado = false;
             esquerdaPressionado = true;
+            direitaPressionado = false;
+            baixoPressionado = false;
+            System.out.println("2");
         }
 
-        if (codigo == KeyEvent.VK_S) {
+        if (!baixoPressionado && codigo == KeyEvent.VK_S) {
+            cimaPressionado = false;
+            esquerdaPressionado = false;
+            direitaPressionado = false;
             baixoPressionado = true;
+            System.out.println("3");
         }
 
-        if (codigo == KeyEvent.VK_D) {
+        if (!direitaPressionado && codigo == KeyEvent.VK_D) {
+            cimaPressionado = false;
+            esquerdaPressionado = false;
             direitaPressionado = true;
+            baixoPressionado = false;
+            System.out.println("4");
         }
     }
 

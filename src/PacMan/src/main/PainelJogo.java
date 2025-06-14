@@ -9,15 +9,15 @@ import javax.swing.JPanel;
 
 import Modelo.PacMan;
 
-public class PainelJogo extends JPanel implements Runnable{
-    final int tamanhoPadraoTile = 16;
-    final int escala = 2;
+public class PainelJogo extends JPanel implements Runnable {
+    private final int tamanhoPadraoTile = 16;
+    private final int escala = 2;
 
-    final int tamanhoTile = tamanhoPadraoTile * escala;
-    final int numeroColunas = 20;
-    final int numeroLinhas = 10;
-    final int larguraTela = tamanhoTile * numeroColunas;
-    final int alturaTela = tamanhoTile * numeroLinhas;
+    private final int tamanhoTile = tamanhoPadraoTile * escala;
+    private final int numeroColunas = 40;
+    private final int numeroLinhas = 20;
+    private final int larguraTela = tamanhoTile * numeroColunas;
+    private final int alturaTela = tamanhoTile * numeroLinhas;
 
     int FPS = 60;
 
@@ -29,11 +29,11 @@ public class PainelJogo extends JPanel implements Runnable{
 
     public PainelJogo() {
         setPreferredSize(new Dimension(larguraTela, alturaTela));
-        setBackground(Color.RED);
+        setBackground(Color.BLACK);
         setDoubleBuffered(true);
         addKeyListener(leitor);
         setFocusable(true);
-        pacman = new PacMan();
+        pacman = new PacMan(this, leitor);
     }
 
     public void comecarThread() {
@@ -42,7 +42,7 @@ public class PainelJogo extends JPanel implements Runnable{
     }
 
     public void run() {
-        double intervaloDesenho = 1000000000/FPS; // tempo em nano segundos entre cada atualização
+        double intervaloDesenho = 1000000000 / FPS; // tempo em nano segundos entre cada atualização
         double delta = 0;
         long ultimoTempo = System.nanoTime();
         long tempoAtual;
@@ -73,21 +73,7 @@ public class PainelJogo extends JPanel implements Runnable{
     }
 
     public void atualizar() {
-        if(leitor.cimaPressionado) {
-            pacman.setY(pacman.getY() - pacman.getVelocidade());
-        }
-
-        if(leitor.direitaPressionado) {
-            pacman.setX(pacman.getX() + pacman.getVelocidade());
-        }
-
-        if(leitor.esquerdaPressionado) {
-            pacman.setX(pacman.getX() - pacman.getVelocidade());
-        }
-
-        if(leitor.baixoPressionado) {
-            pacman.setY(pacman.getY() + pacman.getVelocidade());
-        }
+        pacman.atualizar();
     }
 
     @Override
@@ -98,8 +84,25 @@ public class PainelJogo extends JPanel implements Runnable{
 
         caneta.setColor(Color.WHITE);
 
-        caneta.fillRect(pacman.getX(), pacman.getY(), tamanhoTile, tamanhoTile);
+        pacman.desenhar(caneta);
 
         caneta.dispose();
     }
+
+    public int getTamanhoTile() {
+        return tamanhoTile;
+    }
+
+    public int getEscala() {
+        return escala;
+    }
+
+    public int getAltura() {
+        return alturaTela;
+    }
+
+    public int getLargura() {
+        return larguraTela;
+    }
+
 }
