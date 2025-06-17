@@ -4,24 +4,50 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.List;
 
 import javax.swing.JPanel;
 
-import Modelo.PacMan;
+import modelo.PacMan;
+import modelo.Comida;
+import modelo.Parede;
 
 public class PainelJogo extends JPanel implements Runnable {
     private final int tamanhoPadraoTile = 16; // tamanho em pixels do tile original
     private final int escala = 2; // taxa de escalonamento do sprite na tela
 
     private final int tamanhoTile = tamanhoPadraoTile * escala; // tamanho em pixel de cada lado do tile
-    private final int numeroColunas = 40; // numero de linhas de tiles
+    private final int numeroColunas = 20; // numero de linhas de tiles
     private final int numeroLinhas = 20; // numero de colunas de tiles
     private final int larguraTela = tamanhoTile * numeroColunas; // largura em pixels do painel
     private final int alturaTela = tamanhoTile * numeroLinhas; // altura em pixels do painel
-
+    
+    private String[] mapa = {
+        "pppppppppppppppppppppppppppppppppppppppp",
+        "pccccccppppppppppppppppppppppppppccccccp",
+        "pcppppcppppppppppppppppppppppppppcppppcp",
+        "pcppppcppppppppppppppppppppppppppcppppcp",
+        "pcppppcppppppppppppppppppppppppppcppppcp",
+        "pccccccccccccccccccccccccccccccccccccccp",
+        "pcppppcppppppppppppppppppppppppppppppppp",
+        "pccccccppppppppppppppppppppppppppppppppp",
+        "pcpppppppppppppppppppppppppppppppppppppp",
+        "pcpppppppppppppppppppppppppppppppppppppp",
+        "pcpppppppppppppppppppppppppppppppppppppp",
+        "pcpppppppppppppppppppppppppppppppppppppp",
+        "pcpppppppppppppppppppppppppppppppppppppp",
+        "pcpppppppppppppppppppppppppppppppppppppp",
+        "pcpppppppppppppppppppppppppppppppppppppp",
+        "pcpppppppppppppppppppppppppppppppppppppp",
+        "pcpppppppppppppppppppppppppppppppppppppp",
+        "pcpppppppppppppppppppppppppppppppppppppp",
+        "pccppppppppppppppppppppppppppppppppppppp",
+        "pppppppppppppppppppppppppppppppppppppppp",     
+    };
     int FPS = 60;
-
     PacMan pacman;
+    Comida comida;
+    Parede parede;
 
     LeitorTeclado leitor = new LeitorTeclado(); // listener do teclado
 
@@ -34,6 +60,8 @@ public class PainelJogo extends JPanel implements Runnable {
         addKeyListener(leitor);
         setFocusable(true);
         pacman = new PacMan(this, leitor);
+        comida = new Comida(50, 50);
+        parede = new Parede(this, 25, 25);
     }
 
     public void comecarThread() {
@@ -49,28 +77,41 @@ public class PainelJogo extends JPanel implements Runnable {
         long timer = 0;
         int numeroDesenhos = 0;
 
-        while(gameThread != null) { // loop principal do jogo
+        while (gameThread != null) { // loop principal do jogo
 
             tempoAtual = System.nanoTime();
 
             delta += (tempoAtual - ultimoTempo) / intervaloDesenho;
-            timer += (tempoAtual - ultimoTempo);
             ultimoTempo = tempoAtual;
 
-            if(delta >= 1) { // ações que vão acontecer a cada tick
+            if (delta >= 1) { // ações que vão acontecer a cada tick
                 atualizar();
                 repaint();
                 delta --;
                 numeroDesenhos++;
             }
+        }
+    }
+    
+    public String[] carregarMapa(){
+        return this.mapa;
+    }
 
-            if(timer >= 1000000000) { // quantas atualizações de estado foram feitas no último segundo
-                System.out.printf("FPS: %d\n", numeroDesenhos);
-                numeroDesenhos = 0;
-                timer = 0;
+    public void criar_mapa(){
+        int i, j;
+
+        for (i = 0; i < 20; i++){
+            for (j = 0; j < 40; j++){
+                if (mapa[i].charAt(j) == 'p'){ //parede
+                    
+                }
+                else if (mapa[i].charAt(j) == 'c'){ //parede
+
+                }
             }
         }
     }
+    
 
     // atualiza estado de todos os objetos
     public void atualizar() {
@@ -84,11 +125,15 @@ public class PainelJogo extends JPanel implements Runnable {
 
         Graphics2D caneta = (Graphics2D) g;
 
-        caneta.setColor(Color.WHITE);
-
+        comida.desenhar(caneta);
         pacman.desenhar(caneta);
+        parede.desenhar(caneta);
 
         caneta.dispose();
+    }
+
+    public String[] getMapa() {
+        return mapa;
     }
 
     public int getTamanhoTile() {

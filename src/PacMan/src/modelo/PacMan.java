@@ -1,9 +1,10 @@
-package Modelo;
+package modelo;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 
 import javax.imageio.ImageIO;
 
@@ -22,8 +23,6 @@ public class PacMan {
     private PainelJogo painelJogo;
     private LeitorTeclado leitor;
 
-    
-
     public PacMan(PainelJogo painelJogo, LeitorTeclado leitor) {
         setX(painelJogo.getTamanhoTile());   
         setY(painelJogo.getTamanhoTile());
@@ -38,46 +37,45 @@ public class PacMan {
 
     // atualiza o estado do pac-man dependo do input do usuário
     public void atualizar() {
-        if(leitor.cimaPressionado) {
+        if (leitor.cimaPressionado) {
             direcao = "cima";  
         }
-
-        else if(leitor.direitaPressionado) {
+        else if (leitor.direitaPressionado) {
             direcao = "direita";
         }
 
-        else if(leitor.esquerdaPressionado) {
+        else if (leitor.esquerdaPressionado) {
             direcao = "esquerda";
         }
 
-        else if(leitor.baixoPressionado) {
+        else if (leitor.baixoPressionado) {
             direcao = "baixo";
         }
 
         switch (direcao) { // pac-man move continuamente para a direção que está apontando
             case "cima":
-                if((getY() - painelJogo.getTamanhoTile()/2) > velocidade)
+                if ((getY() - painelJogo.getTamanhoTile()/2) > velocidade)
                     setY(getY() - getVelocidade());
                 else
                     setY(painelJogo.getTamanhoTile()/2);
                 break;
 
             case "baixo":
-                if((getY() + painelJogo.getTamanhoTile()/2) < (painelJogo.getAltura() - velocidade))
+                if ((getY() + painelJogo.getTamanhoTile()/2) < (painelJogo.getAltura() - velocidade))
                     setY(getY() + getVelocidade());
                 else 
                     setY(painelJogo.getAltura() - painelJogo.getTamanhoTile() / 2);
                 break;
 
             case "esquerda":
-                if((getX() - painelJogo.getTamanhoTile()/2) > velocidade)
+                if ((getX() - painelJogo.getTamanhoTile()/2) > velocidade)
                     setX(getX() - getVelocidade());
                 else
                     setX(painelJogo.getTamanhoTile()/2);
                 break;
 
             case "direita":
-                if((getX() + painelJogo.getTamanhoTile()/2) < (painelJogo.getLargura() - velocidade))
+                if ((getX() + painelJogo.getTamanhoTile()/2) < (painelJogo.getLargura() - velocidade))
                     setX(getX() + getVelocidade());
                 else
                     setX(painelJogo.getLargura() - painelJogo.getTamanhoTile()/2);
@@ -86,9 +84,9 @@ public class PacMan {
 
         contadorSprite++;
 
-        if(contadorSprite > 10) { // muda o sprite após um certo número de quadros
+        if (contadorSprite > 10) { // muda o sprite após um certo número de quadros
             contadorSprite = 0;
-            if(estadoBoca == 1)
+            if (estadoBoca == 1)
                 estadoBoca = 0;
             else 
                 estadoBoca = 1;
@@ -99,7 +97,7 @@ public class PacMan {
     public void desenhar(Graphics2D caneta) {
         BufferedImage imagem = null;
 
-        if(estadoBoca == 0) {
+        if (estadoBoca == 0) {
             imagem = repouso;
         } else {
             switch (direcao) {
@@ -127,11 +125,11 @@ public class PacMan {
     public void getImagem() {
         try {
             // Substituir por sprites com transparência
-            cima = ImageIO.read(new File("resources\\Pac_Man_sprite_cima.png")); 
-            baixo = ImageIO.read(new File("resources\\Pac_Man_sprite_baixo.png"));
-            direita = ImageIO.read(new File("resources\\Pac_Man_sprite_direita.png"));
-            esquerda = ImageIO.read(new File("resources\\Pac_Man_sprite_esquerda.png"));
-            repouso = ImageIO.read(new File("resources\\Pac_Man_sprite_boca_fechada.png"));
+            cima = ImageIO.read(new File(Paths.get("resources", "Pac_Man_sprite_cima.png").toString())); 
+            baixo = ImageIO.read(new File(Paths.get("resources", "Pac_Man_sprite_baixo.png").toString()));
+            direita = ImageIO.read(new File(Paths.get("resources", "Pac_Man_sprite_direita.png").toString()));
+            esquerda = ImageIO.read(new File(Paths.get("resources", "Pac_Man_sprite_esquerda.png").toString()));
+            repouso = ImageIO.read(new File(Paths.get("resources", "Pac_Man_sprite_boca_fechada.png").toString()));
 
         } catch (IOException e) {
             System.err.println("Não foi possível carregar os sprites");
