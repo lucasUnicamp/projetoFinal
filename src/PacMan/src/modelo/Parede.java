@@ -27,18 +27,41 @@ public class Parede {
     // Instruções para desenhar as paredes na tela
     public void desenhar(Graphics2D caneta) {
         getImagem();
-        String[] mapa = painelJogo.getMapa();
         caneta.drawImage(parede, getX()  - (painelJogo.getTamanhoTile())/2, getY() - (painelJogo.getTamanhoTile())/2, painelJogo.getTamanhoTile(), painelJogo.getTamanhoTile(), null);
     }
 
-    // Checar nas laterais de cada parede para ver qual tipo de parede deve desenhar
-
-    // Importa os sprites nos arquivos
+    /**
+     * Importa o arquivo da pasta e associa-o ao objeto instanciado
+     */
     public void getImagem() {
         try {
-            parede = ImageIO.read(new File(Paths.get("resources", "Pac_Man_sprite_esquerda.png").toString())); 
-        } catch (IOException e) {
+            switch (decideImagem()) {
+                case 0:
+                    parede = ImageIO.read(new File(Paths.get("src/PacMan/resources", "paredeCheia.png").toString()));
+                case 1:
+                    parede = ImageIO.read(new File(Paths.get("src/PacMan/resources", "paredeLado.png").toString()));
+            }
+        } catch (IOException erro) {
             System.err.println("!!! ERRO NA IMPORTAÇÃO DOS SPRITES DA PAREDE !!!");
+        }
+    }
+
+    /**
+     * Baseado no que tem ao redor da posição em que se quer botar a parede, decide qual o tipo (parede ou cheio)
+     * de sprite a ser posto
+     * @return 0 se for uma parede cercada por outras paredes (cheio) ou se for uma posição da borda; 1 se for uma
+     * parede não cercada por paredes 
+     */
+    public int decideImagem() {
+        String[] mapa = painelJogo.getMapa();
+
+        try {
+            if (mapa[getX()].charAt(getY() + 1) == 'p' && mapa[getX() - 1].charAt(getY()) == 'p' 
+            && mapa[getX() + 1].charAt(getY() + 1) == 'p' && mapa[getX()].charAt(getY() - 1) == 'p') 
+                return 0;
+            return 1;
+        } catch (IndexOutOfBoundsException erro) {
+            return 0;
         }
     }
 

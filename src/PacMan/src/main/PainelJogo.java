@@ -35,15 +35,16 @@ public class PainelJogo extends JPanel implements Runnable {
         "pcpppppppppppppppppppppppppppppppppppppp",
         "pcpppppppppppppppppppppppppppppppppppppp",
         "pcpppppppppppppppppppppppppppppppppppppp",
-        "pcpppppppppppppppppppppppppppppppppppppp",
-        "pcpppppppppppppppppppppppppppppppppppppp",
-        "pcpppppppppppppppppppppppppppppppppppppp",
+        "pcppppppppppppppppppppcccccppppppppppppp",
+        "pcppppppppppppppppppppcccccppppppppppppp",
+        "pcppppppppppppppppppppcccccppppppppppppp",
         "pcpppppppppppppppppppppppppppppppppppppp",
         "pcpppppppppppppppppppppppppppppppppppppp",
         "pcpppppppppppppppppppppppppppppppppppppp",
         "pccppppppppppppppppppppppppppppppppppppp",
         "pppppppppppppppppppppppppppppppppppppppp",     
     };
+
     int FPS = 60;
     PacMan pacman;
     Comida comida;
@@ -61,7 +62,7 @@ public class PainelJogo extends JPanel implements Runnable {
         setFocusable(true);
         pacman = new PacMan(this, leitor);
         comida = new Comida(50, 50);
-        parede = new Parede(this, 25, 25);
+        parede = new Parede(this, 13, 25);
     }
 
     public void comecarThread() {
@@ -75,7 +76,6 @@ public class PainelJogo extends JPanel implements Runnable {
         long ultimoTempo = System.nanoTime();
         long tempoAtual;
         long timer = 0;
-        int numeroDesenhos = 0;
 
         while (gameThread != null) { // loop principal do jogo
 
@@ -88,24 +88,23 @@ public class PainelJogo extends JPanel implements Runnable {
                 atualizar();
                 repaint();
                 delta --;
-                numeroDesenhos++;
             }
         }
     }
     
-    public String[] carregarMapa(){
+    public String[] carregarMapa() {
         return this.mapa;
     }
 
-    public void criar_mapa(){
+    public void criarMapa() {
         int i, j;
 
         for (i = 0; i < 20; i++){
             for (j = 0; j < 40; j++){
-                if (mapa[i].charAt(j) == 'p'){ //parede
+                if (mapa[i].charAt(j) == 'p') { //parede
                     
                 }
-                else if (mapa[i].charAt(j) == 'c'){ //parede
+                else if (mapa[i].charAt(j) == 'c') { //parede
 
                 }
             }
