@@ -44,6 +44,7 @@ public class PainelJogo extends JPanel implements Runnable {
         "pccccccccccccccccccp",
         "pppppppppppppppppppp",     
     };
+
     int FPS = 60;
     PacMan pacman;
 
@@ -74,7 +75,6 @@ public class PainelJogo extends JPanel implements Runnable {
         long ultimoTempo = System.nanoTime();
         long tempoAtual;
         long timer = 0;
-        int numeroDesenhos = 0;
 
         while (gameThread != null) { // loop principal do jogo
 
@@ -87,12 +87,11 @@ public class PainelJogo extends JPanel implements Runnable {
                 atualizar();
                 repaint();
                 delta --;
-                numeroDesenhos++;
             }
         }
     }
     
-    public String[] carregarMapa(){
+    public String[] carregarMapa() {
         return this.mapa;
     }
 

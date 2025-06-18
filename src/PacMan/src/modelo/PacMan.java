@@ -130,7 +130,7 @@ public class PacMan {
             repouso = ImageIO.read(new File(Paths.get("resources", "Pac_Man_sprite_boca_fechada.png").toString()));
 
         } catch (IOException e) {
-            System.err.println("Não foi possível carregar os sprites");
+            System.err.println("!!! ERRO NA IMPORTAÇÃO DOS SPRITES DO PACMAN !!!");
         }
     }
 
