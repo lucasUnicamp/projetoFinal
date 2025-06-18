@@ -9,7 +9,7 @@ public class Comestivel {
     private int posicaoY;
     private PainelJogo painelJogo;
 
-    public Comestivel(int x, int y, PainelJogo painelJogo) {
+    public Comestivel(PainelJogo painelJogo, int x, int y) {
         setX(x);
         setY(y);
         this.painelJogo = painelJogo;
