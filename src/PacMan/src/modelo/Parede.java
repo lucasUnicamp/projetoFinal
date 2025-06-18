@@ -38,7 +38,6 @@ public class Parede {
                 imagem = paredeLado;
                 break;
         }
-
         caneta.drawImage(imagem, getXReal()  - (painelJogo.getTamanhoTile())/2, getYReal() - (painelJogo.getTamanhoTile())/2, painelJogo.getTamanhoTile(), painelJogo.getTamanhoTile(), null);
     }
 
@@ -64,11 +63,19 @@ public class Parede {
         String[] mapa = painelJogo.getMapa();
 
         try {
-            if (mapa[getYMatriz() + 1].charAt(getXMatriz()) == 'p' && mapa[getYMatriz() - 1].charAt(getXMatriz()) == 'p' 
-            && mapa[getYMatriz()].charAt(getXMatriz() + 1) == 'p' && mapa[getYMatriz()].charAt(getXMatriz() - 1) == 'p') 
+            // Faz com que as paredes da borda sejam como "cheias" e deve evitar erro de index
+            if (getXMatriz() - 1 < 0 || getXMatriz() + 1 >= painelJogo.getNumeroColunas() || 
+                getYMatriz() - 1 < 0 || getYMatriz() + 1 >= painelJogo.getNumeroLinhas())
+                return 1;
+
+            // Separa as paredes cercadas por outras paredes para que recebam outro sprite
+            if (mapa[getYMatriz() + 1].charAt(getXMatriz()) == 'p' && mapa[getYMatriz() - 1].charAt(getXMatriz()) == 'p' &&
+                mapa[getYMatriz()].charAt(getXMatriz() + 1) == 'p' && mapa[getYMatriz()].charAt(getXMatriz() - 1) == 'p')
                 return 0;
+
             return 1;
         } catch (IndexOutOfBoundsException erro) {
+            System.err.println("!!! TENTATIVA DE DESENHAR PAREDE FORA DA MATRIZ !!!");      // Só para caso algo dê errado
             return 1;
         }
     }

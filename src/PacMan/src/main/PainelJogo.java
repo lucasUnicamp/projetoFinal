@@ -135,6 +135,14 @@ public class PainelJogo extends JPanel implements Runnable {
         return tamanhoTile;
     }
 
+    public int getNumeroLinhas() {
+        return numeroLinhas;
+    }
+
+    public int getNumeroColunas() {
+        return numeroColunas;
+    }
+
     public int getEscala() {
         return escala;
     }
