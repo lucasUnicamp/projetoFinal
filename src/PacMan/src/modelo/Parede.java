@@ -5,9 +5,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
-
 import javax.imageio.ImageIO;
-
 import main.PainelJogo;
 
 public class Parede {
@@ -36,7 +34,7 @@ public class Parede {
     // Importa os sprites nos arquivos
     public void getImagem() {
         try {
-            parede = ImageIO.read(new File(Paths.get("resources", "Pac_Man_sprite_esquerda.png").toString())); 
+            parede = ImageIO.read(new File(Paths.get("resources", "paredeLado(2).png").toString())); 
         } catch (IOException e) {
             System.err.println("!!! ERRO NA IMPORTAÇÃO DOS SPRITES DA PAREDE !!!");
         }

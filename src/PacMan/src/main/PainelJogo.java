@@ -4,12 +4,11 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.util.List;
-
+import java.util.ArrayList;
 import javax.swing.JPanel;
-
-import modelo.PacMan;
+import modelo.Comestivel;
 import modelo.Comida;
+import modelo.PacMan;
 import modelo.Parede;
 
 public class PainelJogo extends JPanel implements Runnable {
@@ -22,27 +21,29 @@ public class PainelJogo extends JPanel implements Runnable {
     private final int larguraTela = tamanhoTile * numeroColunas; // largura em pixels do painel
     private final int alturaTela = tamanhoTile * numeroLinhas; // altura em pixels do painel
     
+    private ArrayList<Parede> paredes;
+    private ArrayList<Comestivel> comestiveis;
     private String[] mapa = {
-        "pppppppppppppppppppppppppppppppppppppppp",
-        "pccccccppppppppppppppppppppppppppccccccp",
-        "pcppppcppppppppppppppppppppppppppcppppcp",
-        "pcppppcppppppppppppppppppppppppppcppppcp",
-        "pcppppcppppppppppppppppppppppppppcppppcp",
-        "pccccccccccccccccccccccccccccccccccccccp",
-        "pcppppcppppppppppppppppppppppppppppppppp",
-        "pccccccppppppppppppppppppppppppppppppppp",
-        "pcpppppppppppppppppppppppppppppppppppppp",
-        "pcpppppppppppppppppppppppppppppppppppppp",
-        "pcpppppppppppppppppppppppppppppppppppppp",
-        "pcpppppppppppppppppppppppppppppppppppppp",
-        "pcpppppppppppppppppppppppppppppppppppppp",
-        "pcpppppppppppppppppppppppppppppppppppppp",
-        "pcpppppppppppppppppppppppppppppppppppppp",
-        "pcpppppppppppppppppppppppppppppppppppppp",
-        "pcpppppppppppppppppppppppppppppppppppppp",
-        "pcpppppppppppppppppppppppppppppppppppppp",
-        "pccppppppppppppppppppppppppppppppppppppp",
-        "pppppppppppppppppppppppppppppppppppppppp",     
+        "pppppppppppppppppppp",
+        "pccccccccccccccccccp",
+        "pcppppppppcpppppppcp",
+        "pcppppppppcpppppppcp",
+        "pccccccccccccccccccp",
+        "pcppppppppcpppppppcp",
+        "pcppppppppcpppppppcp",
+        "pcppppcccccccccpppcp",
+        "pcppppcpppppppcpppcp",
+        "pccccccpppppppcccccp",
+        "pcppppcpppppppcpppcp",
+        "pcppppcccccccccpppcp",
+        "pcppppppppcpppppppcp",
+        "pcppppppppcpppppppcp",
+        "pcpppcccccccccccppcp",
+        "pcpppcpppppppppcppcp",
+        "pccccccccccccccccccp",
+        "pcpppcpppppppppcppcp",
+        "pccccccccccccccccccp",
+        "pppppppppppppppppppp",     
     };
     int FPS = 60;
     PacMan pacman;
@@ -60,8 +61,10 @@ public class PainelJogo extends JPanel implements Runnable {
         addKeyListener(leitor);
         setFocusable(true);
         pacman = new PacMan(this, leitor);
+        comestiveis = new ArrayList<>();
+        paredes = new ArrayList<>();
+        this.carregar_elementos();
         comida = new Comida(50, 50);
-        parede = new Parede(this, 25, 25);
     }
 
     public void comecarThread() {
@@ -97,17 +100,14 @@ public class PainelJogo extends JPanel implements Runnable {
         return this.mapa;
     }
 
-    public void criar_mapa(){
+    public final void carregar_elementos(){
         int i, j;
-
-        for (i = 0; i < 20; i++){
-            for (j = 0; j < 40; j++){
-                if (mapa[i].charAt(j) == 'p'){ //parede
-                    
-                }
-                else if (mapa[i].charAt(j) == 'c'){ //parede
-
-                }
+        for (i = 0; i < numeroLinhas; i++){
+            for (j = 0; j < numeroColunas; j++){
+                if (mapa[i].charAt(j) == 'p')   //parede
+                    paredes.add(new Parede(this, j * tamanhoTile, i * tamanhoTile));
+                else if (mapa[i].charAt(j) == 'c')      //comestiveis
+                    comestiveis.add(new Comestivel(j * tamanhoTile, i * tamanhoTile, this));
             }
         }
     }
@@ -124,10 +124,16 @@ public class PainelJogo extends JPanel implements Runnable {
         super.paintComponent(g);
 
         Graphics2D caneta = (Graphics2D) g;
-
-        comida.desenhar(caneta);
+        
+        for(Parede p: this.paredes){
+            p.desenhar(caneta);
+        }
+        for(Comestivel c: this.comestiveis){
+            c.desenhar(caneta);
+        }
+        
+        //comida.desenhar(caneta);
         pacman.desenhar(caneta);
-        parede.desenhar(caneta);
 
         caneta.dispose();
     }
