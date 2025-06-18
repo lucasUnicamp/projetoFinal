@@ -37,9 +37,9 @@ public class Parede {
         try {
             switch (decideImagem()) {
                 case 0:
-                    parede = ImageIO.read(new File(Paths.get("src/PacMan/resources", "paredeCheia.png").toString()));
+                    parede = ImageIO.read(new File(Paths.get("resources", "paredeCheia.png").toString()));
                 case 1:
-                    parede = ImageIO.read(new File(Paths.get("src/PacMan/resources", "paredeLado.png").toString()));
+                    parede = ImageIO.read(new File(Paths.get("resources", "paredeLado.png").toString()));
             }
         } catch (IOException erro) {
             System.err.println("!!! ERRO NA IMPORTAÇÃO DOS SPRITES DA PAREDE !!!");
