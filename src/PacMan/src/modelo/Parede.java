@@ -13,7 +13,7 @@ public class Parede {
     private int yMatriz;
     private int xReal;
     private int yReal;
-    private BufferedImage paredeLado, paredeCheia;
+    private BufferedImage paredeLado, paredeCheia, paredeBorda;
     private PainelJogo painelJogo;
 
     public Parede(PainelJogo painelJogo, int x, int y) {
@@ -37,6 +37,9 @@ public class Parede {
             case 1:
                 imagem = paredeLado;
                 break;
+            case 2:
+                imagem = paredeBorda;
+                break;
         }
         caneta.drawImage(imagem, getXReal()  - (painelJogo.getTamanhoTile())/2, getYReal() - (painelJogo.getTamanhoTile())/2, painelJogo.getTamanhoTile(), painelJogo.getTamanhoTile(), null);
     }
@@ -48,6 +51,7 @@ public class Parede {
         try {
             paredeCheia = ImageIO.read(new File(Paths.get("resources", "paredeCheia.png").toString()));
             paredeLado = ImageIO.read(new File(Paths.get("resources", "paredeLado.png").toString())); 
+            paredeBorda = ImageIO.read(new File(Paths.get("resources", "paredeBorda.png").toString()));
         } catch (IOException erro) {
             System.err.println("!!! ERRO NA IMPORTAÇÃO DOS SPRITES DA PAREDE !!!");
         }
@@ -66,7 +70,7 @@ public class Parede {
             // Faz com que as paredes da borda sejam como "cheias" e deve evitar erro de index
             if (getXMatriz() - 1 < 0 || getXMatriz() + 1 >= painelJogo.getNumeroColunas() || 
                 getYMatriz() - 1 < 0 || getYMatriz() + 1 >= painelJogo.getNumeroLinhas())
-                return 1;
+                return 2;
 
             // Separa as paredes cercadas por outras paredes para que recebam outro sprite
             if (mapa[getYMatriz() + 1].charAt(getXMatriz()) == 'p' && mapa[getYMatriz() - 1].charAt(getXMatriz()) == 'p' &&
