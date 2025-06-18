@@ -24,7 +24,7 @@ public class PacMan {
     public PacMan(PainelJogo painelJogo, LeitorTeclado leitor) {
         setX(painelJogo.getTamanhoTile());   
         setY(painelJogo.getTamanhoTile());
-        velocidade = 5;
+        velocidade = 3;
         direcao = "direita";
 
         getImagem();
@@ -123,11 +123,11 @@ public class PacMan {
     public void getImagem() {
         try {
             // Substituir por sprites com transparência
-            cima = ImageIO.read(new File(Paths.get("resources", "Pac_Man_sprite_cima.png").toString())); 
-            baixo = ImageIO.read(new File(Paths.get("resources", "Pac_Man_sprite_baixo.png").toString()));
-            direita = ImageIO.read(new File(Paths.get("resources", "Pac_Man_sprite_direita.png").toString()));
-            esquerda = ImageIO.read(new File(Paths.get("resources", "Pac_Man_sprite_esquerda.png").toString()));
-            repouso = ImageIO.read(new File(Paths.get("resources", "Pac_Man_sprite_boca_fechada.png").toString()));
+            cima = ImageIO.read(new File(Paths.get("resources", "pacmanNorte.png").toString())); 
+            baixo = ImageIO.read(new File(Paths.get("resources", "pacmanSul.png").toString()));
+            direita = ImageIO.read(new File(Paths.get("resources", "pacmanLeste.png").toString()));
+            esquerda = ImageIO.read(new File(Paths.get("resources", "pacmanOeste.png").toString()));
+            repouso = ImageIO.read(new File(Paths.get("resources", "pacmanParado.png").toString()));
 
         } catch (IOException e) {
             System.err.println("!!! ERRO NA IMPORTAÇÃO DOS SPRITES DO PACMAN !!!");
