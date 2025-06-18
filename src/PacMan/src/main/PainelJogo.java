@@ -27,13 +27,13 @@ public class PainelJogo extends JPanel implements Runnable {
         "pccccccccccccccccccp",
         "pcppppppppcpppppppcp",
         "pcppppppppcpppppppcp",
-        "pccccccccccccccccccp",
-        "pcppppppppcpppppppcp",
-        "pcppppppppcpppppppcp",
+        "pccccccccccpppppppcp",
+        "pcppppppcpcpppppppcp",
+        "pcppppppcpcpppppppcp",
         "pcppppcccccccccpppcp",
-        "pcppppcpppppppcpppcp",
-        "pccccccpppppppcccccp",
-        "pcppppcpppppppcpppcp",
+        "pcppppcppppppccpppcp",
+        "pcppppccpppppccccccp",
+        "pcppppccpppppccpppcp",
         "pcppppcccccccccpppcp",
         "pcppppppppcpppppppcp",
         "pcppppppppcpppppppcp",
@@ -61,7 +61,7 @@ public class PainelJogo extends JPanel implements Runnable {
         pacman = new PacMan(this, leitor);
         comestiveis = new ArrayList<>();
         paredes = new ArrayList<>();
-        this.carregar_elementos();
+        this.carregarElementos();
     }
 
     public void comecarThread() {
@@ -90,24 +90,19 @@ public class PainelJogo extends JPanel implements Runnable {
             }
         }
     }
-    
-    public String[] carregarMapa() {
-        return this.mapa;
-    }
 
-    public final void carregar_elementos(){
+    public final void carregarElementos() {
         int i, j;
-        for (i = 0; i < numeroLinhas; i++){
-            for (j = 0; j < numeroColunas; j++){
+        for (i = 0; i < numeroLinhas; i++) {
+            for (j = 0; j < numeroColunas; j++) {
                 if (mapa[i].charAt(j) == 'p')   //parede
-                    paredes.add(new Parede(this, j * tamanhoTile + tamanhoTile / 2, i * tamanhoTile + tamanhoTile / 2));
+                    paredes.add(new Parede(this, j, i));
                 else if (mapa[i].charAt(j) == 'c')      //comestiveis
-                    comestiveis.add(new Comestivel(j * tamanhoTile + tamanhoTile / 4, i * tamanhoTile + tamanhoTile / 4, this));
+                    comestiveis.add(new Comestivel(this, j * tamanhoTile + tamanhoTile / 4, i * tamanhoTile + tamanhoTile / 4));
             }
         }
     }
     
-
     // atualiza estado de todos os objetos
     public void atualizar() {
         pacman.atualizar();
@@ -120,10 +115,10 @@ public class PainelJogo extends JPanel implements Runnable {
 
         Graphics2D caneta = (Graphics2D) g;
         
-        for(Parede p: this.paredes){
+        for(Parede p: this.paredes) {
             p.desenhar(caneta);
         }
-        for(Comestivel c: this.comestiveis){
+        for(Comestivel c: this.comestiveis) {
             c.desenhar(caneta);
         }
    

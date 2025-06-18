@@ -9,23 +9,37 @@ import javax.imageio.ImageIO;
 import main.PainelJogo;
 
 public class Parede {
-    private int posicaoX;
-    private int posicaoY;
-    private BufferedImage parede;
-
+    private int xMatriz;
+    private int yMatriz;
+    private int xReal;
+    private int yReal;
+    private BufferedImage paredeLado, paredeCheia;
     private PainelJogo painelJogo;
 
     public Parede(PainelJogo painelJogo, int x, int y) {
-        setX(x);
-        setY(y);
-        
         this.painelJogo = painelJogo;
+        setXMatriz(x);
+        setYMatriz(y);
+        xReal = x * painelJogo.getTamanhoTile() + painelJogo.getTamanhoTile() / 2;
+        yReal = y * painelJogo.getTamanhoTile() + painelJogo.getTamanhoTile() / 2;
+
+        getImagem();
     }
 
     // Instruções para desenhar as paredes na tela
     public void desenhar(Graphics2D caneta) {
-        getImagem();
-        caneta.drawImage(parede, getX()  - (painelJogo.getTamanhoTile())/2, getY() - (painelJogo.getTamanhoTile())/2, painelJogo.getTamanhoTile(), painelJogo.getTamanhoTile(), null);
+        BufferedImage imagem = null;
+
+        switch (decideImagem()) {
+            case 0:
+                imagem = paredeCheia;
+                break;
+            case 1:
+                imagem = paredeLado;
+                break;
+        }
+
+        caneta.drawImage(imagem, getXReal()  - (painelJogo.getTamanhoTile())/2, getYReal() - (painelJogo.getTamanhoTile())/2, painelJogo.getTamanhoTile(), painelJogo.getTamanhoTile(), null);
     }
 
     /**
@@ -33,12 +47,8 @@ public class Parede {
      */
     public void getImagem() {
         try {
-            switch (decideImagem()) {
-                case 0:
-                    parede = ImageIO.read(new File(Paths.get("resources", "paredeCheia.png").toString()));
-                case 1:
-                    parede = ImageIO.read(new File(Paths.get("resources", "paredeLado.png").toString()));
-            }
+            paredeCheia = ImageIO.read(new File(Paths.get("resources", "paredeCheia.png").toString()));
+            paredeLado = ImageIO.read(new File(Paths.get("resources", "paredeLado.png").toString())); 
         } catch (IOException erro) {
             System.err.println("!!! ERRO NA IMPORTAÇÃO DOS SPRITES DA PAREDE !!!");
         }
@@ -54,28 +64,36 @@ public class Parede {
         String[] mapa = painelJogo.getMapa();
 
         try {
-            if (mapa[getX()].charAt(getY() + 1) == 'p' && mapa[getX() - 1].charAt(getY()) == 'p' 
-            && mapa[getX() + 1].charAt(getY() + 1) == 'p' && mapa[getX()].charAt(getY() - 1) == 'p') 
+            if (mapa[getYMatriz() + 1].charAt(getXMatriz()) == 'p' && mapa[getYMatriz() - 1].charAt(getXMatriz()) == 'p' 
+            && mapa[getYMatriz()].charAt(getXMatriz() + 1) == 'p' && mapa[getYMatriz()].charAt(getXMatriz() - 1) == 'p') 
                 return 0;
             return 1;
         } catch (IndexOutOfBoundsException erro) {
-            return 0;
+            return 1;
         }
     }
 
-    public void setX(int x) {
-        posicaoX = x;
+    public void setXMatriz(int x) {
+        xMatriz = x;
     }
 
-    public void setY(int y) {
-        posicaoY = y;
+    public void setYMatriz(int y) {
+        yMatriz = y;
     }
 
-    public int getX() {
-        return posicaoX;
+    public int getXMatriz() {
+        return xMatriz;
     }
 
-    public int getY() {
-        return posicaoY;
+    public int getYMatriz() {
+        return yMatriz;
+    }
+
+    public int getXReal() {
+        return xReal;
+    }
+
+    public int getYReal() {
+        return yReal;
     }
 }
