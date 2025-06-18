@@ -98,7 +98,8 @@ public class PainelJogo extends JPanel implements Runnable {
                 if (mapa[i].charAt(j) == 'p')   //parede
                     paredes.add(new Parede(this, j, i));
                 else if (mapa[i].charAt(j) == 'c')      //comestiveis
-                    comestiveis.add(new Comestivel(this, j * tamanhoTile + tamanhoTile / 4, i * tamanhoTile + tamanhoTile / 4));
+                    // - 5 pois é o raio do comestível
+                    comestiveis.add(new Comestivel(this, j * tamanhoTile + tamanhoTile / 2 - 5, i * tamanhoTile + tamanhoTile / 2 - 5));
             }
         }
     }
