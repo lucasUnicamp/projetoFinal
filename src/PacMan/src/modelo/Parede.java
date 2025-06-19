@@ -1,5 +1,6 @@
 package modelo;
 
+import interfaces.Elemento;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -8,7 +9,7 @@ import java.nio.file.Paths;
 import javax.imageio.ImageIO;
 import main.PainelJogo;
 
-public class Parede {
+public class Parede implements Elemento{
     private int xMatriz;
     private int yMatriz;
     private int xReal;
@@ -27,7 +28,7 @@ public class Parede {
     }
 
     // Instruções para desenhar as paredes na tela
-    public void desenhar(Graphics2D caneta) {
+    @ Override public void desenhar(Graphics2D caneta) {
         BufferedImage imagem = null;
 
         switch (decideImagem()) {

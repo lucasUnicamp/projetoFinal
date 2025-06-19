@@ -3,8 +3,9 @@ package modelo;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import main.PainelJogo;
+import interfaces.Elemento;
 
-public class Comestivel {
+public class Comestivel implements Elemento{
     private int posicaoX;
     private int posicaoY;
     private PainelJogo painelJogo;
@@ -15,7 +16,7 @@ public class Comestivel {
         this.painelJogo = painelJogo;
     }
 
-    public void desenhar(Graphics2D g) {
+    @Override public void desenhar(Graphics2D g) {
         g.setColor(Color.WHITE);
         g.fillOval(posicaoX, posicaoY, 10, 10);
     }

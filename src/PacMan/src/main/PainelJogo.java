@@ -1,5 +1,6 @@
 package main;
 
+import interfaces.Elemento;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -20,6 +21,7 @@ public class PainelJogo extends JPanel implements Runnable {
     private final int larguraTela = tamanhoTile * numeroColunas; // largura em pixels do painel
     private final int alturaTela = tamanhoTile * numeroLinhas; // altura em pixels do painel
     
+    private final ArrayList<Elemento> elementos;
     private final ArrayList<Parede> paredes;
     private final ArrayList<Comestivel> comestiveis;
     private String[] mapa = {
@@ -59,6 +61,7 @@ public class PainelJogo extends JPanel implements Runnable {
         addKeyListener(leitor);
         setFocusable(true);
         pacman = new PacMan(this, leitor);
+        elementos = new ArrayList<>();
         comestiveis = new ArrayList<>();
         paredes = new ArrayList<>();
         this.carregarElementos();
@@ -95,11 +98,15 @@ public class PainelJogo extends JPanel implements Runnable {
         int i, j;
         for (i = 0; i < numeroLinhas; i++) {
             for (j = 0; j < numeroColunas; j++) {
-                if (mapa[i].charAt(j) == 'p')   //parede
+                if (mapa[i].charAt(j) == 'p') {  //parede
                     paredes.add(new Parede(this, j, i));
-                else if (mapa[i].charAt(j) == 'c')      //comestiveis
+                    elementos.add(new Parede(this, j, i));
+                }
+                else if (mapa[i].charAt(j) == 'c') {     //comestiveis
                     // - 5 pois é o raio do comestível
                     comestiveis.add(new Comestivel(this, j * tamanhoTile + tamanhoTile / 2 - 5, i * tamanhoTile + tamanhoTile / 2 - 5));
+                    elementos.add(new Comestivel(this, j * tamanhoTile + tamanhoTile / 2 - 5, i * tamanhoTile + tamanhoTile / 2 - 5));
+                }
             }
         }
     }
@@ -115,14 +122,10 @@ public class PainelJogo extends JPanel implements Runnable {
         super.paintComponent(g);
 
         Graphics2D caneta = (Graphics2D) g;
+        for(Elemento e: this.elementos) {
+            e.desenhar(caneta);
+        }
         
-        for(Parede p: this.paredes) {
-            p.desenhar(caneta);
-        }
-        for(Comestivel c: this.comestiveis) {
-            c.desenhar(caneta);
-        }
-   
         pacman.desenhar(caneta);
 
         caneta.dispose();
