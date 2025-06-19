@@ -36,73 +36,99 @@ public class Entidade {
     public void mover() {
         boolean colidiu = false;
 
-        int xTopoHitBox = getX() + larguraHitBox; // cordenadas dos limites da hit box da entidade antes do movimento
-        int xBaixoHitBox = getX() - larguraHitBox;
-        int yDireitaHitBox = getY() + alturaHitBox;
-        int yEsquerdaHitBox = getY() - alturaHitBox;
+        int yTopoHitBox = getY() - alturaHitBox/2; // cordenadas dos limites da hit box da entidade antes do movimento
+        int yBaixoHitBox = getY() + alturaHitBox/2;
+        int xDireitaHitBox = getX() + larguraHitBox/2;
+        int xEsquerdaHitBox = getX() - larguraHitBox/2;
 
-        int linhaTopoHitBox = xTopoHitBox/painelJogo.getTamanhoTile(); 
-        int linhaBaixoHitBox = xBaixoHitBox/painelJogo.getTamanhoTile();
-        int colunaDireitaHitBox = yDireitaHitBox/painelJogo.getTamanhoTile();
-        int colunaEsquerdaHitBox = yEsquerdaHitBox/painelJogo.getTamanhoTile();
+        int linhaTopoHitBox = yTopoHitBox/painelJogo.getTamanhoTile(); 
+        int linhaBaixoHitBox = yBaixoHitBox/painelJogo.getTamanhoTile();
+        int colunaDireitaHitBox = xDireitaHitBox/painelJogo.getTamanhoTile();
+        int colunaEsquerdaHitBox = xEsquerdaHitBox/painelJogo.getTamanhoTile();
 
         Elemento[][] elementos = painelJogo.elementos;
 
         switch (getDirecao()) { // pac-man move continuamente para a direção que está apontando
             case "cima":
-                linhaTopoHitBox = (xTopoHitBox + getVelocidade())/painelJogo.getTamanhoTile();
+                linhaTopoHitBox = (yTopoHitBox - getVelocidade())/painelJogo.getTamanhoTile();
 
                 if (elementos[linhaTopoHitBox][colunaEsquerdaHitBox].ehColidivel() == true || elementos[linhaTopoHitBox][colunaDireitaHitBox].ehColidivel() == true)
                     colidiu = true;
-                else if ((getY() - getVelocidade()) <= getPainelJogo().getTamanhoTile()/2)
+                else if ((getY() - getVelocidade()) <= getPainelJogo().getTamanhoTile()/2) {
                     colidiu = true;
                     setY(getPainelJogo().getTamanhoTile()/2);
+                }
                     
                 break;
 
             case "baixo":
-                if ((getY() + getVelocidade()) < (getPainelJogo().getAltura() - getPainelJogo().getTamanhoTile()/2))
-                    setY(getY() + getVelocidade());
-                else 
+                linhaBaixoHitBox = (yBaixoHitBox + getVelocidade())/painelJogo.getTamanhoTile();
+
+                if (elementos[linhaBaixoHitBox][colunaEsquerdaHitBox].ehColidivel() == true || elementos[linhaBaixoHitBox][colunaDireitaHitBox].ehColidivel() == true)
+                    colidiu = true;
+                else if ((getY() + getVelocidade()) >= (getPainelJogo().getAltura() - getPainelJogo().getTamanhoTile()/2)) {
+                    colidiu = true;
                     setY(getPainelJogo().getAltura() - getPainelJogo().getTamanhoTile() / 2);
+                }
+                    
                 break;
 
             case "esquerda":
-                if ((getX() - getVelocidade()) > getPainelJogo().getTamanhoTile()/2)
-                    setX(getX() - getVelocidade());
-                else
+                colunaEsquerdaHitBox = (xEsquerdaHitBox - getVelocidade())/painelJogo.getTamanhoTile();
+
+                if (elementos[linhaBaixoHitBox][colunaEsquerdaHitBox].ehColidivel() == true || elementos[linhaTopoHitBox][colunaEsquerdaHitBox].ehColidivel() == true)
+                    colidiu = true;
+                else if ((getX() - getVelocidade()) <= getPainelJogo().getTamanhoTile()/2) {
+                    colidiu = true;
                     setX(getPainelJogo().getTamanhoTile()/2);
+                }
                 break;
 
             case "direita":
-                if ((getX() + getVelocidade()) < (getPainelJogo().getLargura() - getPainelJogo().getTamanhoTile()/2))
-                    setX(getX() + getVelocidade());
-                else
+                colunaDireitaHitBox = (xDireitaHitBox + getVelocidade())/painelJogo.getTamanhoTile();
+
+                if (elementos[linhaBaixoHitBox][colunaDireitaHitBox].ehColidivel() == true || elementos[linhaTopoHitBox][colunaDireitaHitBox].ehColidivel() == true)
+                    colidiu = true;
+                else if ((getX() + getVelocidade()) >= (getPainelJogo().getLargura() - getPainelJogo().getTamanhoTile()/2)){
+                    colidiu = true;
                     setX(getPainelJogo().getLargura() - getPainelJogo().getTamanhoTile()/2);
+                }
                 break;
         }
         
         if (!colidiu) {
             switch (getDirecao()) {
                 case "cima":
-                    setY(getY() + getVelocidade());
+                    centralizarX();
+                    setY(getY() - getVelocidade());
                     break;
                 case "direita":
+                    centralizarY();
                     setX(getX() + getVelocidade());
                     break;
                 case "esquerda":
+                    centralizarY();
                     setX(getX() - getVelocidade());
                     break;
                 case "baixo":
-                    setY(getY() - getVelocidade());
+                    centralizarX();
+                    setY(getY() + getVelocidade());
                     break;
             }
         }
     }
 
+    public void centralizarX() {
+        setX((getX()/painelJogo.getTamanhoTile())*painelJogo.getTamanhoTile() + painelJogo.getTamanhoTile()/2);
+    }
+
+    public void centralizarY() {
+        setY((getY()/painelJogo.getTamanhoTile())*painelJogo.getTamanhoTile() + painelJogo.getTamanhoTile()/2);
+    }
+
     private void setPadrao() {
-        setX(painelJogo.getTamanhoTile());   
-        setY(painelJogo.getTamanhoTile());
+        setX(painelJogo.getTamanhoTile() + painelJogo.getTamanhoTile()/2);   
+        setY(painelJogo.getTamanhoTile() + painelJogo.getTamanhoTile()/2);
         setVelocidade(3);
         setDirecao("direita");
     }
