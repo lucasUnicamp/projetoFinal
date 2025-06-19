@@ -9,74 +9,65 @@ import javax.imageio.ImageIO;
 import main.LeitorTeclado;
 import main.PainelJogo;
 
-public class PacMan {
-    private int posicaoX;
-    private int posicaoY;
-    private int velocidade;
+public class PacMan extends Entidade{
     private int estadoBoca; // boca aberta ou fechada
     private int contadorSprite; // usado para saber quando mudar o sprite (animação)
     private BufferedImage cima, baixo, esquerda, direita, repouso;
-    private String direcao;
 
-    private PainelJogo painelJogo;
     private LeitorTeclado leitor;
 
     public PacMan(PainelJogo painelJogo, LeitorTeclado leitor) {
-        setX(painelJogo.getTamanhoTile());   
-        setY(painelJogo.getTamanhoTile());
-        velocidade = 3;
-        direcao = "direita";
+        super(painelJogo);
 
         getImagem();
-        
-        this.painelJogo = painelJogo;
+
         this.leitor = leitor;
     }
 
     // atualiza o estado do pac-man dependo do input do usuário
     public void atualizar() {
         if (leitor.cimaPressionado) {
-            direcao = "cima";  
+            setDirecao("cima");
         }
         else if (leitor.direitaPressionado) {
-            direcao = "direita";
+            setDirecao("direita");
         }
 
         else if (leitor.esquerdaPressionado) {
-            direcao = "esquerda";
+            setDirecao("esquerda");
         }
 
         else if (leitor.baixoPressionado) {
-            direcao = "baixo";
+            setDirecao("baixo");
         }
 
-        switch (direcao) { // pac-man move continuamente para a direção que está apontando
+        switch (getDirecao()) { // pac-man move continuamente para a direção que está apontando
             case "cima":
-                if ((getY() - painelJogo.getTamanhoTile()/2) > velocidade)
+                if ((getY() - getPainelJogo().getTamanhoTile()/2) > getVelocidade())
                     setY(getY() - getVelocidade());
                 else
-                    setY(painelJogo.getTamanhoTile()/2);
+                    setY(getPainelJogo().getTamanhoTile()/2);
                 break;
 
             case "baixo":
-                if ((getY() + painelJogo.getTamanhoTile()/2) < (painelJogo.getAltura() - velocidade))
+                if ((getY() + getPainelJogo().getTamanhoTile()/2) < (getPainelJogo().getAltura() - getVelocidade()))
                     setY(getY() + getVelocidade());
                 else 
-                    setY(painelJogo.getAltura() - painelJogo.getTamanhoTile() / 2);
+                    setY(getPainelJogo().getAltura() - getPainelJogo().getTamanhoTile() / 2);
                 break;
 
             case "esquerda":
-                if ((getX() - painelJogo.getTamanhoTile()/2) > velocidade)
+                if ((getX() - getPainelJogo().getTamanhoTile()/2) > getVelocidade())
                     setX(getX() - getVelocidade());
                 else
-                    setX(painelJogo.getTamanhoTile()/2);
+                    setX(getPainelJogo().getTamanhoTile()/2);
                 break;
 
             case "direita":
-                if ((getX() + painelJogo.getTamanhoTile()/2) < (painelJogo.getLargura() - velocidade))
+                if ((getX() + getPainelJogo().getTamanhoTile()/2) < (getPainelJogo().getLargura() - getVelocidade()))
                     setX(getX() + getVelocidade());
                 else
-                    setX(painelJogo.getLargura() - painelJogo.getTamanhoTile()/2);
+                    setX(getPainelJogo().getLargura() - getPainelJogo().getTamanhoTile()/2);
                 break;
         }
 
@@ -98,7 +89,7 @@ public class PacMan {
         if (estadoBoca == 0) {
             imagem = repouso;
         } else {
-            switch (direcao) {
+            switch (getDirecao()) {
                 case "cima":
                     imagem = cima;
                     break;
@@ -116,7 +107,7 @@ public class PacMan {
                     break;
             }
         }
-        caneta.drawImage(imagem, getX()  - (painelJogo.getTamanhoTile())/2, getY() - (painelJogo.getTamanhoTile())/2, painelJogo.getTamanhoTile(), painelJogo.getTamanhoTile(), null);
+        caneta.drawImage(imagem, getX()  - (getPainelJogo().getTamanhoTile())/2, getY() - (getPainelJogo().getTamanhoTile())/2, getPainelJogo().getTamanhoTile(), getPainelJogo().getTamanhoTile(), null);
     }
 
     // importa os sprites
@@ -132,25 +123,5 @@ public class PacMan {
         } catch (IOException e) {
             System.err.println("!!! ERRO NA IMPORTAÇÃO DOS SPRITES DO PACMAN !!!");
         }
-    }
-
-    public void setX(int x) {
-        posicaoX = x;
-    }
-
-    public void setY(int y) {
-        posicaoY = y;
-    }
-
-    public int getVelocidade() {
-        return velocidade;
-    }
-
-    public int getX() {
-        return posicaoX;
-    }
-
-    public int getY() {
-        return posicaoY;
     }
 }
