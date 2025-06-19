@@ -1,20 +1,19 @@
 package menuPrincipal;
 
 import javax.swing.JFrame;
-//import java.awt.event.ActionEvent;
-//import java.awt.event.ActionListener;
 
 public class MenuPrincipal extends JFrame {
     
     public MenuPrincipal() {
-        setTitle("Menu Principal");
-        setSize(400, 300);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setTitle("Menu Principal");
+        this.setSize(400, 300);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        PainelMenu painel = new PainelMenu(this);
+        this.add(painel);
+
         setLocationRelativeTo(null); //Centralização
-
-        
-
-
+        this.setVisible(true);
 
     }
 }
