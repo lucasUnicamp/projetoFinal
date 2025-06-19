@@ -41,35 +41,7 @@ public class PacMan extends Entidade{
             setDirecao("baixo");
         }
 
-        switch (getDirecao()) { // pac-man move continuamente para a direção que está apontando
-            case "cima":
-                if ((getY() - getPainelJogo().getTamanhoTile()/2) > getVelocidade())
-                    setY(getY() - getVelocidade());
-                else
-                    setY(getPainelJogo().getTamanhoTile()/2);
-                break;
-
-            case "baixo":
-                if ((getY() + getPainelJogo().getTamanhoTile()/2) < (getPainelJogo().getAltura() - getVelocidade()))
-                    setY(getY() + getVelocidade());
-                else 
-                    setY(getPainelJogo().getAltura() - getPainelJogo().getTamanhoTile() / 2);
-                break;
-
-            case "esquerda":
-                if ((getX() - getPainelJogo().getTamanhoTile()/2) > getVelocidade())
-                    setX(getX() - getVelocidade());
-                else
-                    setX(getPainelJogo().getTamanhoTile()/2);
-                break;
-
-            case "direita":
-                if ((getX() + getPainelJogo().getTamanhoTile()/2) < (getPainelJogo().getLargura() - getVelocidade()))
-                    setX(getX() + getVelocidade());
-                else
-                    setX(getPainelJogo().getLargura() - getPainelJogo().getTamanhoTile()/2);
-                break;
-        }
+        mover();
 
         contadorSprite++;
 
