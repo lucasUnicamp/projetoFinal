@@ -9,6 +9,7 @@ public class Comestivel implements Elemento{
     private int posicaoX;
     private int posicaoY;
     private PainelJogo painelJogo;
+    public boolean colidivel = false;
 
     public Comestivel(PainelJogo painelJogo, int x, int y) {
         setX(x);
@@ -19,6 +20,10 @@ public class Comestivel implements Elemento{
     @Override public void desenhar(Graphics2D g) {
         g.setColor(Color.WHITE);
         g.fillOval(posicaoX, posicaoY, 10, 10);
+    }
+
+    public boolean ehColidivel() {
+        return colidivel;
     }
 
     public void setX(int x) {

@@ -1,5 +1,6 @@
 package modelo;
 
+import interfaces.Elemento;
 import main.LeitorTeclado;
 import main.PainelJogo;
 
@@ -8,6 +9,8 @@ public class Entidade {
     private int posicaoY;
     private int velocidade;
     private String direcao;
+    private int alturaHitBox;
+    private int larguraHitBox;
 
     private PainelJogo painelJogo;
 
@@ -16,45 +19,84 @@ public class Entidade {
         setY(y);
         this.velocidade = velocidade;
         this.direcao = direcao;
+        this.alturaHitBox = painelJogo.getTamanhoTile()/2;
+        this.larguraHitBox = painelJogo.getTamanhoTile()/2;
         
         this.painelJogo = painelJogo;
     }
 
     public Entidade(PainelJogo painelJogo) {
         this.painelJogo = painelJogo;
+        this.alturaHitBox = painelJogo.getTamanhoTile()/2;
+        this.larguraHitBox = painelJogo.getTamanhoTile()/2;
 
         setPadrao();
     }
 
     public void mover() {
+        boolean colidiu = false;
+
+        int xTopoHitBox = getX() + larguraHitBox; // cordenadas dos limites da hit box da entidade antes do movimento
+        int xBaixoHitBox = getX() - larguraHitBox;
+        int yDireitaHitBox = getY() + alturaHitBox;
+        int yEsquerdaHitBox = getY() - alturaHitBox;
+
+        int linhaTopoHitBox = xTopoHitBox/painelJogo.getTamanhoTile(); 
+        int linhaBaixoHitBox = xBaixoHitBox/painelJogo.getTamanhoTile();
+        int colunaDireitaHitBox = yDireitaHitBox/painelJogo.getTamanhoTile();
+        int colunaEsquerdaHitBox = yEsquerdaHitBox/painelJogo.getTamanhoTile();
+
+        Elemento[][] elementos = painelJogo.elementos;
+
         switch (getDirecao()) { // pac-man move continuamente para a direção que está apontando
             case "cima":
-                if ((getY() - getPainelJogo().getTamanhoTile()/2) > getVelocidade())
-                    setY(getY() - getVelocidade());
-                else
+                linhaTopoHitBox = (xTopoHitBox + getVelocidade())/painelJogo.getTamanhoTile();
+
+                if (elementos[linhaTopoHitBox][colunaEsquerdaHitBox].ehColidivel() == true || elementos[linhaTopoHitBox][colunaDireitaHitBox].ehColidivel() == true)
+                    colidiu = true;
+                else if ((getY() - getVelocidade()) <= getPainelJogo().getTamanhoTile()/2)
+                    colidiu = true;
                     setY(getPainelJogo().getTamanhoTile()/2);
+                    
                 break;
 
             case "baixo":
-                if ((getY() + getPainelJogo().getTamanhoTile()/2) < (getPainelJogo().getAltura() - getVelocidade()))
+                if ((getY() + getVelocidade()) < (getPainelJogo().getAltura() - getPainelJogo().getTamanhoTile()/2))
                     setY(getY() + getVelocidade());
                 else 
                     setY(getPainelJogo().getAltura() - getPainelJogo().getTamanhoTile() / 2);
                 break;
 
             case "esquerda":
-                if ((getX() - getPainelJogo().getTamanhoTile()/2) > getVelocidade())
+                if ((getX() - getVelocidade()) > getPainelJogo().getTamanhoTile()/2)
                     setX(getX() - getVelocidade());
                 else
                     setX(getPainelJogo().getTamanhoTile()/2);
                 break;
 
             case "direita":
-                if ((getX() + getPainelJogo().getTamanhoTile()/2) < (getPainelJogo().getLargura() - getVelocidade()))
+                if ((getX() + getVelocidade()) < (getPainelJogo().getLargura() - getPainelJogo().getTamanhoTile()/2))
                     setX(getX() + getVelocidade());
                 else
                     setX(getPainelJogo().getLargura() - getPainelJogo().getTamanhoTile()/2);
                 break;
+        }
+        
+        if (!colidiu) {
+            switch (getDirecao()) {
+                case "cima":
+                    setY(getY() + getVelocidade());
+                    break;
+                case "direita":
+                    setX(getX() + getVelocidade());
+                    break;
+                case "esquerda":
+                    setX(getX() - getVelocidade());
+                    break;
+                case "baixo":
+                    setY(getY() - getVelocidade());
+                    break;
+            }
         }
     }
 
