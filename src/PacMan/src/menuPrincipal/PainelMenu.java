@@ -7,6 +7,7 @@ import javax.sound.sampled.*;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.nio.file.Paths;
 import java.awt.event.ActionEvent;
 
 public class PainelMenu extends JPanel implements ActionListener{
@@ -61,7 +62,7 @@ public class PainelMenu extends JPanel implements ActionListener{
 
     private void tocarMusica() {
         try {
-            AudioInputStream audioStream = AudioSystem.getAudioInputStream(new File("../../resources/sons/Pac-Man-Theme-(REMIX).wav"));
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(new File(Paths.get("resources", "sons", "Pac-Man-Theme-(REMIX).wav").toString()));
             clip = AudioSystem.getClip();
             clip.open(audioStream);
             clip.loop(Clip.LOOP_CONTINUOUSLY);
