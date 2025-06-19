@@ -20,6 +20,8 @@ public class PainelJogo extends JPanel implements Runnable {
     private final int numeroLinhas = 20; // numero de colunas de tiles
     private final int larguraTela = tamanhoTile * numeroColunas; // largura em pixels do painel
     private final int alturaTela = tamanhoTile * numeroLinhas; // altura em pixels do painel
+
+    private int pontuacao;
     
     public final Elemento[][] elementos;
     private final ArrayList<Parede> paredes;
@@ -89,6 +91,7 @@ public class PainelJogo extends JPanel implements Runnable {
                 atualizar();
                 repaint();
                 delta --;
+                System.out.printf("pontos: %d\n", getPontuacao());
             }
         }
     }
@@ -134,6 +137,14 @@ public class PainelJogo extends JPanel implements Runnable {
         caneta.dispose();
     }
 
+    public void aumentaPontuacao(int aumento) {
+        pontuacao += aumento;
+    }
+
+    public void setPontuacao(int pontuacao) {
+        this.pontuacao = pontuacao;
+    }
+
     public String[] getMapa() {
         return mapa;
     }
@@ -160,6 +171,10 @@ public class PainelJogo extends JPanel implements Runnable {
 
     public int getLargura() {
         return larguraTela;
+    }
+
+    public int getPontuacao() {
+        return pontuacao;
     }
 
 }

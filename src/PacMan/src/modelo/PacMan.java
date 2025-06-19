@@ -6,6 +6,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import javax.imageio.ImageIO;
+
+import interfaces.Elemento;
 import main.LeitorTeclado;
 import main.PainelJogo;
 
@@ -42,6 +44,14 @@ public class PacMan extends Entidade{
         }
 
         mover();
+
+        int linhaMatriz = getY()/getPainelJogo().getTamanhoTile();
+        int colunaMatriz = getX()/getPainelJogo().getTamanhoTile();
+        Elemento elemento = getPainelJogo().elementos[linhaMatriz][colunaMatriz];
+
+        if(elemento instanceof Comestivel) {
+            ((Comestivel)elemento).comer();
+        }
 
         contadorSprite++;
 

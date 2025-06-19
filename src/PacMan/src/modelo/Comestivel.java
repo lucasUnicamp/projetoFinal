@@ -22,8 +22,23 @@ public class Comestivel implements Elemento{
         g.fillOval(posicaoX, posicaoY, 10, 10);
     }
 
+    public void comer() {
+        int linhaMatriz = getY()/painelJogo.getTamanhoTile();
+        int colunaMatriz = getX()/painelJogo.getTamanhoTile();
+        painelJogo.elementos[linhaMatriz][colunaMatriz] = new EspacoVazio();
+        painelJogo.aumentaPontuacao(1);
+    }
+
     public boolean ehColidivel() {
         return colidivel;
+    }
+    
+    public int getX() {
+        return posicaoX;
+    }
+
+    public int getY() {
+        return posicaoY;
     }
 
     public void setX(int x) {
