@@ -25,15 +25,15 @@ public class PainelJogo extends JPanel implements Runnable {
     private final ArrayList<Parede> paredes;
     private final ArrayList<Comestivel> comestiveis;
     private String[] mapa = {
-        "pppppppppppppppppppp",
+        "ppppppppppcppppppppp",
         "pccccccccccccccccccp",
         "pcppppppppcppcppppcp",
         "pcppppppppcppcppppcp",
         "pccccccccccppcppppcp",
         "pcppppppcpcppcppppcp",
-        "pcppppppcpcppcppppcp",
+        "ccppppppcpcppcppppcp",
         "pcppppcccccccccpppcp",
-        "pcppppccpppppccpppcp",
+        "pcppppccpppppccpppcc",
         "pcppppccpppppccccccp",
         "pcppppccpppppccpppcp",
         "pcppppcccccccccpppcp",
@@ -44,7 +44,7 @@ public class PainelJogo extends JPanel implements Runnable {
         "pccccccccccccccccccp",
         "pcpppcpppppppppcppcp",
         "pccccccccccccccccccp",
-        "pppppppppppppppppppp",     
+        "pppppppppppcpppppppp",     
     };
 
     int FPS = 60;

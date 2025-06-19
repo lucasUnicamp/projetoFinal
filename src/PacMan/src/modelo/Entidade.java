@@ -36,11 +36,13 @@ public class Entidade {
     public void mover() {
         boolean colidiu = false;
 
-        int yTopoHitBox = getY() - alturaHitBox/2; // cordenadas dos limites da hit box da entidade antes do movimento
+        // cordenadas dos limites da hit box da entidade antes do movimento
+        int yTopoHitBox = getY() - alturaHitBox/2;
         int yBaixoHitBox = getY() + alturaHitBox/2;
         int xDireitaHitBox = getX() + larguraHitBox/2;
         int xEsquerdaHitBox = getX() - larguraHitBox/2;
 
+        // indices na matriz de elementos que cada borda da hit box está
         int linhaTopoHitBox = yTopoHitBox/painelJogo.getTamanhoTile(); 
         int linhaBaixoHitBox = yBaixoHitBox/painelJogo.getTamanhoTile();
         int colunaDireitaHitBox = xDireitaHitBox/painelJogo.getTamanhoTile();
@@ -48,14 +50,14 @@ public class Entidade {
 
         Elemento[][] elementos = painelJogo.elementos;
 
-        switch (getDirecao()) { // pac-man move continuamente para a direção que está apontando
+        switch (getDirecao()) { 
             case "cima":
-                linhaTopoHitBox = (yTopoHitBox - getVelocidade())/painelJogo.getTamanhoTile();
+                linhaTopoHitBox = (yTopoHitBox - getVelocidade())/painelJogo.getTamanhoTile(); // vê onde a hit box vai estar se o pac-man andar
 
                 if (elementos[linhaTopoHitBox][colunaEsquerdaHitBox].ehColidivel() == true || elementos[linhaTopoHitBox][colunaDireitaHitBox].ehColidivel() == true)
-                    colidiu = true;
+                    colidiu = true; // colidiu com parede
                 else if ((getY() - getVelocidade()) <= getPainelJogo().getTamanhoTile()/2) {
-                    colidiu = true;
+                    colidiu = true; // colidiu com a borda do mapa
                     setY(getPainelJogo().getTamanhoTile()/2);
                 }
                     
@@ -96,10 +98,11 @@ public class Entidade {
                 break;
         }
         
-        if (!colidiu) {
+        // caso o movimento não resulte em colisão o pac-man se movimenta
+        if (!colidiu) { 
             switch (getDirecao()) {
                 case "cima":
-                    centralizarX();
+                    centralizarX(); // centraliza o pac-man no caminho
                     setY(getY() - getVelocidade());
                     break;
                 case "direita":
