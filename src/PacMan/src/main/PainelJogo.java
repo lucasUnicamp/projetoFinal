@@ -21,7 +21,7 @@ public class PainelJogo extends JPanel implements Runnable {
     private final int larguraTela = tamanhoTile * numeroColunas; // largura em pixels do painel
     private final int alturaTela = tamanhoTile * numeroLinhas; // altura em pixels do painel
     
-    private final Elemento[][] elementos;
+    public final Elemento[][] elementos;
     private final ArrayList<Parede> paredes;
     private final ArrayList<Comestivel> comestiveis;
     private String[] mapa = {
