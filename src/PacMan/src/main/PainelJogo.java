@@ -21,7 +21,7 @@ public class PainelJogo extends JPanel implements Runnable {
     private final int larguraTela = tamanhoTile * numeroColunas; // largura em pixels do painel
     private final int alturaTela = tamanhoTile * numeroLinhas; // altura em pixels do painel
     
-    private final ArrayList<Elemento> elementos;
+    private final Elemento[][] elementos;
     private final ArrayList<Parede> paredes;
     private final ArrayList<Comestivel> comestiveis;
     private String[] mapa = {
@@ -61,7 +61,7 @@ public class PainelJogo extends JPanel implements Runnable {
         addKeyListener(leitor);
         setFocusable(true);
         pacman = new PacMan(this, leitor);
-        elementos = new ArrayList<>();
+        elementos = new Elemento[numeroLinhas][numeroColunas];
         comestiveis = new ArrayList<>();
         paredes = new ArrayList<>();
         this.carregarElementos();
@@ -100,12 +100,12 @@ public class PainelJogo extends JPanel implements Runnable {
             for (j = 0; j < numeroColunas; j++) {
                 if (mapa[i].charAt(j) == 'p') {  //parede
                     paredes.add(new Parede(this, j, i));
-                    elementos.add(new Parede(this, j, i));
+                    elementos[i][j] = new Parede(this, j, i);
                 }
                 else if (mapa[i].charAt(j) == 'c') {     //comestiveis
                     // - 5 pois é o raio do comestível
                     comestiveis.add(new Comestivel(this, j * tamanhoTile + tamanhoTile / 2 - 5, i * tamanhoTile + tamanhoTile / 2 - 5));
-                    elementos.add(new Comestivel(this, j * tamanhoTile + tamanhoTile / 2 - 5, i * tamanhoTile + tamanhoTile / 2 - 5));
+                    elementos[i][j] = new Comestivel(this, j * tamanhoTile + tamanhoTile / 2 - 5, i * tamanhoTile + tamanhoTile / 2 - 5);
                 }
             }
         }
@@ -122,8 +122,10 @@ public class PainelJogo extends JPanel implements Runnable {
         super.paintComponent(g);
 
         Graphics2D caneta = (Graphics2D) g;
-        for(Elemento e: this.elementos) {
-            e.desenhar(caneta);
+        for(int i = 0; i < numeroLinhas; i++) {     //laco para o desenho dos elementos de parede e comestiveis
+            for(int j = 0; j < numeroColunas; j++){
+                elementos[i][j].desenhar(caneta);
+            }
         }
         
         pacman.desenhar(caneta);
