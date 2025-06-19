@@ -51,9 +51,9 @@ public class Parede implements Elemento{
      */
     public void getImagem() {
         try {
-            paredeCheia = ImageIO.read(new File(Paths.get("resources", "paredeCheia.png").toString()));
-            paredeLado = ImageIO.read(new File(Paths.get("resources", "paredeLado.png").toString())); 
-            paredeBorda = ImageIO.read(new File(Paths.get("resources", "paredeBorda.png").toString()));
+            paredeCheia = ImageIO.read(new File(Paths.get("resources", "imagens", "paredeCheia.png").toString()));
+            paredeLado = ImageIO.read(new File(Paths.get("resources", "imagens", "paredeLado.png").toString())); 
+            paredeBorda = ImageIO.read(new File(Paths.get("resources", "imagens", "paredeBorda.png").toString()));
         } catch (IOException erro) {
             System.err.println("!!! ERRO NA IMPORTAÇÃO DOS SPRITES DA PAREDE !!!");
         }

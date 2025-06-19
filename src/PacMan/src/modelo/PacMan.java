@@ -96,11 +96,11 @@ public class PacMan extends Entidade{
     public void getImagem() {
         try {
             // Substituir por sprites com transparência
-            cima = ImageIO.read(new File(Paths.get("resources", "pacmanNorte.png").toString())); 
-            baixo = ImageIO.read(new File(Paths.get("resources", "pacmanSul.png").toString()));
-            direita = ImageIO.read(new File(Paths.get("resources", "pacmanLeste.png").toString()));
-            esquerda = ImageIO.read(new File(Paths.get("resources", "pacmanOeste.png").toString()));
-            repouso = ImageIO.read(new File(Paths.get("resources", "pacmanParado.png").toString()));
+            cima = ImageIO.read(new File(Paths.get("resources", "imagens", "pacmanNorte.png").toString())); 
+            baixo = ImageIO.read(new File(Paths.get("resources", "imagens", "pacmanSul.png").toString()));
+            direita = ImageIO.read(new File(Paths.get("resources", "imagens", "pacmanLeste.png").toString()));
+            esquerda = ImageIO.read(new File(Paths.get("resources", "imagens", "pacmanOeste.png").toString()));
+            repouso = ImageIO.read(new File(Paths.get("resources", "imagens", "pacmanParado.png").toString()));
 
         } catch (IOException e) {
             System.err.println("!!! ERRO NA IMPORTAÇÃO DOS SPRITES DO PACMAN !!!");
