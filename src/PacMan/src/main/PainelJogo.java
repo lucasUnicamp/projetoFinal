@@ -74,7 +74,6 @@ public class PainelJogo extends JPanel implements Runnable {
         double delta = 0;
         long ultimoTempo = System.nanoTime();
         long tempoAtual;
-        long timer = 0;
 
         while (gameThread != null) { // loop principal do jogo
 
@@ -123,6 +122,8 @@ public class PainelJogo extends JPanel implements Runnable {
         for(Parede p: this.paredes){
             p.desenhar(caneta);
         }
+
+
         for(Comestivel c: this.comestiveis){
             c.desenhar(caneta);
         }

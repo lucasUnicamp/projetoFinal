@@ -18,13 +18,12 @@ public class Parede {
     public Parede(PainelJogo painelJogo, int x, int y) {
         setX(x);
         setY(y);
-        
         this.painelJogo = painelJogo;
+        getImagem();
     }
 
     // Instruções para desenhar as paredes na tela
     public void desenhar(Graphics2D caneta) {
-        getImagem();
         caneta.drawImage(parede, getX()  - (painelJogo.getTamanhoTile())/2, getY() - (painelJogo.getTamanhoTile())/2, painelJogo.getTamanhoTile(), painelJogo.getTamanhoTile(), null);
     }
 

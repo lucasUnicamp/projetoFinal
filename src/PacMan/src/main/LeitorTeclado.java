@@ -21,7 +21,6 @@ public class LeitorTeclado implements KeyListener{
             esquerdaPressionado = false;
             direitaPressionado = false;
             baixoPressionado = false;
-            System.out.println("1");
         }
 
         if (!esquerdaPressionado && codigo == KeyEvent.VK_A) {
@@ -29,7 +28,6 @@ public class LeitorTeclado implements KeyListener{
             esquerdaPressionado = true;
             direitaPressionado = false;
             baixoPressionado = false;
-            System.out.println("2");
         }
 
         if (!baixoPressionado && codigo == KeyEvent.VK_S) {
@@ -37,7 +35,6 @@ public class LeitorTeclado implements KeyListener{
             esquerdaPressionado = false;
             direitaPressionado = false;
             baixoPressionado = true;
-            System.out.println("3");
         }
 
         if (!direitaPressionado && codigo == KeyEvent.VK_D) {
@@ -45,7 +42,6 @@ public class LeitorTeclado implements KeyListener{
             esquerdaPressionado = false;
             direitaPressionado = true;
             baixoPressionado = false;
-            System.out.println("4");
         }
     }
 
