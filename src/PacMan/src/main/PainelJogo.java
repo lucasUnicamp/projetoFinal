@@ -1,5 +1,6 @@
 package main;
 
+import interfaces.Elemento;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -20,25 +21,26 @@ public class PainelJogo extends JPanel implements Runnable {
     private final int larguraTela = tamanhoTile * numeroColunas; // largura em pixels do painel
     private final int alturaTela = tamanhoTile * numeroLinhas; // altura em pixels do painel
     
+    private final Elemento[][] elementos;
     private final ArrayList<Parede> paredes;
     private final ArrayList<Comestivel> comestiveis;
     private String[] mapa = {
         "pppppppppppppppppppp",
         "pccccccccccccccccccp",
-        "pcppppppppcpppppppcp",
-        "pcppppppppcpppppppcp",
-        "pccccccccccccccccccp",
-        "pcppppppppcpppppppcp",
-        "pcppppppppcpppppppcp",
+        "pcppppppppcppcppppcp",
+        "pcppppppppcppcppppcp",
+        "pccccccccccppcppppcp",
+        "pcppppppcpcppcppppcp",
+        "pcppppppcpcppcppppcp",
         "pcppppcccccccccpppcp",
-        "pcppppcpppppppcpppcp",
-        "pccccccpppppppcccccp",
-        "pcppppcpppppppcpppcp",
+        "pcppppccpppppccpppcp",
+        "pcppppccpppppccccccp",
+        "pcppppccpppppccpppcp",
         "pcppppcccccccccpppcp",
         "pcppppppppcpppppppcp",
         "pcppppppppcpppppppcp",
-        "pcpppcccccccccccppcp",
-        "pcpppcpppppppppcppcp",
+        "pcppppppppccccccppcp",
+        "pcpppppppppppppcppcp",
         "pccccccccccccccccccp",
         "pcpppcpppppppppcppcp",
         "pccccccccccccccccccp",
@@ -59,9 +61,10 @@ public class PainelJogo extends JPanel implements Runnable {
         addKeyListener(leitor);
         setFocusable(true);
         pacman = new PacMan(this, leitor);
+        elementos = new Elemento[numeroLinhas][numeroColunas];
         comestiveis = new ArrayList<>();
         paredes = new ArrayList<>();
-        this.carregar_elementos();
+        this.carregarElementos();
     }
 
     public void comecarThread() {
@@ -89,24 +92,24 @@ public class PainelJogo extends JPanel implements Runnable {
             }
         }
     }
-    
-    public String[] carregarMapa() {
-        return this.mapa;
-    }
 
-    public final void carregar_elementos(){
+    public final void carregarElementos() {
         int i, j;
-        for (i = 0; i < numeroLinhas; i++){
-            for (j = 0; j < numeroColunas; j++){
-                if (mapa[i].charAt(j) == 'p')   //parede
-                    paredes.add(new Parede(this, j * tamanhoTile + tamanhoTile / 2, i * tamanhoTile + tamanhoTile / 2));
-                else if (mapa[i].charAt(j) == 'c')      //comestiveis
-                    comestiveis.add(new Comestivel(j * tamanhoTile + tamanhoTile / 4, i * tamanhoTile + tamanhoTile / 4, this));
+        for (i = 0; i < numeroLinhas; i++) {
+            for (j = 0; j < numeroColunas; j++) {
+                if (mapa[i].charAt(j) == 'p') {  //parede
+                    paredes.add(new Parede(this, j, i));
+                    elementos[i][j] = new Parede(this, j, i);
+                }
+                else if (mapa[i].charAt(j) == 'c') {     //comestiveis
+                    // - 5 pois é o raio do comestível
+                    comestiveis.add(new Comestivel(this, j * tamanhoTile + tamanhoTile / 2 - 5, i * tamanhoTile + tamanhoTile / 2 - 5));
+                    elementos[i][j] = new Comestivel(this, j * tamanhoTile + tamanhoTile / 2 - 5, i * tamanhoTile + tamanhoTile / 2 - 5);
+                }
             }
         }
     }
     
-
     // atualiza estado de todos os objetos
     public void atualizar() {
         pacman.atualizar();
@@ -118,16 +121,12 @@ public class PainelJogo extends JPanel implements Runnable {
         super.paintComponent(g);
 
         Graphics2D caneta = (Graphics2D) g;
+        for(int i = 0; i < numeroLinhas; i++) {     //laco para o desenho dos elementos de parede e comestiveis
+            for(int j = 0; j < numeroColunas; j++){
+                elementos[i][j].desenhar(caneta);
+            }
+        }
         
-        for(Parede p: this.paredes){
-            p.desenhar(caneta);
-        }
-
-
-        for(Comestivel c: this.comestiveis){
-            c.desenhar(caneta);
-        }
-   
         pacman.desenhar(caneta);
 
         caneta.dispose();
@@ -139,6 +138,14 @@ public class PainelJogo extends JPanel implements Runnable {
 
     public int getTamanhoTile() {
         return tamanhoTile;
+    }
+
+    public int getNumeroLinhas() {
+        return numeroLinhas;
+    }
+
+    public int getNumeroColunas() {
+        return numeroColunas;
     }
 
     public int getEscala() {
