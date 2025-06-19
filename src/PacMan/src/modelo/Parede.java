@@ -16,6 +16,7 @@ public class Parede implements Elemento{
     private int yReal;
     private BufferedImage paredeLado, paredeCheia, paredeBorda;
     private PainelJogo painelJogo;
+    public boolean colidivel = true;
 
     public Parede(PainelJogo painelJogo, int x, int y) {
         this.painelJogo = painelJogo;
@@ -85,6 +86,10 @@ public class Parede implements Elemento{
         }
     }
 
+    public boolean ehColidivel() {
+        return colidivel;
+    }
+    
     public void setXMatriz(int x) {
         xMatriz = x;
     }

@@ -21,19 +21,19 @@ public class PainelJogo extends JPanel implements Runnable {
     private final int larguraTela = tamanhoTile * numeroColunas; // largura em pixels do painel
     private final int alturaTela = tamanhoTile * numeroLinhas; // altura em pixels do painel
     
-    private final Elemento[][] elementos;
+    public final Elemento[][] elementos;
     private final ArrayList<Parede> paredes;
     private final ArrayList<Comestivel> comestiveis;
     private String[] mapa = {
-        "pppppppppppppppppppp",
+        "ppppppppppcppppppppp",
         "pccccccccccccccccccp",
         "pcppppppppcppcppppcp",
         "pcppppppppcppcppppcp",
         "pccccccccccppcppppcp",
         "pcppppppcpcppcppppcp",
-        "pcppppppcpcppcppppcp",
+        "ccppppppcpcppcppppcp",
         "pcppppcccccccccpppcp",
-        "pcppppccpppppccpppcp",
+        "pcppppccpppppccpppcc",
         "pcppppccpppppccccccp",
         "pcppppccpppppccpppcp",
         "pcppppcccccccccpppcp",
@@ -44,7 +44,7 @@ public class PainelJogo extends JPanel implements Runnable {
         "pccccccccccccccccccp",
         "pcpppcpppppppppcppcp",
         "pccccccccccccccccccp",
-        "pppppppppppppppppppp",     
+        "pppppppppppcpppppppp",     
     };
 
     int FPS = 60;
@@ -98,13 +98,15 @@ public class PainelJogo extends JPanel implements Runnable {
         for (i = 0; i < numeroLinhas; i++) {
             for (j = 0; j < numeroColunas; j++) {
                 if (mapa[i].charAt(j) == 'p') {  //parede
-                    paredes.add(new Parede(this, j, i));
-                    elementos[i][j] = new Parede(this, j, i);
+                    Parede parede = new Parede(this, j, i);
+                    paredes.add(parede);
+                    elementos[i][j] = parede;
                 }
                 else if (mapa[i].charAt(j) == 'c') {     //comestiveis
                     // - 5 pois é o raio do comestível
-                    comestiveis.add(new Comestivel(this, j * tamanhoTile + tamanhoTile / 2 - 5, i * tamanhoTile + tamanhoTile / 2 - 5));
-                    elementos[i][j] = new Comestivel(this, j * tamanhoTile + tamanhoTile / 2 - 5, i * tamanhoTile + tamanhoTile / 2 - 5);
+                    Comestivel comestivel = new Comestivel(this, j * tamanhoTile + tamanhoTile / 2 - 5, i * tamanhoTile + tamanhoTile / 2 - 5);
+                    comestiveis.add(comestivel);
+                    elementos[i][j] = comestivel;
                 }
             }
         }
