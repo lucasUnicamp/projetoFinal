@@ -49,7 +49,7 @@ public class PainelJogo extends JPanel implements Runnable {
         "pppppppppppcpppppppp",     
     };
 
-    int FPS = 60;
+    int FPS = 30;
     PacMan pacman;
 
     LeitorTeclado leitor = new LeitorTeclado(); // listener do teclado
@@ -175,6 +175,10 @@ public class PainelJogo extends JPanel implements Runnable {
 
     public int getPontuacao() {
         return pontuacao;
+    }
+
+    public int getFPS() {
+        return FPS;
     }
 
 }

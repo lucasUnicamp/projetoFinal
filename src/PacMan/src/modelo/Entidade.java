@@ -7,7 +7,7 @@ import main.PainelJogo;
 public class Entidade {
     private int posicaoX;
     private int posicaoY;
-    private int velocidade;
+    private int velocidade; // pixels por frame
     private String direcao;
     private int alturaHitBox;
     private int larguraHitBox;
@@ -54,11 +54,11 @@ public class Entidade {
             case "cima":
                 linhaTopoHitBox = (yTopoHitBox - getVelocidade())/painelJogo.getTamanhoTile(); // vê onde a hit box vai estar se o pac-man andar
 
-                if (elementos[linhaTopoHitBox][colunaEsquerdaHitBox].ehColidivel() == true || elementos[linhaTopoHitBox][colunaDireitaHitBox].ehColidivel() == true)
-                    colidiu = true; // colidiu com parede
-                else if ((getY() - getVelocidade()) <= getPainelJogo().getTamanhoTile()/2) {
+                if ((getY() - getVelocidade()) <= getPainelJogo().getTamanhoTile()/2) {
                     colidiu = true; // colidiu com a borda do mapa
                     setY(getPainelJogo().getTamanhoTile()/2);
+                } else if (elementos[linhaTopoHitBox][colunaEsquerdaHitBox].ehColidivel() == true || elementos[linhaTopoHitBox][colunaDireitaHitBox].ehColidivel() == true) {
+                    colidiu = true; // colidiu com parede
                 }
                     
                 break;
@@ -66,11 +66,11 @@ public class Entidade {
             case "baixo":
                 linhaBaixoHitBox = (yBaixoHitBox + getVelocidade())/painelJogo.getTamanhoTile();
 
-                if (elementos[linhaBaixoHitBox][colunaEsquerdaHitBox].ehColidivel() == true || elementos[linhaBaixoHitBox][colunaDireitaHitBox].ehColidivel() == true)
-                    colidiu = true;
-                else if ((getY() + getVelocidade()) >= (getPainelJogo().getAltura() - getPainelJogo().getTamanhoTile()/2)) {
+                if ((getY() + getVelocidade()) >= (getPainelJogo().getAltura() - getPainelJogo().getTamanhoTile()/2)) {
                     colidiu = true;
                     setY(getPainelJogo().getAltura() - getPainelJogo().getTamanhoTile() / 2);
+                } else if (elementos[linhaBaixoHitBox][colunaEsquerdaHitBox].ehColidivel() == true || elementos[linhaBaixoHitBox][colunaDireitaHitBox].ehColidivel() == true) {
+                    colidiu = true;
                 }
                     
                 break;
@@ -78,22 +78,22 @@ public class Entidade {
             case "esquerda":
                 colunaEsquerdaHitBox = (xEsquerdaHitBox - getVelocidade())/painelJogo.getTamanhoTile();
 
-                if (elementos[linhaBaixoHitBox][colunaEsquerdaHitBox].ehColidivel() == true || elementos[linhaTopoHitBox][colunaEsquerdaHitBox].ehColidivel() == true)
-                    colidiu = true;
-                else if ((getX() - getVelocidade()) <= getPainelJogo().getTamanhoTile()/2) {
+                if ((getX() - getVelocidade()) <= getPainelJogo().getTamanhoTile()/2) {
                     colidiu = true;
                     setX(getPainelJogo().getTamanhoTile()/2);
+                } else if (elementos[linhaBaixoHitBox][colunaEsquerdaHitBox].ehColidivel() == true || elementos[linhaTopoHitBox][colunaEsquerdaHitBox].ehColidivel() == true) {
+                    colidiu = true;
                 }
                 break;
 
             case "direita":
                 colunaDireitaHitBox = (xDireitaHitBox + getVelocidade())/painelJogo.getTamanhoTile();
 
-                if (elementos[linhaBaixoHitBox][colunaDireitaHitBox].ehColidivel() == true || elementos[linhaTopoHitBox][colunaDireitaHitBox].ehColidivel() == true)
-                    colidiu = true;
-                else if ((getX() + getVelocidade()) >= (getPainelJogo().getLargura() - getPainelJogo().getTamanhoTile()/2)){
+                if ((getX() + getVelocidade()) >= (getPainelJogo().getLargura() - getPainelJogo().getTamanhoTile()/2)) {
                     colidiu = true;
                     setX(getPainelJogo().getLargura() - getPainelJogo().getTamanhoTile()/2);
+                } else if (elementos[linhaBaixoHitBox][colunaDireitaHitBox].ehColidivel() == true || elementos[linhaTopoHitBox][colunaDireitaHitBox].ehColidivel() == true){
+                    colidiu = true;
                 }
                 break;
         }
@@ -132,7 +132,10 @@ public class Entidade {
     private void setPadrao() {
         setX(painelJogo.getTamanhoTile() + painelJogo.getTamanhoTile()/2);   
         setY(painelJogo.getTamanhoTile() + painelJogo.getTamanhoTile()/2);
-        setVelocidade(3);
+
+        int velocidade = 90; // pixels por segundo
+        setVelocidade((velocidade * getPainelJogo().getEscala()) / getPainelJogo().getFPS()); 
+
         setDirecao("direita");
     }
 
