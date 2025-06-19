@@ -19,7 +19,7 @@ public class PainelMenu extends JPanel implements ActionListener{
 
     public PainelMenu (JFrame frame) {
         this.frame = frame;
-        this.tocarMusica("");
+        this.tocarMusica();
         this.setLayout(new GridLayout(4, 1));
         
         novoJogo = new JButton("Novo Jogo");
@@ -32,6 +32,11 @@ public class PainelMenu extends JPanel implements ActionListener{
         this.add(opcoes);
         this.add(sair);
 
+        novoJogo.addActionListener(this);
+        continuar.addActionListener(this);
+        opcoes.addActionListener(this);
+        sair.addActionListener(this);
+
     }
 
     @Override public void actionPerformed (ActionEvent e) {
@@ -42,16 +47,17 @@ public class PainelMenu extends JPanel implements ActionListener{
             //ação correspondente
 
         } else if (e.getSource() == opcoes){
-            //ação correspondente
+            JFrame janelaopcoes = new JFrame("Opções");
+            
 
         } else {
             frame.dispose();
         }
     }
 
-    private void tocarMusica(String caminhoAudio) {
+    private void tocarMusica() {
         try {
-            AudioInputStream audioStream = AudioSystem.getAudioInputStream(new File(caminhoAudio));
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(new File("../../resources/sons/Pac-Man-Theme-(REMIX).wav"));
             clip = AudioSystem.getClip();
             clip.open(audioStream);
             clip.loop(Clip.LOOP_CONTINUOUSLY);
