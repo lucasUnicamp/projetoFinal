@@ -48,6 +48,7 @@ public class PainelMenu extends JPanel implements ActionListener{
 
         } else if (e.getSource() == opcoes){
             JFrame janelaopcoes = new JFrame("Opções");
+            janelaopcoes.setVisible(true);
             
 
         } else {
