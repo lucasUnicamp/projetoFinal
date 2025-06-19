@@ -47,9 +47,12 @@ public class PainelMenu extends JPanel implements ActionListener{
             //ação correspondente
 
         } else if (e.getSource() == opcoes){
-            JFrame janelaopcoes = new JFrame("Opções");
-            janelaopcoes.setVisible(true);
-            
+            JFrame janelaOpcoes = new JFrame("Opções");
+            janelaOpcoes.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            janelaOpcoes.setSize(300, 200);
+            janelaOpcoes.setLocationRelativeTo(frame); // centraliza em relação ao menu
+            janelaOpcoes.setContentPane(new PainelOpcoes(this.clip));
+            janelaOpcoes.setVisible(true);
 
         } else {
             frame.dispose();
