@@ -3,19 +3,23 @@ package menuPrincipal;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.sound.sampled.*;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.awt.event.ActionEvent;
 
 public class PainelMenu extends JPanel implements ActionListener{
-    JButton novoJogo;
-    JButton continuar;
-    JButton opcoes;
-    JButton sair;
-    JFrame frame;
+    private JButton novoJogo;
+    private JButton continuar;
+    private JButton opcoes;
+    private JButton sair;
+    private JFrame frame;
+    private Clip clip;
 
     public PainelMenu (JFrame frame) {
         this.frame = frame;
+        this.tocarMusica("");
         this.setLayout(new GridLayout(4, 1));
         
         novoJogo = new JButton("Novo Jogo");
@@ -43,5 +47,15 @@ public class PainelMenu extends JPanel implements ActionListener{
         } else {
             frame.dispose();
         }
+    }
+
+    private void tocarMusica(String caminhoAudio) {
+        try {
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(new File(caminhoAudio));
+            clip = AudioSystem.getClip();
+            clip.open(audioStream);
+            clip.loop(Clip.LOOP_CONTINUOUSLY);
+
+        } catch (Exception e) {}
     }
 }
