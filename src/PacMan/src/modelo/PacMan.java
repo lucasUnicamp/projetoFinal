@@ -24,11 +24,7 @@ public class PacMan {
     public PacMan(PainelJogo painelJogo, LeitorTeclado leitor) {
         setX(painelJogo.getTamanhoTile());   
         setY(painelJogo.getTamanhoTile());
-<<<<<<< HEAD
-        velocidade = 4;
-=======
         velocidade = 3;
->>>>>>> 097ca081feab172f869c4a6e94e4c8bc648d9a2f
         direcao = "direita";
 
         getImagem();
