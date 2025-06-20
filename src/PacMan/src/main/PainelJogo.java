@@ -121,6 +121,8 @@ public class PainelJogo extends JPanel implements Runnable {
     // atualiza estado de todos os objetos
     public void atualizar() {
         pacman.atualizar();
+        fantasma.executarfuncao(pacman.getX(), pacman.getY());
+
     }
 
     // desenha tudo na tela
