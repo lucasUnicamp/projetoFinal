@@ -8,6 +8,7 @@ import java.awt.Graphics2D;
 import java.util.ArrayList;
 import javax.swing.JPanel;
 import modelo.Comestivel;
+import modelo.Fantasma;
 import modelo.PacMan;
 import modelo.Parede;
 
@@ -31,6 +32,7 @@ public class PainelJogo extends JPanel implements Runnable {
 
     int FPS = 30;
     PacMan pacman;
+    Fantasma fantasma;
 
     LeitorTeclado leitor = new LeitorTeclado(); // listener do teclado
 
@@ -47,6 +49,7 @@ public class PainelJogo extends JPanel implements Runnable {
         mapa = tratadorMapa.atribuirMapa();
 
         pacman = new PacMan(this, leitor);
+        fantasma = new Fantasma(this);
         elementos = new Elemento[numeroLinhas][numeroColunas];
         comestiveis = new ArrayList<>();
         paredes = new ArrayList<>();
@@ -102,6 +105,8 @@ public class PainelJogo extends JPanel implements Runnable {
     // atualiza estado de todos os objetos
     public void atualizar() {
         pacman.atualizar();
+        fantasma.executarfuncao(pacman.getX(), pacman.getY());
+
     }
 
     // desenha tudo na tela
@@ -116,6 +121,7 @@ public class PainelJogo extends JPanel implements Runnable {
             }
         }
         
+        fantasma.desenhar(caneta);
         pacman.desenhar(caneta);
 
         caneta.dispose();
