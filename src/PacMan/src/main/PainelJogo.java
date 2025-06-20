@@ -49,7 +49,6 @@ public class PainelJogo extends JPanel implements Runnable {
         setPreferredSize(new Dimension(larguraTela, alturaTela));
         setBackground(Color.BLACK);
         setDoubleBuffered(true);
-        addKeyListener(leitor);
         setFocusable(true);
 
         pacman = new PacMan(this, leitor);
@@ -82,7 +81,7 @@ public class PainelJogo extends JPanel implements Runnable {
                 atualizar();
                 repaint();
                 delta --;
-                System.out.printf("pontos: %d\n", getPontuacao());
+                //System.out.printf("pontos: %d\n", getPontuacao());
             }
         }
     }

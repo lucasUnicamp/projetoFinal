@@ -7,6 +7,7 @@ import javax.sound.sampled.*;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.awt.event.ActionEvent;
 import main.*;
@@ -22,11 +23,8 @@ public class PainelMenu extends JPanel implements ActionListener{
     private MenuPrincipal frame;
     private Clip clip;
 
-    //paineis
-    private PainelOpcoes painelOpcoes;
-    private PainelJogo painelJogo;
-
-    public PainelMenu (MenuPrincipal frame) {
+    public PainelMenu (Clip clip, MenuPrincipal frame) {
+        this.clip = clip;
         this.frame = frame;
 
         this.tocarMusica();
@@ -47,20 +45,13 @@ public class PainelMenu extends JPanel implements ActionListener{
         opcoes.addActionListener(this);
         sair.addActionListener(this);
 
-        painelOpcoes = new PainelOpcoes(clip, this.frame);
-
-        this.frame.getCards().add(this, "painelMenu");
-        this.frame.getCards().add(painelOpcoes, "painelOpcoes");
-
-        painelJogo = new PainelJogo();
-        this.frame.getCards().add(painelJogo, "painelJogo");
-
     }
 
     @Override public void actionPerformed (ActionEvent e) {
         if (e.getSource() == novoJogo) {
             this.frame.getCardLayout().show(this.frame.getCards(), "painelJogo");
-            this.painelJogo.comecarThread();
+            this.frame.requestFocusInWindow();
+            this.frame.painelJogo.comecarThread();
 
         } else if (e.getSource() == continuar) {
             //ação correspondente
@@ -99,17 +90,22 @@ public class PainelMenu extends JPanel implements ActionListener{
             );
     
             AudioInputStream decodedStream = AudioSystem.getAudioInputStream(decodedFormat, originalStream);
-    
-            this.clip = AudioSystem.getClip();
             clip.open(decodedStream);
             clip.loop(Clip.LOOP_CONTINUOUSLY);
     
             System.out.println("Música carregada e tocando!");
     
-        } catch (Exception e) {
+        } catch (LineUnavailableException e) {
+            System.out.println("Erro ao carregar música:");
+            e.printStackTrace();
+        } catch (IOException e) {
+            System.out.println("Erro ao carregar música:");
+            e.printStackTrace();
+        } catch (UnsupportedAudioFileException e) {
             System.out.println("Erro ao carregar música:");
             e.printStackTrace();
         }
+
     }
     
 

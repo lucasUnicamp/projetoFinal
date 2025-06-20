@@ -22,8 +22,6 @@ public class PainelOpcoes extends JPanel implements ActionListener, ChangeListen
 
 
     public PainelOpcoes(Clip clip, MenuPrincipal frame) {
-        this.clip = clip;
-        if (this.clip == null) System.out.println("deu bosta");
         this.frame = frame;
         setLayout(new GridLayout(2,1));
 
