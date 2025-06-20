@@ -27,7 +27,7 @@ public class Fantasma extends Entidade{
         setDirecao("cima");
 
         try {
-            provisoria = ImageIO.read(new File(Paths.get("resources", "imagens", "fantasma.png").toString()));
+            provisoria = ImageIO.read(new File(Paths.get("resources", "imagens", "fantasmaVermelho.png").toString()));
         } catch (IOException e) {
             System.err.println("!!! ERRO NA IMPORTAÇÃO DO SPRITE DO FANTASMA !!!");
         }
