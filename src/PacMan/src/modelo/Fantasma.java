@@ -22,7 +22,7 @@ public class Fantasma extends Entidade{
         setY(getPainelJogo().getTamanhoTile() * 11 + getPainelJogo().getTamanhoTile()/2);
 
         estadoPerseguicao = 1;
-        setVelocidade((100 * getPainelJogo().getEscala()) / getPainelJogo().getFPS()); 
+        setVelocidade((70 * getPainelJogo().getEscala()) / getPainelJogo().getFPS()); 
 
         setDirecao("cima");
 
@@ -78,7 +78,7 @@ public class Fantasma extends Entidade{
     }
 
     public void dispersar(int xf, int yf){
-
+        //implementar no futuro quando o fantasma estiver no modo dispersar
     }
 
     public void perseguir(int x, int y){
@@ -90,10 +90,11 @@ public class Fantasma extends Entidade{
         ArrayList<Direcoes> direcoes = prioridade(x, y);
 
         if(menorDistantcia > direcoes.get(0).getDistancia()){
+            //escolha da direcao que apos o movimento mais se aproximara do destino desejado
             for(Direcoes d: direcoes){
                 this.setDirecao(d.getDirecao());
                 this.mover();
-                if(xi != this.getX() || yi != this.getY()){
+                if(xi != this.getX() || yi != this.getY()){ //moveu
                     break;
                 }
             }
