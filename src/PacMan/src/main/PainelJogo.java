@@ -26,6 +26,7 @@ public class PainelJogo extends JPanel implements Runnable {
     public final Elemento[][] elementos;
     private final ArrayList<Parede> paredes;
     private final ArrayList<Comestivel> comestiveis;
+    private final TratadorArquivo tratadorArquivo;
     private String[] mapa = {
         "ppppppppppcppppppppp",
         "pccccccccccccccccccp",
@@ -62,6 +63,10 @@ public class PainelJogo extends JPanel implements Runnable {
         setDoubleBuffered(true);
         addKeyListener(leitor);
         setFocusable(true);
+
+        tratadorArquivo = new TratadorArquivo();
+        tratadorArquivo.checarMapa();
+        
         pacman = new PacMan(this, leitor);
         elementos = new Elemento[numeroLinhas][numeroColunas];
         comestiveis = new ArrayList<>();
