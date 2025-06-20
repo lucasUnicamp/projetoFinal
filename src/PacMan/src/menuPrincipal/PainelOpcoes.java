@@ -15,6 +15,7 @@ import java.awt.GridLayout;
 public class PainelOpcoes extends JPanel implements ActionListener, ChangeListener{
     private Clip clip;
     private JButton pausar;
+    private JButton voltar;
     private JSlider slider;
     private boolean musicaPausada = false;
     private FloatControl controleVolume;
@@ -27,7 +28,8 @@ public class PainelOpcoes extends JPanel implements ActionListener, ChangeListen
         pausar = new JButton("Pausar Música");
         this.add(pausar);
         pausar.addActionListener(this);
-
+        
+        //controlador de volume
         if (clip.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
             controleVolume = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
             slider = new JSlider(0, 100, 70); // 0 a 100, começa em 70
@@ -41,21 +43,29 @@ public class PainelOpcoes extends JPanel implements ActionListener, ChangeListen
             slider.setEnabled(false); // Desabilita se não for suportado
         }
 
-
+        //botão de retornar
+        voltar = new JButton("Voltar");
+        voltar.addActionListener(this);
+        this.add(voltar);
     }
 
 
     @Override public void actionPerformed(ActionEvent e) {
-        if (musicaPausada) {
-            clip.start();
-            this.pausar.setText("Pausar Música");
-            
-        } else {
-            clip.stop();
-            this.pausar.setText("Retomar Música");
-        }
+        if (e.getSource() == this.pausar) {
+            if (musicaPausada) {
+                clip.start();
+                this.pausar.setText("Pausar Música");
+                
+            } else {
+                clip.stop();
+                this.pausar.setText("Retomar Música");
+            }
+    
+            musicaPausada = !musicaPausada;
 
-        musicaPausada = !musicaPausada;
+        } else {
+            //clicou na opção de voltar
+        }
     }
 
     @Override public void stateChanged(ChangeEvent e) {
