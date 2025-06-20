@@ -50,7 +50,6 @@ public class PainelMenu extends JPanel implements ActionListener{
     @Override public void actionPerformed (ActionEvent e) {
         if (e.getSource() == novoJogo) {
             this.frame.getCardLayout().show(this.frame.getCards(), "painelJogo");
-            this.frame.requestFocusInWindow();
             this.frame.painelJogo.comecarThread();
 
         } else if (e.getSource() == continuar) {

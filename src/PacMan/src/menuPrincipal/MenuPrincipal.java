@@ -22,6 +22,7 @@ public class MenuPrincipal extends JFrame{
     JPanel painelExternoJogo;
     PainelMenu painelMenu;
     Clip clip;
+    LeitorTeclado leitor = new LeitorTeclado();
 
     public MenuPrincipal() {
         try {
@@ -36,13 +37,13 @@ public class MenuPrincipal extends JFrame{
         this.setTitle("Pac-Man");
         this.cardLayout =  new CardLayout();
         this.cards = new JPanel(cardLayout);
+        cards.addKeyListener(leitor);
+        cards.setFocusable(true);
 
         painelExternoJogo = new JPanel(new GridBagLayout());
-        LeitorTeclado leitor = new LeitorTeclado();
-        painelExternoJogo.addKeyListener(leitor);
         painelExternoJogo.setBackground(Color.BLACK);
 
-        painelJogo = new PainelJogo();
+        painelJogo = new PainelJogo(leitor);
         painelExternoJogo.add(painelJogo, new GridBagConstraints());
 
         painelMenu = new PainelMenu(clip, this);

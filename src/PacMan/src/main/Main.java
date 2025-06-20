@@ -14,12 +14,6 @@ import java.awt.GridBagLayout;
 public class Main extends JFrame{
     public static void main(String[] args) throws Exception {
         new MenuPrincipal();
-        JFrame janela = new JFrame();
-        janela.setResizable(true);
-        PainelJogo painelJogo = new PainelJogo();
-        janela.add(painelJogo);
-        painelJogo.comecarThread();
-        janela.setVisible(true);
 
     }
 }
