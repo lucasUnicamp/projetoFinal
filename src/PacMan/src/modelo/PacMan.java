@@ -15,6 +15,7 @@ public class PacMan extends Entidade {
     private int estadoBoca; // boca aberta ou fechada
     private int contadorSprite; // usado para saber quando mudar o sprite (animação)
     private BufferedImage cima, baixo, esquerda, direita, repouso;
+    private String direcaoDesejada;
 
     private LeitorTeclado leitor;
 
@@ -29,25 +30,53 @@ public class PacMan extends Entidade {
     // atualiza o estado do pac-man dependo do input do usuário
     public void atualizar() {
         if (leitor.cimaPressionado) {
-            setDirecao("cima");
+            setDirecaoDesejada("cima");
         }
         else if (leitor.direitaPressionado) {
-            setDirecao("direita");
+            setDirecaoDesejada("direita");
         }
 
         else if (leitor.esquerdaPressionado) {
-            setDirecao("esquerda");
+            setDirecaoDesejada("esquerda");
         }
 
         else if (leitor.baixoPressionado) {
-            setDirecao("baixo");
+            setDirecaoDesejada("baixo");
+        }
+
+        int linhaMatriz = getY()/getPainelJogo().getTamanhoTile();
+        int colunaMatriz = getX()/getPainelJogo().getTamanhoTile();
+        Elemento[][] matrizElementos = getPainelJogo().elementos;
+
+        try {
+            if ((getDirecao() == "cima" || getDirecao() == "baixo"))
+                if (getDirecaoDesejada() == "direita") {
+                    if(!matrizElementos[linhaMatriz][colunaMatriz + 1].ehColidivel())
+                        setDirecao("direita");
+                } else if (getDirecaoDesejada() == "esquerda") {
+                    if(!matrizElementos[linhaMatriz][colunaMatriz - 1].ehColidivel())
+                        setDirecao("esquerda");
+                } else {
+                    setDirecao(getDirecaoDesejada());
+                }
+            else if((getDirecao() == "direita" || getDirecao() == "esquerda"))
+                if (getDirecaoDesejada() == "cima") {
+                    if(!matrizElementos[linhaMatriz - 1][colunaMatriz].ehColidivel())
+                        setDirecao("cima");
+                } else if (getDirecaoDesejada() == "baixo") {
+                    if(!matrizElementos[linhaMatriz + 1][colunaMatriz].ehColidivel())
+                        setDirecao("baixo");
+                } else {
+                    setDirecao(getDirecaoDesejada());
+                }
+
+        } catch (ArrayIndexOutOfBoundsException  e) {
+            setDirecao(getDirecaoDesejada());
         }
 
         mover();
 
-        int linhaMatriz = getY()/getPainelJogo().getTamanhoTile();
-        int colunaMatriz = getX()/getPainelJogo().getTamanhoTile();
-        Elemento elemento = getPainelJogo().elementos[linhaMatriz][colunaMatriz];
+        Elemento elemento = matrizElementos[linhaMatriz][colunaMatriz];
 
         if(elemento instanceof Comestivel) {
             ((Comestivel)elemento).comer();
@@ -90,6 +119,15 @@ public class PacMan extends Entidade {
             }
         }
         caneta.drawImage(imagem, getX()  - (getPainelJogo().getTamanhoTile())/2, getY() - (getPainelJogo().getTamanhoTile())/2, getPainelJogo().getTamanhoTile(), getPainelJogo().getTamanhoTile(), null);
+    }
+
+    public void setDirecaoDesejada(String direcao) {
+        if(direcao == "direita" || direcao == "esquerda" || direcao == "cima" || direcao == "baixo") 
+            this.direcaoDesejada = direcao;
+    }
+
+    public String getDirecaoDesejada() {
+        return direcaoDesejada;
     }
 
     // importa os sprites
