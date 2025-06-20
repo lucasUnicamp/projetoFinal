@@ -2,13 +2,10 @@ package main;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-
-import menuPrincipal.MenuPrincipal;
-
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Menu;
+//import java.awt.Menu;
 
 public class Main {
     public static void main(String[] args) throws Exception {
@@ -30,8 +27,6 @@ public class Main {
 
         janela.setExtendedState(JFrame.MAXIMIZED_BOTH);
         janela.setVisible(true);
-
-        MenuPrincipal menu = new MenuPrincipal();
         
         painelJogo.comecarThread();
     }
