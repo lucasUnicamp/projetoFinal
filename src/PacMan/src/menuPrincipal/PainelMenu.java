@@ -70,8 +70,7 @@ public class PainelMenu extends JPanel implements ActionListener{
 
     private void tocarMusica() {
         try {
-            Path caminho = Paths.get("/home/joaopedro/projetoFinal/src/PacMan/resources/sons/musca.wav");
-            File arquivo = caminho.toFile();
+            File arquivo = new File(Paths.get("resources", "sons", "musica.wav").toString());
     
             if (!arquivo.exists()) {
                 System.out.println("Arquivo não encontrado: " + arquivo.getAbsolutePath());
