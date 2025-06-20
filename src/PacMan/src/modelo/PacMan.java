@@ -11,7 +11,7 @@ import interfaces.Elemento;
 import main.LeitorTeclado;
 import main.PainelJogo;
 
-public class PacMan extends Entidade{
+public class PacMan extends Entidade {
     private int estadoBoca; // boca aberta ou fechada
     private int contadorSprite; // usado para saber quando mudar o sprite (animação)
     private BufferedImage cima, baixo, esquerda, direita, repouso;

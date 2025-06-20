@@ -9,7 +9,7 @@ import java.nio.file.Paths;
 import javax.imageio.ImageIO;
 import main.PainelJogo;
 
-public class Parede implements Elemento{
+public class Parede implements Elemento {
     private int xMatriz;
     private int yMatriz;
     private int xReal;
@@ -29,7 +29,8 @@ public class Parede implements Elemento{
     }
 
     // Instruções para desenhar as paredes na tela
-    @ Override public void desenhar(Graphics2D caneta) {
+    @Override
+    public void desenhar(Graphics2D caneta) {
         BufferedImage imagem = null;
 
         switch (decideImagem()) {
