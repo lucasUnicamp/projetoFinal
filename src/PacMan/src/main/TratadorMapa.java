@@ -11,6 +11,8 @@ import java.nio.file.Paths;
 
 public class TratadorMapa {
     private int mapaEscolhido;
+    private int mapaLargura;
+    private int mapaAltura;
     private File mapaArquivo;
 
     public TratadorMapa(int mapaEscolhido) {
@@ -18,22 +20,29 @@ public class TratadorMapa {
         carregarMapa();
     }
 
+    /**
+     * Atribui um arquivo de mapa ao objeto. Caso nenhum arquivo exista ou seja inválido, cria um arquivo de mapa
+     * genérico para ser usado
+     */
     public void carregarMapa() {
+        // String do nome do arquivo. O mapa é escolhido em 'PainelJogo'
         String mapa = "mapa" + Integer.toString(getMapaEscolhido());
         File mapaArquivo = new File(Paths.get("resources", "mapas", mapa).toString());
 
         if (mapaArquivo.isFile()) {
             System.out.printf("Mapa %d carregado com sucesso.\n", mapaEscolhido);
             checarMapa();
-            setMapaArquivo(mapaArquivo);
         }
+        // Mesmo se o 'mapa0' já existir, cria outro por precaução
         else {
             System.out.println("Nenhum mapa encontrado. Configuração genérica será usada.");
             criarGenerico();
-            setMapaArquivo(new File(Paths.get("resources", "mapas", "mapa0").toString()));
+            mapaArquivo = new File(Paths.get("resources", "mapas", "mapa0").toString());
         }
+        setMapaArquivo(mapaArquivo);
     }
 
+    // Cria o mapa genérico para que o jogo não fique sem nenhum
     public void criarGenerico() {
         try {
             Formatter arquivoLog  = new Formatter(new FileWriter(Paths.get("resources", "mapas", "mapa0").toString(), false));
@@ -68,20 +77,44 @@ public class TratadorMapa {
 
     }
 
+    /**
+     * Converte o arquivo de texto em um array de string para ser usado no jogo. também atribui as medidas
+     * do mapa às propriedades adequadas
+     * @return String[] do mapa baseada no arquivo de mapa
+     */
     public String[] atribuirMapa() {
         ArrayList<String> mapa = new ArrayList<String>();
+        int contador = 0;
 
         try (BufferedReader br = new BufferedReader(new FileReader(getMapaArquivo()))) {
             String line;
 
             while ((line = br.readLine()) != null) {
+                // Vê o tamanho da primeira linha para usar como largura do mapa
+                if (contador == 0)
+                    setMapaLargura(line.length());
                 mapa.add(line);
+                contador++;
             }
         } catch (IOException erro) {
             System.err.println("!!! ARQUIVO NÃO FOI ENCONTRADO PARA SER ATRIBUIDO !!!");
         }
-    
+
+        // Usa o número de linhas como altura do mapa
+        setMapaAltura(contador);
         return mapa.toArray(new String[mapa.size()]);
+    }
+
+    public void setMapaArquivo(File mapaArquivo) {
+        this.mapaArquivo = mapaArquivo;
+    }
+
+    public void setMapaLargura(int largura) {
+        mapaLargura = largura;
+    }
+
+    public void setMapaAltura(int altura) {
+        mapaAltura = altura;
     }
 
     public int getMapaEscolhido() {
@@ -91,8 +124,12 @@ public class TratadorMapa {
     public File getMapaArquivo() {
         return mapaArquivo;
     }
-    
-    public void setMapaArquivo(File mapaArquivo) {
-        this.mapaArquivo = mapaArquivo;
+
+    public int getMapaLargura() {
+        return mapaLargura;
+    }
+
+    public int getMapaAltura() {
+        return mapaAltura;
     }
 }

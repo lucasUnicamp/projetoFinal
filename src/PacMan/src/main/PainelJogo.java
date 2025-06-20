@@ -17,10 +17,10 @@ public class PainelJogo extends JPanel implements Runnable {
     private final int escala = 2; // taxa de escalonamento do sprite na tela
 
     private final int tamanhoTile = tamanhoPadraoTile * escala; // tamanho em pixel de cada lado do tile
-    private final int numeroColunas = 20; // numero de linhas de tiles
-    private final int numeroLinhas = 20; // numero de colunas de tiles
-    private final int larguraTela = tamanhoTile * numeroColunas; // largura em pixels do painel
-    private final int alturaTela = tamanhoTile * numeroLinhas; // altura em pixels do painel
+    private int numeroColunas; // numero de linhas de tiles
+    private int numeroLinhas; // numero de colunas de tiles
+    private int larguraTela; // largura em pixels do painel
+    private int alturaTela; // altura em pixels do painel
 
     private int pontuacao;
     
@@ -39,14 +39,18 @@ public class PainelJogo extends JPanel implements Runnable {
     Thread gameThread;
 
     public PainelJogo() {
+        tratadorMapa = new TratadorMapa(2);
+        mapa = tratadorMapa.atribuirMapa();
+        setNumeroColunas(tratadorMapa.getMapaLargura()); // numero de linhas de tiles
+        setNumeroLinhas(tratadorMapa.getMapaAltura()); // numero de colunas de tiles
+        larguraTela = tamanhoTile * numeroColunas; // largura em pixels do painel
+        alturaTela = tamanhoTile * numeroLinhas; // altura em pixels do painel
+
         setPreferredSize(new Dimension(larguraTela, alturaTela));
         setBackground(Color.BLACK);
         setDoubleBuffered(true);
         addKeyListener(leitor);
         setFocusable(true);
-
-        tratadorMapa = new TratadorMapa(1);
-        mapa = tratadorMapa.atribuirMapa();
 
         pacman = new PacMan(this, leitor);
         fantasma = new Fantasma(this);
@@ -85,8 +89,8 @@ public class PainelJogo extends JPanel implements Runnable {
 
     public final void carregarElementos() {
         int i, j;
-        for (i = 0; i < numeroLinhas; i++) {
-            for (j = 0; j < numeroColunas; j++) {
+        for (i = 0; i < getNumeroLinhas(); i++) {
+            for (j = 0; j < getNumeroColunas(); j++) {
                 if (mapa[i].charAt(j) == 'p') {  //parede
                     Parede parede = new Parede(this, j, i);
                     paredes.add(parede);
@@ -133,6 +137,14 @@ public class PainelJogo extends JPanel implements Runnable {
 
     public void setPontuacao(int pontuacao) {
         this.pontuacao = pontuacao;
+    }
+
+    public void setNumeroLinhas(int linhas) {
+        numeroLinhas = linhas;
+    }
+
+    public void setNumeroColunas(int colunas) {
+        numeroColunas = colunas;
     }
 
     public String[] getMapa() {
