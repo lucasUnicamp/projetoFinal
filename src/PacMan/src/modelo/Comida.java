@@ -1,20 +1,23 @@
 package modelo;
 
 import java.awt.Graphics2D;
+
+import main.PainelJogo;
+
 import java.awt.Color;
 
-public class Comida {
+public class Comida{
     private int posicaoX;
     private int posicaoY;
 
-    public Comida(int x, int y) {
+    public Comida(int x, int y, PainelJogo painelJogo) {
         setX(x);
         setY(y);
     }
 
     public void desenhar(Graphics2D g) {
         g.setColor(Color.WHITE);
-        g.fillOval(posicaoX, posicaoX, 10, 10);
+        g.fillOval(posicaoX, posicaoY, 10, 10);
     }
 
     public void setX(int x) {

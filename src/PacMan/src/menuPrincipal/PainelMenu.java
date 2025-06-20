@@ -10,7 +10,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.awt.event.ActionEvent;
-import main.*;
 
 public class PainelMenu extends JPanel implements ActionListener{
     //botões

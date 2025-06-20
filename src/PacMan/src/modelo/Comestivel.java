@@ -18,8 +18,9 @@ public class Comestivel implements Elemento{
     }
 
     @Override public void desenhar(Graphics2D g) {
+        int escala = painelJogo.getEscala();
         g.setColor(Color.WHITE);
-        g.fillOval(posicaoX, posicaoY, 10, 10);
+        g.fillOval(posicaoX, posicaoY, 5*escala, 5*escala);
     }
 
     public void comer() {
