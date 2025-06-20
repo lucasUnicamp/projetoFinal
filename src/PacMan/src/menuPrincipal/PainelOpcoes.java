@@ -9,7 +9,6 @@ import javax.swing.JButton;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
 import java.awt.GridLayout;
 
 public class PainelOpcoes extends JPanel implements ActionListener, ChangeListener{
@@ -19,9 +18,13 @@ public class PainelOpcoes extends JPanel implements ActionListener, ChangeListen
     private JSlider slider;
     private boolean musicaPausada = false;
     private FloatControl controleVolume;
+    private MenuPrincipal frame;
 
-    public PainelOpcoes(Clip clip) {
+
+    public PainelOpcoes(Clip clip, MenuPrincipal frame) {
         this.clip = clip;
+        if (this.clip == null) System.out.println("deu bosta");
+        this.frame = frame;
         setLayout(new GridLayout(2,1));
 
         //pause da música
@@ -65,6 +68,7 @@ public class PainelOpcoes extends JPanel implements ActionListener, ChangeListen
 
         } else {
             //clicou na opção de voltar
+            this.frame.getCardLayout().show(this.frame.getCards(), "painelMenu");
         }
     }
 

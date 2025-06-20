@@ -2,6 +2,10 @@ package main;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+
+import menuPrincipal.MenuPrincipal;
+
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -10,7 +14,7 @@ import java.awt.GridBagLayout;
 public class Main {
     public static void main(String[] args) throws Exception {
         // Cria a janela do jogo
-        JFrame janela = new JFrame();
+        /*JFrame janela = new JFrame();
         janela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         janela.setResizable(true);
         janela.setTitle("Pac-Man");
@@ -29,5 +33,8 @@ public class Main {
         janela.setVisible(true);
         
         painelJogo.comecarThread();
+        */
+
+       new MenuPrincipal();
     }
 }
