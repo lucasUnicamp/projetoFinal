@@ -139,6 +139,19 @@ public class Entidade {
         setDirecao("direita");
     }
 
+    public void setAlturaHitBox(int alturaHitBox) {
+        this.alturaHitBox = alturaHitBox;
+    }
+
+    public void setLarguraHitBox(int larguraHitBox) {
+        this.larguraHitBox = larguraHitBox;
+    }
+
+    public void setDimensoesHitBox(int dimensao) {
+        setLarguraHitBox(dimensao);
+        setAlturaHitBox(dimensao);
+    }
+
     public void setVelocidade(int velocidade) {
         if(velocidade > 0) 
             this.velocidade = velocidade;

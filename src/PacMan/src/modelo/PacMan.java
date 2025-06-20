@@ -47,27 +47,30 @@ public class PacMan extends Entidade {
         int linhaMatriz = getY()/getPainelJogo().getTamanhoTile();
         int colunaMatriz = getX()/getPainelJogo().getTamanhoTile();
         Elemento[][] matrizElementos = getPainelJogo().elementos;
+        setDimensoesHitBox(getPainelJogo().getTamanhoTile()/2);
 
         try {
             if ((getDirecao() == "cima" || getDirecao() == "baixo"))
                 if (getDirecaoDesejada() == "direita") {
-                    if(!matrizElementos[linhaMatriz][colunaMatriz + 1].ehColidivel())
+                    if(!matrizElementos[linhaMatriz][colunaMatriz + 1].ehColidivel() && Math.abs(getY() - linhaMatriz*getPainelJogo().getTamanhoTile() - getPainelJogo().getTamanhoTile()/2) <= getVelocidade())
                         setDirecao("direita");
                 } else if (getDirecaoDesejada() == "esquerda") {
-                    if(!matrizElementos[linhaMatriz][colunaMatriz - 1].ehColidivel())
+                    if(!matrizElementos[linhaMatriz][colunaMatriz - 1].ehColidivel() && Math.abs(getY() - linhaMatriz*getPainelJogo().getTamanhoTile() - getPainelJogo().getTamanhoTile()/2) <= getVelocidade())
                         setDirecao("esquerda");
                 } else {
                     setDirecao(getDirecaoDesejada());
+                    setDimensoesHitBox(getPainelJogo().getTamanhoTile() - 1);
                 }
             else if((getDirecao() == "direita" || getDirecao() == "esquerda"))
                 if (getDirecaoDesejada() == "cima") {
-                    if(!matrizElementos[linhaMatriz - 1][colunaMatriz].ehColidivel())
+                    if(!matrizElementos[linhaMatriz - 1][colunaMatriz].ehColidivel() && Math.abs(getX() - colunaMatriz*getPainelJogo().getTamanhoTile() - getPainelJogo().getTamanhoTile()/2) <= getVelocidade())
                         setDirecao("cima");
                 } else if (getDirecaoDesejada() == "baixo") {
-                    if(!matrizElementos[linhaMatriz + 1][colunaMatriz].ehColidivel())
+                    if(!matrizElementos[linhaMatriz + 1][colunaMatriz].ehColidivel() && Math.abs(getX() - colunaMatriz*getPainelJogo().getTamanhoTile() - getPainelJogo().getTamanhoTile()/2) <= getVelocidade())
                         setDirecao("baixo");
                 } else {
                     setDirecao(getDirecaoDesejada());
+                    setDimensoesHitBox(getPainelJogo().getTamanhoTile() - 1);
                 }
 
         } catch (ArrayIndexOutOfBoundsException  e) {
