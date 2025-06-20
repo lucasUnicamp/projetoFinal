@@ -30,7 +30,7 @@ public class TratadorMapa {
         else {
             System.out.println("Nenhum mapa encontrado. Configuração genérica será usada.");
             criarGenerico();
-            setMapaArquivo(new File(Paths.get("resources", "mapas", "mapa0.txt").toString()));
+            setMapaArquivo(new File(Paths.get("resources", "mapas", "mapa0").toString()));
         }
     }
 
