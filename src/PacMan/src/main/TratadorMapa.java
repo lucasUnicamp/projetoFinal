@@ -52,26 +52,36 @@ public class TratadorMapa {
         System.out.println("Mapa genérico sendo criado...");
         try {
             Formatter arquivoLog  = new Formatter(new FileWriter(Paths.get("resources", "mapas", "mapa0").toString(), false));
-            arquivoLog.format("ppppppppppcppppppppp\n" +
-                              "pccccccccccccccccccp\n" + 
-                              "pcppppppppcppcppppcp\n" + 
-                              "pcppppppppcppcppppcp\n" + 
-                              "pccccccccccppcppppcp\n" + 
-                              "pcppppppcpcppcppppcp\n" + 
-                              "ccppppppcpcppcppppcp\n" + 
-                              "pcppppcccccccccpppcp\n" + 
-                              "pcppppccpppppccpppcc\n" + 
-                              "pcppppccpppppccccccp\n" + 
-                              "pcppppccpppppccpppcp\n" + 
-                              "pcppppcccccccccpppcp\n" + 
-                              "pcppppppppcpppppppcp\n" + 
-                              "pcppppppppcpppppppcp\n" + 
-                              "pcppppppppccccccppcp\n" + 
-                              "pcpppppppppppppcppcp\n" + 
-                              "pccccccccccccccccccp\n" + 
-                              "pcpppcpppppppppcppcp\n" + 
-                              "pccccccccccccccccccp\n" + 
-                              "pppppppppppcpppppppp");
+            arquivoLog.format("############################\n" +
+                              "#............##............#\n" + 
+                              "#.####.#####.##.#####.####.#\n" + 
+                              "#.####.#####.##.#####.####.#\n" + 
+                              "#..........................#\n" + 
+                              "#.####.##.########.##.####.#\n" + 
+                              "#.####.##.########.##.####.#\n" + 
+                              "#......##....##....##......#\n" + 
+                              "######.#####.##.#####.######\n" + 
+                              "######.#####.##.#####.######\n" + 
+                              "######.##..........##.######\n" + 
+                              "######.##.###..###.##.######\n" + 
+                              "######.##.#......#.##.######\n" + 
+                              "..........#......#..........\n" + 
+                              "######.##.#......#.##.######\n" + 
+                              "######.##.########.##.######\n" + 
+                              "######.##..........##.######\n" + 
+                              "######.##.########.##.######\n" + 
+                              "######.##.########.##.######\n" +
+                              "#............##............#\n" + 
+                              "#.####.#####.##.#####.####.#\n" + 
+                              "#.####.#####.##.#####.####.#\n" + 
+                              "#...##................##...#\n" + 
+                              "###.##.##.########.##.##.###\n" + 
+                              "###.##.##.########.##.##.###\n" + 
+                              "#......##....##....##......#\n" + 
+                              "#.##########.##.##########.#\n" + 
+                              "#.##########.##.##########.#\n" + 
+                              "#..........................#\n" + 
+                              "############################");
             arquivoLog.flush();
             arquivoLog.close();
             setMapaArquivo(new File(Paths.get("resources", "mapas", "mapa0").toString()));
@@ -108,7 +118,7 @@ public class TratadorMapa {
 
                 for (int i = 0; i < largura; i++) {
                     // Caso algum caractere inválido esteja no mapa
-                    if (linha.charAt(i) != 'p' && linha.charAt(i) != 'c')
+                    if (linha.charAt(i) != '#' && linha.charAt(i) != '.')
                         throw new ArquivoCorrompidoException(String.format("CARACTERE NÃO RECONHECIDO EM [%d, %d]", i, altura));
                 }
                 larguraUltima = largura;

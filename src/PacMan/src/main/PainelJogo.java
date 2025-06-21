@@ -40,7 +40,7 @@ public class PainelJogo extends JPanel implements Runnable {
 
     public PainelJogo(LeitorTeclado leitor) {
         this.leitor = leitor;
-        tratadorMapa = new TratadorMapa(0);
+        tratadorMapa = new TratadorMapa(1);
         mapa = tratadorMapa.atribuirMapa();
         setNumeroColunas(tratadorMapa.getMapaLargura()); // numero de linhas de tiles
         setNumeroLinhas(tratadorMapa.getMapaAltura()); // numero de colunas de tiles
@@ -91,12 +91,12 @@ public class PainelJogo extends JPanel implements Runnable {
         int i, j;
         for (i = 0; i < getNumeroLinhas(); i++) {
             for (j = 0; j < getNumeroColunas(); j++) {
-                if (mapa[i].charAt(j) == 'p') {  //parede
+                if (mapa[i].charAt(j) == '#') {  //parede
                     Parede parede = new Parede(this, j, i);
                     paredes.add(parede);
                     elementos[i][j] = parede;
                 }
-                else if (mapa[i].charAt(j) == 'c') {     //comestiveis
+                else if (mapa[i].charAt(j) == '.') {     //comestiveis
                     // - 5 pois é o raio do comestível
                     Comestivel comestivel = new Comestivel(this, j * tamanhoTile + tamanhoTile / 2 - 5, i * tamanhoTile + tamanhoTile / 2 - 5);
                     comestiveis.add(comestivel);
