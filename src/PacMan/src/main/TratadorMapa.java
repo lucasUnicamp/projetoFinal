@@ -33,7 +33,7 @@ public class TratadorMapa {
      */
     public void carregarMapa() {
         // String do nome do arquivo. O mapa é escolhido em 'PainelJogo'
-        String mapa = "mapa" + Integer.toString(getMapaEscolhido());
+        String mapa = "mapa" + Integer.toString(getMapaEscolhido()) + ".txt";
         File mapaArquivo = new File(Paths.get("resources", "mapas", mapa).toString());
 
         System.out.printf("\nCarregando mapa %d...", mapaEscolhido);
@@ -54,7 +54,7 @@ public class TratadorMapa {
     public void criarGenerico() {
         System.out.println("Mapa genérico sendo criado...");
         try {
-            Formatter arquivoLog  = new Formatter(new FileWriter(Paths.get("resources", "mapas", "mapa0").toString(), false));
+            Formatter arquivoLog  = new Formatter(new FileWriter(Paths.get("resources", "mapas", "mapa0.txt").toString(), false));
             arquivoLog.format("###################\n" +
                               "#........#........#\n" +
                               "#.##.###.#.###.##.#\n" +
@@ -79,7 +79,7 @@ public class TratadorMapa {
                             );
             arquivoLog.flush();
             arquivoLog.close();
-            setMapaArquivo(new File(Paths.get("resources", "mapas", "mapa0").toString()));
+            setMapaArquivo(new File(Paths.get("resources", "mapas", "mapa0.txt").toString()));
         } catch (IOException erro) {
             System.err.println("!!! ERRO AO CRIAR MAPA GENÉRICO !!!");
         }
