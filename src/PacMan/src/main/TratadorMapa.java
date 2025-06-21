@@ -18,7 +18,7 @@ public class TratadorMapa {
     private final int maxLargura;
     private final int maxAltura;
     private File mapaArquivo;
-    private char[] charValidos = {'#', '.', ' ', '<'};      // Lista de caracteres válidos no mapa
+    private char[] charValidos = {'#', '.', ' ', '<', 'P'};      // Lista de caracteres válidos no mapa
 
     public TratadorMapa(int mapaEscolhido) {
         maxLargura = 40;
@@ -70,7 +70,7 @@ public class TratadorMapa {
                               "####.# ##### #.####\n" +
                               "#........#........#\n" +
                               "#.##.###.#.###.##.#\n" +
-                              "#..#...........#..#\n" +
+                              "#..#.....P.....#..#\n" +
                               "##.#.#.#####.#.#.##\n" +
                               "#....#...#...#....#\n" +
                               "#.######.#.######.#\n" +

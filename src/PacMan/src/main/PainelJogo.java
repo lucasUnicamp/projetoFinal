@@ -93,24 +93,35 @@ public class PainelJogo extends JPanel implements Runnable {
         int i, j;
         for (i = 0; i < getNumeroLinhas(); i++) {
             for (j = 0; j < getNumeroColunas(); j++) {
-                if (mapa[i].charAt(j) == '#') {  //parede
-                    Parede parede = new Parede(this, j, i);
-                    paredes.add(parede);
-                    elementos[i][j] = parede;
-                }
-                else if (mapa[i].charAt(j) == '.') {     //comestiveis
-                    // - 5 pois é o raio do comestível
-                    Comestivel comestivel = new Comestivel(this, j * tamanhoTile + tamanhoTile / 2 - 5, i * tamanhoTile + tamanhoTile / 2 - 5);
-                    comestiveis.add(comestivel);
-                    elementos[i][j] = comestivel;
-                }
-                else if (mapa[i].charAt(j) == '<') {
-                    Tunel tunel = new Tunel(this, j, i);
-                    elementos[i][j] = tunel;
-                }
-                else if (mapa[i].charAt(j) == ' ') {
-                    EspacoVazio espacoVazio = new EspacoVazio();
-                    elementos[i][j] = espacoVazio;
+                switch (mapa[i].charAt(j)) {
+                    case '#':  //parede
+                        Parede parede = new Parede(this, j, i);
+                        paredes.add(parede);
+                        elementos[i][j] = parede;
+                        break;
+
+                    case '.':     //comestiveis
+                        // - 5 pois é o raio do comestível
+                        Comestivel comestivel = new Comestivel(this, j * tamanhoTile + tamanhoTile / 2 - 5, i * tamanhoTile + tamanhoTile / 2 - 5);
+                        comestiveis.add(comestivel);
+                        elementos[i][j] = comestivel;
+                        break;
+                    
+                    case '<':
+                        Tunel tunel = new Tunel(this, j, i);
+                        elementos[i][j] = tunel;
+                        break;
+                    
+                    case ' ':
+                        EspacoVazio espacoVazio = new EspacoVazio();
+                        elementos[i][j] = espacoVazio;
+                        break;
+
+                    case 'P':
+                        EspacoVazio spawnPacMan = new EspacoVazio();
+                        elementos[i][j] = spawnPacMan;
+                        pacman.setSpawn(j, i);
+                        break;
                 }
             }
         }

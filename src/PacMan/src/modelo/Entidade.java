@@ -130,13 +130,16 @@ public class Entidade {
     }
 
     private void setPadrao() {
-        setX(painelJogo.getTamanhoTile() + painelJogo.getTamanhoTile()/2);   
-        setY(painelJogo.getTamanhoTile() + painelJogo.getTamanhoTile()/2);
-
         int velocidade = 90; // pixels por segundo
+        setX(getPainelJogo().getTamanhoTile() + getPainelJogo().getTamanhoTile()/2);   
+        setY(getPainelJogo().getTamanhoTile() + getPainelJogo().getTamanhoTile()/2);
         setVelocidade((velocidade * getPainelJogo().getEscala()) / getPainelJogo().getFPS()); 
-
         setDirecao("direita");
+    }
+
+    public void setSpawn(int x, int y) {
+        setX(getPainelJogo().getTamanhoTile() * x + getPainelJogo().getTamanhoTile()/2);   
+        setY(getPainelJogo().getTamanhoTile() * y + getPainelJogo().getTamanhoTile()/2);
     }
 
     public void setAlturaHitBox(int alturaHitBox) {
