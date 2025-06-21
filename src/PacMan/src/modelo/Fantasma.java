@@ -18,8 +18,8 @@ public class Fantasma extends Entidade{
 
     public Fantasma(PainelJogo painel) {
         super(painel);
-        setX(getPainelJogo().getTamanhoTile() * 13 + getPainelJogo().getTamanhoTile()/2);   
-        setY(getPainelJogo().getTamanhoTile() * 14 + getPainelJogo().getTamanhoTile()/2);
+        setX(getPainelJogo().getTamanhoTile() * 9 + getPainelJogo().getTamanhoTile()/2);   
+        setY(getPainelJogo().getTamanhoTile() * 9 + getPainelJogo().getTamanhoTile()/2);
 
         estadoPerseguicao = 1;
         setVelocidade((70 * getPainelJogo().getEscala()) / getPainelJogo().getFPS()); 

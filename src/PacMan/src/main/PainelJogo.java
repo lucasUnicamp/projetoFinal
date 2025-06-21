@@ -8,6 +8,7 @@ import java.awt.Graphics2D;
 import java.util.ArrayList;
 import javax.swing.JPanel;
 import modelo.Comestivel;
+import modelo.EspacoVazio;
 import modelo.Fantasma;
 import modelo.PacMan;
 import modelo.Parede;
@@ -106,6 +107,10 @@ public class PainelJogo extends JPanel implements Runnable {
                 else if (mapa[i].charAt(j) == '<') {
                     Tunel tunel = new Tunel(this, j, i);
                     elementos[i][j] = tunel;
+                }
+                else if (mapa[i].charAt(j) == ' ') {
+                    EspacoVazio espacoVazio = new EspacoVazio();
+                    elementos[i][j] = espacoVazio;
                 }
             }
         }
