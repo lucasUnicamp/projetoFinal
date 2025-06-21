@@ -1,5 +1,6 @@
 package modelo;
 
+import interfaces.Elemento;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -14,13 +15,16 @@ import main.PainelJogo;
 public class Fantasma extends Entidade{
 
     private int estadoPerseguicao; //1 se o fantasma estiver perseguindo o pacman e 0 caso esteja no modo dispersando
+    private int metaCaminho;
     private BufferedImage provisoria;
-
+    private ArrayList<Ponto> caminhoAtual;
     public Fantasma(PainelJogo painel) {
         super(painel);
         setX(getPainelJogo().getTamanhoTile() * 10 + getPainelJogo().getTamanhoTile()/2);   
         setY(getPainelJogo().getTamanhoTile() * 11 + getPainelJogo().getTamanhoTile()/2);
 
+        caminhoAtual = new ArrayList<>();
+        metaCaminho = 0;
         estadoPerseguicao = 1;
         setVelocidade((70 * getPainelJogo().getEscala()) / getPainelJogo().getFPS()); 
 
@@ -56,29 +60,130 @@ public class Fantasma extends Entidade{
         return dist;
     }
 
-    private ArrayList<Direcoes> prioridade(int x, int y){
-        //retorna um array ordenado com base na prioridade de direcao para menor distancia ate as coordenadas x e y
-        ArrayList<Direcoes> prioridades = new ArrayList<>(); //prioridades no sentido do movimento
+    private void prioridade(int x0, int y0, int x, int y, ArrayList<Direcoes> prioridades){
         
         //subida
-        int distanciasubida = calculaDistancia(getX(), getY() - getVelocidade(), x, y);
-        prioridades.add(new Direcoes(distanciasubida, "cima"));
+        int distanciasubida = calculaDistancia(x0, y0 - getVelocidade(), x, y);
+        prioridades.add(new Direcoes(0, 0, 0, distanciasubida, "cima")); 
         //descida
-        int distanciadescida = calculaDistancia(getX(), getY() + getVelocidade(), x, y);
-        prioridades.add(new Direcoes(distanciadescida, "baixo"));
+        int distanciadescida = calculaDistancia(x0, y0 + getVelocidade(), x, y);
+        prioridades.add(new Direcoes(0, 0, 0, distanciadescida, "baixo"));
         //direita
-        int distanciadireita = calculaDistancia(getX() + getVelocidade(), getY(), x, y);
-        prioridades.add(new Direcoes(distanciadireita, "direita"));
+        int distanciadireita = calculaDistancia(x0 + getVelocidade(), y0, x, y);
+        prioridades.add(new Direcoes(0, 0, 0, distanciadireita, "direita"));
         //esquerda
-        int distanciaesquerda = calculaDistancia(getX() - getVelocidade(), getY(), x, y);
-        prioridades.add(new Direcoes(distanciaesquerda, "esquerda"));
-        Collections.sort(prioridades, Comparator.comparingInt(Direcoes::getDistancia));
-        return prioridades;
+        int distanciaesquerda = calculaDistancia(x0 - getVelocidade(), y0, x, y);
+        prioridades.add(new Direcoes(0, 0, 0, distanciaesquerda, "esquerda"));
+        
+        Collections.sort(prioridades, Comparator.comparingInt(Direcoes::getHeuristica));
 
+    }
+
+    private void adicionarPonto(ArrayList<Ponto> busca, Ponto atual, int x, int y, int d){
+        boolean estava = false;
+        for(Ponto p: busca){
+            if(p.getX() == x && p.getY() == y){
+                estava = true;
+                if(p.getDistancia() >= d){
+                    p.setDistancia(d);
+                    p.setPai(atual);
+                }
+            }
+        }
+        if(!estava)
+            busca.add(new Ponto(x, y, 0, d, atual));
+    }
+
+    private boolean jaVisitado(ArrayList<Ponto> visitados, int x, int y){
+        for(Ponto p: visitados){
+            if(p.getX() == x && p.getY() == y){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void posicoesAdjacentes(Ponto atual, int x2, int y2, ArrayList<Ponto> busca, ArrayList<Ponto> visitados){
+        //subida
+        int x1 = atual.getX();
+        int y1 = atual.getY();
+        Elemento mapa[][] = getPainelJogo().elementos;
+        if(y1 < getPainelJogo().getAltura() && x1 < getPainelJogo().getLargura()){
+
+            if(!mapa[y1 - 1][x1].ehColidivel() && !jaVisitado(visitados, x1, y1 - 1)){
+                int distanciasubida = calculaDistancia(x1, y1 - 1, x2, y2);
+                adicionarPonto(busca, atual, x1, y1 - 1, distanciasubida);        
+            }
+            //descida
+            if(!mapa[y1 + 1][x1].ehColidivel() && !jaVisitado(visitados, x1, y1 + 1)){
+                int distanciadescida = calculaDistancia(x1, y1 + 1, x2, y2);
+                adicionarPonto(busca, atual, x1, y1 + 1, distanciadescida);
+            }
+            //direita
+            if(!mapa[y1][x1 + 1].ehColidivel() && !jaVisitado(visitados, x1 + 1, y1)){
+                int distanciadireita = calculaDistancia(x1 + 1, y1, x2, y2);
+                adicionarPonto(busca, atual, x1 + 1, y1, distanciadireita);
+            }
+            //esquerda
+            if(!mapa[y1][x1 - 1].ehColidivel() && !jaVisitado(visitados, x1 - 1, y1)){
+                int distanciaesquerda = calculaDistancia(x1 - 1, y1, x2, y2);
+                adicionarPonto(busca, atual, x1 - 1, y1, distanciaesquerda);
+            }
+            
+            Collections.sort(busca, Comparator.comparingInt(Ponto::getHeuristica));
+        }
+        else{
+            System.out.println("Erro em acesso a posicao invalida de memoria");
+        }
+    }
+
+    public void montarCaminho(Ponto destino){
+        Ponto aux = destino;
+        while(aux != null){
+            caminhoAtual.add(0, aux);
+            aux = aux.getPai();
+        }
     }
 
     public void dispersar(int xf, int yf){
         //implementar no futuro quando o fantasma estiver no modo dispersar
+    }
+
+    public void menorCaminho(int x, int y){
+        int xm = x/getPainelJogo().getTamanhoTile();
+        int ym = y/getPainelJogo().getTamanhoTile();
+        ArrayList<Ponto> visitados = new ArrayList<>();
+        ArrayList<Ponto> abertos = new ArrayList<>();
+
+        Ponto inicio = new Ponto(getX()/getPainelJogo().getTamanhoTile(), getY()/getPainelJogo().getTamanhoTile(), 0,  calculaDistancia(getX()/getPainelJogo().getTamanhoTile(), getY()/getPainelJogo().getTamanhoTile(), xm, ym), null);
+        abertos.add(inicio);
+
+
+        while(!abertos.isEmpty()){
+            Collections.sort(abertos, Comparator.comparingInt(Ponto::getHeuristica));
+            Ponto atual = abertos.get(0);
+            abertos.remove(0);
+            if(atual.getX() == xm && atual.getY() == ym){
+                caminhoAtual = new ArrayList<>();
+                montarCaminho(atual);
+                caminhoAtual.remove(0);
+                if(caminhoAtual.size() > 5)
+                    metaCaminho = 5;
+                else
+                    metaCaminho = 1;
+                return;
+                //chegou ao fim
+            }
+            if(abertos.isEmpty() && atual.getX() != inicio.getX() && atual.getY() != inicio.getY()){
+                return;
+            }
+            visitados.add(atual);
+            posicoesAdjacentes(atual, xm, ym, abertos, visitados);
+
+        }
+
+
+
     }
 
     public void perseguir(int x, int y){
@@ -87,7 +192,9 @@ public class Fantasma extends Entidade{
         int xi = getX();
         int yi = getY();
         String dini = this.getDirecao();
-        ArrayList<Direcoes> direcoes = prioridade(x, y);
+        ArrayList<Direcoes> direcoes = new ArrayList<>(); //prioridades no sentido do movimento
+
+        prioridade(this.getX(), this.getY(), x, y, direcoes);
 
         if(menorDistantcia > direcoes.get(0).getDistancia()){
             //escolha da direcao que apos o movimento mais se aproximara do destino desejado
@@ -102,8 +209,53 @@ public class Fantasma extends Entidade{
 
     }
 
+    public void buscarPonto(){
+        //posicoes iniciais do fantasma na matriz
+        int xm = getX()/getPainelJogo().getTamanhoTile();
+        int ym = getY()/getPainelJogo().getTamanhoTile();
+        Ponto proximo = caminhoAtual.get(0);
+        if(proximo != null && (proximo.getX() != xm || proximo.getY() != ym)){
+            //o fantasma esta no meio do caminho
+            if(xm == proximo.getX()){
+                //a proxima posicao no caminho varia em y: fantasma movera para cima ou para baixo
+                if(ym < proximo.getY()) {
+                    setDirecao("baixo");
+                    setY(getY() + getVelocidade());
+                }
+                else{
+                    setDirecao("cima");
+                    setY(getY() - getVelocidade());
+                }
+                ym = getY()/getPainelJogo().getTamanhoTile();
+            }
+            else if (ym == proximo.getY()){
+                //a proxima posicao no caminho varia em x: fantasma movera para direita ou esquerda
+                if(xm < proximo.getX()) {
+                    setDirecao("direita");
+                    setX(getX() + getVelocidade());
+                }
+                else{
+                    setDirecao("esquerda");
+                    setX(getX() - getVelocidade());
+                }
+                xm = getX()/getPainelJogo().getTamanhoTile();
+            }
+
+            if(proximo.getX() == xm && proximo.getY() == ym){
+                //fantasma avancou uma posicao na matriz
+                caminhoAtual.remove(0);
+                metaCaminho--;
+
+            }
+        }
+    }
+
     public void executarfuncao(int x, int y){
-        this.perseguir(x, y);
+        //perseguir(x, y);
+        if(metaCaminho == 0)
+            menorCaminho(x, y);
+        buscarPonto();
+        
     }
 
 

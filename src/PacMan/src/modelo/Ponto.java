@@ -1,18 +1,18 @@
 package modelo;
 
-public class Direcoes {
+public class Ponto {
+    private Ponto pai;
     private int distancia;
-    private String direcao;
-    private int custo;
-    private int x;
-    private int y;
+    private final int custo;
+    private final int x;
+    private final int y;
 
-    public Direcoes(int xp, int yp, int c, int d, String s){
+    public Ponto(int xp, int yp, int c, int d, Ponto origem){
+        pai = origem;
         x = xp;
         y = yp;
         custo = c;
         distancia = d;
-        direcao = s;
     }
 
     public int getX(){
@@ -21,6 +21,14 @@ public class Direcoes {
 
     public int getY(){
         return y;
+    }
+
+    public Ponto getPai(){
+        return pai;
+    }
+
+    public void setPai(Ponto p){
+        pai = p;
     }
 
     public int getCusto(){
@@ -35,7 +43,9 @@ public class Direcoes {
         return distancia;
     }
 
-    public String getDirecao(){
-        return this.direcao;
+    public void setDistancia(int d){
+        distancia = d;
     }
+
+    
 }
