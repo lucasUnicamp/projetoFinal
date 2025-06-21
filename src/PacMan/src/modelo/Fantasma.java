@@ -60,25 +60,6 @@ public class Fantasma extends Entidade{
         return dist;
     }
 
-    private void prioridade(int x0, int y0, int x, int y, ArrayList<Direcoes> prioridades){
-        
-        //subida
-        int distanciasubida = calculaDistancia(x0, y0 - getVelocidade(), x, y);
-        prioridades.add(new Direcoes(0, 0, 0, distanciasubida, "cima")); 
-        //descida
-        int distanciadescida = calculaDistancia(x0, y0 + getVelocidade(), x, y);
-        prioridades.add(new Direcoes(0, 0, 0, distanciadescida, "baixo"));
-        //direita
-        int distanciadireita = calculaDistancia(x0 + getVelocidade(), y0, x, y);
-        prioridades.add(new Direcoes(0, 0, 0, distanciadireita, "direita"));
-        //esquerda
-        int distanciaesquerda = calculaDistancia(x0 - getVelocidade(), y0, x, y);
-        prioridades.add(new Direcoes(0, 0, 0, distanciaesquerda, "esquerda"));
-        
-        Collections.sort(prioridades, Comparator.comparingInt(Direcoes::getHeuristica));
-
-    }
-
     private void adicionarPonto(ArrayList<Ponto> busca, Ponto atual, int x, int y, int d){
         boolean estava = false;
         for(Ponto p: busca){
@@ -108,7 +89,7 @@ public class Fantasma extends Entidade{
         int x1 = atual.getX();
         int y1 = atual.getY();
         Elemento mapa[][] = getPainelJogo().elementos;
-        if(y1 < getPainelJogo().getAltura() && x1 < getPainelJogo().getLargura()){
+        if(y1 < getPainelJogo().getAltura() && x1 < getPainelJogo().getLargura() && x1 > 0 && y1 > 0){
 
             if(!mapa[y1 - 1][x1].ehColidivel() && !jaVisitado(visitados, x1, y1 - 1)){
                 int distanciasubida = calculaDistancia(x1, y1 - 1, x2, y2);
@@ -146,7 +127,7 @@ public class Fantasma extends Entidade{
     }
 
     public void dispersar(int xf, int yf){
-        //implementar no futuro quando o fantasma estiver no modo dispersar
+        //usara a funcao buscar ponto de acordo com o tipo do fantasma quando este estiver no modo dispersao
     }
 
     public void menorCaminho(int x, int y){
@@ -174,11 +155,11 @@ public class Fantasma extends Entidade{
                 return;
                 //chegou ao fim
             }
-            if(abertos.isEmpty() && atual.getX() != inicio.getX() && atual.getY() != inicio.getY()){
+            if(abertos.isEmpty() && atual.getX() != inicio.getX() && atual.getY() != inicio.getY()){ //nao encontrou caminho
                 return;
             }
             visitados.add(atual);
-            posicoesAdjacentes(atual, xm, ym, abertos, visitados);
+            posicoesAdjacentes(atual, xm, ym, abertos, visitados); //busca pelas posicoes adjacentes tentando avancar ate o destino
 
         }
 
@@ -187,25 +168,7 @@ public class Fantasma extends Entidade{
     }
 
     public void perseguir(int x, int y){
-        int menorDistantcia = calculaDistancia(this.getX(), this.getY(), x, y);
-        //posicoes iniciais
-        int xi = getX();
-        int yi = getY();
-        String dini = this.getDirecao();
-        ArrayList<Direcoes> direcoes = new ArrayList<>(); //prioridades no sentido do movimento
-
-        prioridade(this.getX(), this.getY(), x, y, direcoes);
-
-        if(menorDistantcia > direcoes.get(0).getDistancia()){
-            //escolha da direcao que apos o movimento mais se aproximara do destino desejado
-            for(Direcoes d: direcoes){
-                this.setDirecao(d.getDirecao());
-                this.mover();
-                if(xi != this.getX() || yi != this.getY()){ //moveu
-                    break;
-                }
-            }
-        }
+        //usara a funcao buscar ponto de acordo com o tipo do fantasma quando este estiver perseguindo o pacman
 
     }
 
@@ -251,10 +214,20 @@ public class Fantasma extends Entidade{
     }
 
     public void executarfuncao(int x, int y){
-        //perseguir(x, y);
-        if(metaCaminho == 0)
-            menorCaminho(x, y);
-        buscarPonto();
+        //coordenadas do fantasma na matriz
+        int xf = getX()/getPainelJogo().getTamanhoTile();
+        int yf = getY()/getPainelJogo().getTamanhoTile();
+        //coordenadas do destino na matriz
+        int xm = x/getPainelJogo().getTamanhoTile();
+        int ym = y/getPainelJogo().getTamanhoTile();
+
+
+        //perseguir(x, y): caso o fantasma e seu destino nao estejam no mesmo ponto da matriz
+        if(xf != xm || yf != ym){
+            if(metaCaminho == 0)
+                menorCaminho(x, y);
+            buscarPonto();
+        }
         
     }
 
