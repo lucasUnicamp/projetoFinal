@@ -48,6 +48,10 @@ public class Entidade {
         int colunaDireitaHitBox = xDireitaHitBox/painelJogo.getTamanhoTile();
         int colunaEsquerdaHitBox = xEsquerdaHitBox/painelJogo.getTamanhoTile();
 
+        //linha e coluna na matriz da posição atual da entidade
+        int linhaMatriz = getY()/painelJogo.getTamanhoTile();
+        int colunaMatriz = getX()/painelJogo.getTamanhoTile();
+
         Elemento[][] elementos = painelJogo.elementos;
 
         switch (getDirecao()) { 
@@ -57,6 +61,9 @@ public class Entidade {
                 if ((getY() - getVelocidade()) <= getPainelJogo().getTamanhoTile()/2) {
                     colidiu = true; // colidiu com a borda do mapa
                     setY(getPainelJogo().getTamanhoTile()/2);
+                    if(elementos[linhaMatriz][colunaMatriz] instanceof Tunel) {
+                        setY(painelJogo.getAltura()-painelJogo.getTamanhoTile()/2);
+                    }
                 } else if (elementos[linhaTopoHitBox][colunaEsquerdaHitBox].ehColidivel() == true || elementos[linhaTopoHitBox][colunaDireitaHitBox].ehColidivel() == true) {
                     colidiu = true; // colidiu com parede
                 }
@@ -69,6 +76,9 @@ public class Entidade {
                 if ((getY() + getVelocidade()) >= (getPainelJogo().getAltura() - getPainelJogo().getTamanhoTile()/2)) {
                     colidiu = true;
                     setY(getPainelJogo().getAltura() - getPainelJogo().getTamanhoTile() / 2);
+                    if(elementos[linhaMatriz][colunaMatriz] instanceof Tunel) {
+                        setY(painelJogo.getTamanhoTile()/2);
+                    }
                 } else if (elementos[linhaBaixoHitBox][colunaEsquerdaHitBox].ehColidivel() == true || elementos[linhaBaixoHitBox][colunaDireitaHitBox].ehColidivel() == true) {
                     colidiu = true;
                 }
@@ -81,6 +91,9 @@ public class Entidade {
                 if ((getX() - getVelocidade()) <= getPainelJogo().getTamanhoTile()/2) {
                     colidiu = true;
                     setX(getPainelJogo().getTamanhoTile()/2);
+                    if(elementos[linhaMatriz][colunaMatriz] instanceof Tunel) {
+                        setX(painelJogo.getLargura()-painelJogo.getTamanhoTile()/2);
+                    }
                 } else if (elementos[linhaBaixoHitBox][colunaEsquerdaHitBox].ehColidivel() == true || elementos[linhaTopoHitBox][colunaEsquerdaHitBox].ehColidivel() == true) {
                     colidiu = true;
                 }
@@ -92,6 +105,9 @@ public class Entidade {
                 if ((getX() + getVelocidade()) >= (getPainelJogo().getLargura() - getPainelJogo().getTamanhoTile()/2)) {
                     colidiu = true;
                     setX(getPainelJogo().getLargura() - getPainelJogo().getTamanhoTile()/2);
+                    if(elementos[linhaMatriz][colunaMatriz] instanceof Tunel) {
+                        setX(painelJogo.getTamanhoTile()/2);
+                    }
                 } else if (elementos[linhaBaixoHitBox][colunaDireitaHitBox].ehColidivel() == true || elementos[linhaTopoHitBox][colunaDireitaHitBox].ehColidivel() == true){
                     colidiu = true;
                 }
