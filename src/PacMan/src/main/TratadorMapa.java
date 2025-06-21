@@ -97,29 +97,30 @@ public class TratadorMapa {
     public void checarMapa() {
         int altura = 0;
         int largura, larguraUltima = 0;
-        boolean comecouTunel;
-        ArrayList<Integer> tuneis = new ArrayList<Integer>();
+        boolean comecouTunelHorizontal;
+        boolean[] comecouTuneis = new boolean[maxLargura];
 
+        System.out.println("Checando mapa...");
         try (Scanner scan = new Scanner(new FileReader(getMapaArquivo()))) {
             String linha;
 
             while (scan.hasNextLine()) {
                 linha = scan.nextLine();
                 largura = linha.length();
-                comecouTunel = false;
+                comecouTunelHorizontal = false;
 
                 if (altura != 0) {
                     // Caso o mapa não seja em formato retangular
                     if (larguraUltima != largura)
-                        throw new ArquivoCorrompidoException(String.format("LINHA EM [X, %d] DE TAMANHO DIFERENTE DA ANTERIOR", altura));
+                        throw new ArquivoCorrompidoException(String.format("LINHA %d DE TAMANHO DIFERENTE DA ANTERIOR", altura));
                 }
 
                 // Caso alguma linha seja maior que o máximo permitido
                 if (largura > getMaxLargura())
-                    throw new ArquivoCorrompidoException(String.format("LINHA EM [X, %d] É MAIOR QUE O PERMITIDO", altura));
+                    throw new ArquivoCorrompidoException(String.format("HÁ UMA LINHA MAIOR QUE O PERMITIDO", altura));
                 // Caso alguma coluna seja maior que o máximo permitido
                 if (altura > getMaxAltura())
-                    throw new ArquivoCorrompidoException(String.format("COLUNA DE [X, %d] É MAIOR QUE O PERMITIDO", altura));                
+                    throw new ArquivoCorrompidoException(String.format("HÁ UMA COLUNA MAIOR QUE O PERMITIDO"));                
 
                 for (int i = 0; i < largura; i++) {
                     // Caso algum caractere inválido esteja no mapa
@@ -131,10 +132,15 @@ public class TratadorMapa {
 
                     // Caso em que apenas uma parte do túnel tenha sido posta horizontalmente
                     if (i == 0 && linha.charAt(i) == '<')
-                        comecouTunel = true;
-                    if ((i == largura - 1 && comecouTunel && linha.charAt(i) != '<') || (i == largura - 1 && !comecouTunel && linha.charAt(i) == '<'))
+                        comecouTunelHorizontal = true;
+                    if ((i == largura - 1 && comecouTunelHorizontal && linha.charAt(i) != '<') || (i == largura - 1 && !comecouTunelHorizontal && linha.charAt(i) == '<'))
                         throw new ArquivoCorrompidoException(String.format("TUNEL COMEÇADO MAS NÃO ACABADO NA LINHA EM [X, %d]", altura));
 
+                    // Caso em que apenas uma parte do túnel tenha sido posta verticalmente
+                    if (altura == 0 && linha.charAt(i) == '<')
+                        comecouTuneis[i] = true;
+                    if ((!scan.hasNextLine() && comecouTuneis[i] && linha.charAt(i) != '<') || (!scan.hasNextLine() && !comecouTuneis[i] && linha.charAt(i) == '<'))
+                        throw new ArquivoCorrompidoException(String.format("TUNEL COMEÇADO MAS NÃO ACABADO NA COLUNA EM [%d, X]", i));
                 }
                 larguraUltima = largura;
                 altura++;
