@@ -98,11 +98,11 @@ public class Entidade {
                 break;
         }
         
-        // caso o movimento não resulte em colisão o pac-man se movimenta
+        // caso o movimento não resulte em colisão, se movimenta
         if (!colidiu) { 
             switch (getDirecao()) {
                 case "cima":
-                    centralizarX(); // centraliza o pac-man no caminho
+                    centralizarX(); // centraliza a entidade no caminho
                     setY(getY() - getVelocidade());
                     break;
                 case "direita":

@@ -17,7 +17,7 @@ public class Tunel implements Elemento {
     private int xReal;
     private int yReal;
     public boolean colidivel = false;
-    private BufferedImage tunelVertical, tunelHorizontal;
+    private BufferedImage tunelNorte, tunelSul, tunelLeste, tunelOeste;
     private PainelJogo painelJogo;
 
     public Tunel(PainelJogo painelJogo, int x, int y) {
@@ -33,12 +33,18 @@ public class Tunel implements Elemento {
     @Override public void desenhar(Graphics2D caneta) {
         BufferedImage imagem = null;
 
-        switch (0) {
+        switch (decideImagem()) {
             case 0:
-                imagem = tunelVertical;
+                imagem = tunelNorte;
                 break;
             case 1:
-                imagem = tunelHorizontal;
+                imagem = tunelSul;
+                break;
+            case 2:
+                imagem = tunelLeste;
+                break;
+            case 3:
+                imagem = tunelOeste;
                 break;
         }
         caneta.drawImage(imagem, getXReal()  - (painelJogo.getTamanhoTile())/2, getYReal() - (painelJogo.getTamanhoTile())/2, painelJogo.getTamanhoTile(), painelJogo.getTamanhoTile(), null);
@@ -46,10 +52,30 @@ public class Tunel implements Elemento {
 
     public void getImagem() {
         try {
-            tunelVertical = ImageIO.read(new File(Paths.get("resources", "imagens", "tunelVertical.png").toString()));
-            tunelHorizontal = ImageIO.read(new File(Paths.get("resources", "imagens", "tunelHorizontal.png").toString()));
+            tunelNorte = ImageIO.read(new File(Paths.get("resources", "imagens", "tunelNorte.png").toString()));
+            tunelSul = ImageIO.read(new File(Paths.get("resources", "imagens", "tunelSul.png").toString()));
+            tunelLeste = ImageIO.read(new File(Paths.get("resources", "imagens", "tunelLeste.png").toString()));
+            tunelOeste = ImageIO.read(new File(Paths.get("resources", "imagens", "tunelOeste.png").toString()));
         } catch (IOException erro) {
-            System.err.println("!!! ERRO NA IMPORTAÇÃO DOS SPRITES DA PAREDE !!!");
+            System.err.println("!!! ERRO NA IMPORTAÇÃO DOS SPRITES DO TÚNEL !!!");
+        }
+    }
+
+    public int decideImagem() {
+        try {
+            if (getYMatriz() - 1 < 0)       // Está no topo (norte)
+                return 0;
+            if (getYMatriz() + 1 >= painelJogo.getNumeroLinhas())       // Está embaixo (sul)
+                return 1;
+            if (getXMatriz() + 1 >= painelJogo.getNumeroColunas())      // Está no lado direito (leste)
+                return 2;
+            if (getXMatriz() - 1 < 0)       // Está no lado esquerdo (oeste)
+                return 3;
+            return 0;
+
+        } catch (IndexOutOfBoundsException erro) {
+            System.err.println("!!! TENTATIVA DE DESENHAR TÚNEL FORA DA MATRIZ !!!");      // Só para caso algo dê errado
+            return 1;
         }
     }
 
@@ -63,6 +89,14 @@ public class Tunel implements Elemento {
 
     public void setYMatriz(int y) {
         yMatriz = y;
+    }
+
+    public int getXMatriz() {
+        return xMatriz;
+    }
+
+    public int getYMatriz() {
+        return yMatriz;
     }
 
     public int getXReal() {
