@@ -30,6 +30,7 @@ public class Tunel implements Elemento {
         getImagem();
     }
 
+    // Instruções para desenhar os túneis na tela
     @Override public void desenhar(Graphics2D caneta) {
         BufferedImage imagem = null;
 
@@ -50,6 +51,9 @@ public class Tunel implements Elemento {
         caneta.drawImage(imagem, getXReal()  - (painelJogo.getTamanhoTile())/2, getYReal() - (painelJogo.getTamanhoTile())/2, painelJogo.getTamanhoTile(), painelJogo.getTamanhoTile(), null);
     }
 
+    /**
+     * Importa o arquivo da pasta e associa-o ao objeto instanciado
+     */
     public void getImagem() {
         try {
             tunelNorte = ImageIO.read(new File(Paths.get("resources", "imagens", "tunelNorte.png").toString()));
@@ -61,6 +65,10 @@ public class Tunel implements Elemento {
         }
     }
 
+    /**
+     * Baseado na posição do túnel na matriz, decide qual rotação do sprite deve ser usada
+     * @return 0 se o túnel estiver no lado norte, 1 se estiver no sul, 2 no leste e 3 no oeste 
+     */
     public int decideImagem() {
         try {
             if (getYMatriz() - 1 < 0)       // Está no topo (norte)
