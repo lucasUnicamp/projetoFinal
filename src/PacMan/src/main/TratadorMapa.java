@@ -2,13 +2,13 @@ package main;
 
 import excecoes.ArquivoCorrompidoException;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Formatter;
+import java.util.Scanner;
 import java.nio.file.Paths;
 
 public class TratadorMapa {
@@ -65,7 +65,7 @@ public class TratadorMapa {
                               "######.##..........##.######\n" + 
                               "######.##.###..###.##.######\n" + 
                               "######.##.#......#.##.######\n" + 
-                              "..........#......#..........\n" + 
+                              "<.........#......#.........#\n" + 
                               "######.##.#......#.##.######\n" + 
                               "######.##.########.##.######\n" + 
                               "######.##..........##.######\n" + 
@@ -97,11 +97,16 @@ public class TratadorMapa {
     public void checarMapa() {
         int altura = 0;
         int largura, larguraUltima = 0;
-        try (BufferedReader br = new BufferedReader(new FileReader(getMapaArquivo()))) {
+        boolean comecouTunel;
+        ArrayList<Integer> tuneis = new ArrayList<Integer>();
+
+        try (Scanner scan = new Scanner(new FileReader(getMapaArquivo()))) {
             String linha;
 
-            while ((linha = br.readLine()) != null) {
+            while (scan.hasNextLine()) {
+                linha = scan.nextLine();
                 largura = linha.length();
+                comecouTunel = false;
 
                 if (altura != 0) {
                     // Caso o mapa não seja em formato retangular
@@ -114,12 +119,22 @@ public class TratadorMapa {
                     throw new ArquivoCorrompidoException(String.format("LINHA EM [X, %d] É MAIOR QUE O PERMITIDO", altura));
                 // Caso alguma coluna seja maior que o máximo permitido
                 if (altura > getMaxAltura())
-                    throw new ArquivoCorrompidoException(String.format("COLUNA DE [X, %d] É MAIOR QUE O PERMITIDO", altura));
+                    throw new ArquivoCorrompidoException(String.format("COLUNA DE [X, %d] É MAIOR QUE O PERMITIDO", altura));                
 
                 for (int i = 0; i < largura; i++) {
                     // Caso algum caractere inválido esteja no mapa
-                    if (linha.charAt(i) != '#' && linha.charAt(i) != '.')
+                    if (linha.charAt(i) != '#' && linha.charAt(i) != '.' && linha.charAt(i) != '<')
                         throw new ArquivoCorrompidoException(String.format("CARACTERE NÃO RECONHECIDO EM [%d, %d]", i, altura));
+                    // Caso algum tunel seja posto no interior do mapa ao invés de só nas bordas
+                    if (((altura != 0 && scan.hasNextLine()) && (i != 0 && i != largura - 1)) && linha.charAt(i) == '<')
+                        throw new ArquivoCorrompidoException(String.format("TUNEL COLOCADO NO INTERIOR DO MAPA EM [%d, %d]", i, altura));
+
+                    // Caso em que apenas uma parte do túnel tenha sido posta horizontalmente
+                    if (i == 0 && linha.charAt(i) == '<')
+                        comecouTunel = true;
+                    if ((i == largura - 1 && comecouTunel && linha.charAt(i) != '<') || (i == largura - 1 && !comecouTunel && linha.charAt(i) == '<'))
+                        throw new ArquivoCorrompidoException(String.format("TUNEL COMEÇADO MAS NÃO ACABADO NA LINHA EM [X, %d]", altura));
+
                 }
                 larguraUltima = largura;
                 altura++;
@@ -141,10 +156,11 @@ public class TratadorMapa {
         int contador = 0;
         ArrayList<String> mapa = new ArrayList<String>();
 
-        try (BufferedReader br = new BufferedReader(new FileReader(getMapaArquivo()))) {
+        try (Scanner scan = new Scanner(new FileReader(getMapaArquivo()))) {
             String linha;
 
-            while ((linha = br.readLine()) != null) {
+            while (scan.hasNextLine()) {
+                linha = scan.nextLine();
                 // Pega o comprimento da primeira linha para usar como largura
                 if (contador == 0)
                     setMapaLargura(linha.length());

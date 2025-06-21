@@ -14,9 +14,9 @@ public class Parede implements Elemento {
     private int yMatriz;
     private int xReal;
     private int yReal;
+    public boolean colidivel = true;
     private BufferedImage paredeLado, paredeCheia, paredeBorda;
     private PainelJogo painelJogo;
-    public boolean colidivel = true;
 
     public Parede(PainelJogo painelJogo, int x, int y) {
         this.painelJogo = painelJogo;
@@ -29,8 +29,7 @@ public class Parede implements Elemento {
     }
 
     // Instruções para desenhar as paredes na tela
-    @Override
-    public void desenhar(Graphics2D caneta) {
+    @Override public void desenhar(Graphics2D caneta) {
         BufferedImage imagem = null;
 
         switch (decideImagem()) {

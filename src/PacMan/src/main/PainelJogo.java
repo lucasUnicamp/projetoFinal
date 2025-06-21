@@ -11,6 +11,7 @@ import modelo.Comestivel;
 import modelo.Fantasma;
 import modelo.PacMan;
 import modelo.Parede;
+import modelo.Tunel;
 
 public class PainelJogo extends JPanel implements Runnable {
     private final int tamanhoPadraoTile = 16; // tamanho em pixels do tile original
@@ -101,6 +102,10 @@ public class PainelJogo extends JPanel implements Runnable {
                     Comestivel comestivel = new Comestivel(this, j * tamanhoTile + tamanhoTile / 2 - 5, i * tamanhoTile + tamanhoTile / 2 - 5);
                     comestiveis.add(comestivel);
                     elementos[i][j] = comestivel;
+                }
+                else if (mapa[i].charAt(j) == '<') {
+                    Tunel tunel = new Tunel(this, j, i);
+                    elementos[i][j] = tunel;
                 }
             }
         }

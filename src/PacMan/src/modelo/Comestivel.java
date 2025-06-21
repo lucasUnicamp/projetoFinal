@@ -5,7 +5,7 @@ import java.awt.Graphics2D;
 import main.PainelJogo;
 import interfaces.Elemento;
 
-public class Comestivel implements Elemento{
+public class Comestivel implements Elemento {
     private int posicaoX;
     private int posicaoY;
     private PainelJogo painelJogo;
