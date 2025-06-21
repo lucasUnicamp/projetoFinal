@@ -12,16 +12,13 @@ import java.util.Comparator;
 import javax.imageio.ImageIO;
 import main.PainelJogo;
 
-public class Fantasma extends Entidade{
-
+public class Fantasma extends Entidade {
     private int estadoPerseguicao; //1 se o fantasma estiver perseguindo o pacman e 0 caso esteja no modo dispersando
     private int metaCaminho;
     private BufferedImage provisoria;
     private ArrayList<Ponto> caminhoAtual;
     public Fantasma(PainelJogo painel) {
         super(painel);
-        setX(getPainelJogo().getTamanhoTile() * 10 + getPainelJogo().getTamanhoTile()/2);   
-        setY(getPainelJogo().getTamanhoTile() * 11 + getPainelJogo().getTamanhoTile()/2);
 
         caminhoAtual = new ArrayList<>();
         metaCaminho = 0;

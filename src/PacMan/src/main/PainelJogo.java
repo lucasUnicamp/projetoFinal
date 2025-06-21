@@ -8,9 +8,11 @@ import java.awt.Graphics2D;
 import java.util.ArrayList;
 import javax.swing.JPanel;
 import modelo.Comestivel;
+import modelo.EspacoVazio;
 import modelo.Fantasma;
 import modelo.PacMan;
 import modelo.Parede;
+import modelo.Tunel;
 
 public class PainelJogo extends JPanel implements Runnable {
     private final int tamanhoPadraoTile = 16; // tamanho em pixels do tile original
@@ -40,7 +42,7 @@ public class PainelJogo extends JPanel implements Runnable {
 
     public PainelJogo(LeitorTeclado leitor) {
         this.leitor = leitor;
-        tratadorMapa = new TratadorMapa(0);
+        tratadorMapa = new TratadorMapa(2);
         mapa = tratadorMapa.atribuirMapa();
         setNumeroColunas(tratadorMapa.getMapaLargura()); // numero de linhas de tiles
         setNumeroLinhas(tratadorMapa.getMapaAltura()); // numero de colunas de tiles
@@ -91,16 +93,41 @@ public class PainelJogo extends JPanel implements Runnable {
         int i, j;
         for (i = 0; i < getNumeroLinhas(); i++) {
             for (j = 0; j < getNumeroColunas(); j++) {
-                if (mapa[i].charAt(j) == 'p') {  //parede
-                    Parede parede = new Parede(this, j, i);
-                    paredes.add(parede);
-                    elementos[i][j] = parede;
-                }
-                else if (mapa[i].charAt(j) == 'c') {     //comestiveis
-                    // - 5 pois é o raio do comestível
-                    Comestivel comestivel = new Comestivel(this, j * tamanhoTile + tamanhoTile / 2 - 5, i * tamanhoTile + tamanhoTile / 2 - 5);
-                    comestiveis.add(comestivel);
-                    elementos[i][j] = comestivel;
+                switch (mapa[i].charAt(j)) {
+                    case '#':  //parede
+                        Parede parede = new Parede(this, j, i);
+                        paredes.add(parede);
+                        elementos[i][j] = parede;
+                        break;
+
+                    case '.':     //comestiveis
+                        // - 5 pois é o raio do comestível
+                        Comestivel comestivel = new Comestivel(this, j * tamanhoTile + tamanhoTile / 2 - 5, i * tamanhoTile + tamanhoTile / 2 - 5);
+                        comestiveis.add(comestivel);
+                        elementos[i][j] = comestivel;
+                        break;
+                    
+                    case '<':
+                        Tunel tunel = new Tunel(this, j, i);
+                        elementos[i][j] = tunel;
+                        break;
+                    
+                    case ' ':
+                        EspacoVazio espacoVazio = new EspacoVazio();
+                        elementos[i][j] = espacoVazio;
+                        break;
+
+                    case 'P':
+                        EspacoVazio spawnPacMan = new EspacoVazio();
+                        elementos[i][j] = spawnPacMan;
+                        pacman.setSpawn(j, i);
+                        break;
+
+                    case 'R':
+                        EspacoVazio spawnFantVermelho = new EspacoVazio();
+                        elementos[i][j] = spawnFantVermelho;
+                        fantasma.setSpawn(j, i);
+                        break;
                 }
             }
         }

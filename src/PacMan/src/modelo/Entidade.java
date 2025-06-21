@@ -48,6 +48,10 @@ public class Entidade {
         int colunaDireitaHitBox = xDireitaHitBox/painelJogo.getTamanhoTile();
         int colunaEsquerdaHitBox = xEsquerdaHitBox/painelJogo.getTamanhoTile();
 
+        //linha e coluna na matriz da posição atual da entidade
+        int linhaMatriz = getY()/painelJogo.getTamanhoTile();
+        int colunaMatriz = getX()/painelJogo.getTamanhoTile();
+
         Elemento[][] elementos = painelJogo.elementos;
 
         switch (getDirecao()) { 
@@ -57,6 +61,9 @@ public class Entidade {
                 if ((getY() - getVelocidade()) <= getPainelJogo().getTamanhoTile()/2) {
                     colidiu = true; // colidiu com a borda do mapa
                     setY(getPainelJogo().getTamanhoTile()/2);
+                    if(elementos[linhaMatriz][colunaMatriz] instanceof Tunel) {
+                        setY(painelJogo.getAltura()-painelJogo.getTamanhoTile()/2);
+                    }
                 } else if (elementos[linhaTopoHitBox][colunaEsquerdaHitBox].ehColidivel() == true || elementos[linhaTopoHitBox][colunaDireitaHitBox].ehColidivel() == true) {
                     colidiu = true; // colidiu com parede
                 }
@@ -69,6 +76,9 @@ public class Entidade {
                 if ((getY() + getVelocidade()) >= (getPainelJogo().getAltura() - getPainelJogo().getTamanhoTile()/2)) {
                     colidiu = true;
                     setY(getPainelJogo().getAltura() - getPainelJogo().getTamanhoTile() / 2);
+                    if(elementos[linhaMatriz][colunaMatriz] instanceof Tunel) {
+                        setY(painelJogo.getTamanhoTile()/2);
+                    }
                 } else if (elementos[linhaBaixoHitBox][colunaEsquerdaHitBox].ehColidivel() == true || elementos[linhaBaixoHitBox][colunaDireitaHitBox].ehColidivel() == true) {
                     colidiu = true;
                 }
@@ -81,6 +91,9 @@ public class Entidade {
                 if ((getX() - getVelocidade()) <= getPainelJogo().getTamanhoTile()/2) {
                     colidiu = true;
                     setX(getPainelJogo().getTamanhoTile()/2);
+                    if(elementos[linhaMatriz][colunaMatriz] instanceof Tunel) {
+                        setX(painelJogo.getLargura()-painelJogo.getTamanhoTile()/2);
+                    }
                 } else if (elementos[linhaBaixoHitBox][colunaEsquerdaHitBox].ehColidivel() == true || elementos[linhaTopoHitBox][colunaEsquerdaHitBox].ehColidivel() == true) {
                     colidiu = true;
                 }
@@ -92,17 +105,20 @@ public class Entidade {
                 if ((getX() + getVelocidade()) >= (getPainelJogo().getLargura() - getPainelJogo().getTamanhoTile()/2)) {
                     colidiu = true;
                     setX(getPainelJogo().getLargura() - getPainelJogo().getTamanhoTile()/2);
+                    if(elementos[linhaMatriz][colunaMatriz] instanceof Tunel) {
+                        setX(painelJogo.getTamanhoTile()/2);
+                    }
                 } else if (elementos[linhaBaixoHitBox][colunaDireitaHitBox].ehColidivel() == true || elementos[linhaTopoHitBox][colunaDireitaHitBox].ehColidivel() == true){
                     colidiu = true;
                 }
                 break;
         }
         
-        // caso o movimento não resulte em colisão o pac-man se movimenta
+        // caso o movimento não resulte em colisão, se movimenta
         if (!colidiu) { 
             switch (getDirecao()) {
                 case "cima":
-                    centralizarX(); // centraliza o pac-man no caminho
+                    centralizarX(); // centraliza a entidade no caminho
                     setY(getY() - getVelocidade());
                     break;
                 case "direita":
@@ -130,13 +146,23 @@ public class Entidade {
     }
 
     private void setPadrao() {
-        setX(painelJogo.getTamanhoTile() + painelJogo.getTamanhoTile()/2);   
-        setY(painelJogo.getTamanhoTile() + painelJogo.getTamanhoTile()/2);
-
         int velocidade = 90; // pixels por segundo
+        // Mantem uma posição padrão mesmo tendo o 'setSpawn' por precaução
+        setX(getPainelJogo().getTamanhoTile() + getPainelJogo().getTamanhoTile()/2);   
+        setY(getPainelJogo().getTamanhoTile() + getPainelJogo().getTamanhoTile()/2);
         setVelocidade((velocidade * getPainelJogo().getEscala()) / getPainelJogo().getFPS()); 
-
         setDirecao("direita");
+    }
+
+    /**
+     * Posiciona a entidade no mapa na posição parametrizada. Método é chamado em 'PainelJogo', em que passa a posição
+     * vinda do arquivo do mapa
+     * @param x posição horizontal do spawn
+     * @param y posição vertical do spawn
+     */
+    public void setSpawn(int x, int y) {
+        setX(getPainelJogo().getTamanhoTile() * x + getPainelJogo().getTamanhoTile()/2);   
+        setY(getPainelJogo().getTamanhoTile() * y + getPainelJogo().getTamanhoTile()/2);
     }
 
     public void setAlturaHitBox(int alturaHitBox) {

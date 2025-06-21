@@ -15,7 +15,6 @@ public class LeitorTeclado implements KeyListener{
     @Override
     public void keyPressed(KeyEvent e) {
         int codigo = e.getKeyCode();
-        System.out.printf("%d\n", codigo);
 
         if (!cimaPressionado && codigo == KeyEvent.VK_W) {
             cimaPressionado = true;

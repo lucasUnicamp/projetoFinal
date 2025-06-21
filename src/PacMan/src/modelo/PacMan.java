@@ -87,7 +87,7 @@ public class PacMan extends Entidade {
 
         contadorSprite++;
 
-        if (contadorSprite > 10) { // muda o sprite após um certo número de quadros
+        if (contadorSprite > 5) { // muda o sprite após um certo número de quadros
             contadorSprite = 0;
             if (estadoBoca == 1)
                 estadoBoca = 0;

@@ -14,9 +14,9 @@ public class Parede implements Elemento {
     private int yMatriz;
     private int xReal;
     private int yReal;
+    public boolean colidivel = true;
     private BufferedImage paredeLado, paredeCheia, paredeBorda;
     private PainelJogo painelJogo;
-    public boolean colidivel = true;
 
     public Parede(PainelJogo painelJogo, int x, int y) {
         this.painelJogo = painelJogo;
@@ -29,8 +29,7 @@ public class Parede implements Elemento {
     }
 
     // Instruções para desenhar as paredes na tela
-    @Override
-    public void desenhar(Graphics2D caneta) {
+    @Override public void desenhar(Graphics2D caneta) {
         BufferedImage imagem = null;
 
         switch (decideImagem()) {
@@ -76,8 +75,8 @@ public class Parede implements Elemento {
                 return 2;
 
             // Separa as paredes cercadas por outras paredes para que recebam outro sprite
-            if (mapa[getYMatriz() + 1].charAt(getXMatriz()) == 'p' && mapa[getYMatriz() - 1].charAt(getXMatriz()) == 'p' &&
-                mapa[getYMatriz()].charAt(getXMatriz() + 1) == 'p' && mapa[getYMatriz()].charAt(getXMatriz() - 1) == 'p')
+            if (mapa[getYMatriz() + 1].charAt(getXMatriz()) == '#' && mapa[getYMatriz() - 1].charAt(getXMatriz()) == '#' &&
+                mapa[getYMatriz()].charAt(getXMatriz() + 1) == '#' && mapa[getYMatriz()].charAt(getXMatriz() - 1) == '#')
                 return 0;
 
             return 1;
