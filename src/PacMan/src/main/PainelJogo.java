@@ -122,6 +122,12 @@ public class PainelJogo extends JPanel implements Runnable {
                         elementos[i][j] = spawnPacMan;
                         pacman.setSpawn(j, i);
                         break;
+
+                    case 'R':
+                        EspacoVazio spawnFantVermelho = new EspacoVazio();
+                        elementos[i][j] = spawnFantVermelho;
+                        fantasma.setSpawn(j, i);
+                        break;
                 }
             }
         }

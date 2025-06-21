@@ -131,12 +131,19 @@ public class Entidade {
 
     private void setPadrao() {
         int velocidade = 90; // pixels por segundo
+        // Mantem uma posição padrão mesmo tendo o 'setSpawn' por precaução
         setX(getPainelJogo().getTamanhoTile() + getPainelJogo().getTamanhoTile()/2);   
         setY(getPainelJogo().getTamanhoTile() + getPainelJogo().getTamanhoTile()/2);
         setVelocidade((velocidade * getPainelJogo().getEscala()) / getPainelJogo().getFPS()); 
         setDirecao("direita");
     }
 
+    /**
+     * Posiciona a entidade no mapa na posição parametrizada. Método é chamado em 'PainelJogo', em que passa a posição
+     * vinda do arquivo do mapa
+     * @param x posição horizontal do spawn
+     * @param y posição vertical do spawn
+     */
     public void setSpawn(int x, int y) {
         setX(getPainelJogo().getTamanhoTile() * x + getPainelJogo().getTamanhoTile()/2);   
         setY(getPainelJogo().getTamanhoTile() * y + getPainelJogo().getTamanhoTile()/2);
