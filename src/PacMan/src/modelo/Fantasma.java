@@ -141,7 +141,6 @@ public class Fantasma extends Entidade {
             Collections.sort(abertos, Comparator.comparingInt(Ponto::getHeuristica));
             Ponto atual = abertos.get(0);
             visitados.add(atual);
-            abertos.remove(0);
             if(atual.getX() == xm && atual.getY() == ym){
                 caminhoAtual = new ArrayList<>();
                 montarCaminho(atual);
@@ -153,12 +152,11 @@ public class Fantasma extends Entidade {
                 return;
                 //chegou ao fim
             }
-            if(abertos.isEmpty() && atual.getX() != inicio.getX() && atual.getY() != inicio.getY()){ //nao encontrou caminho
+            if(abertos.isEmpty()){ //nao encontrou caminho
                 return;
             }
-            visitados.add(atual);
             posicoesAdjacentes(atual, xm, ym, abertos, visitados); //busca pelas posicoes adjacentes tentando avancar ate o destino
-
+            abertos.remove(atual);
         }
 
 
