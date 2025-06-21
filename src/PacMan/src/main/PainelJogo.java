@@ -42,7 +42,7 @@ public class PainelJogo extends JPanel implements Runnable {
 
     public PainelJogo(LeitorTeclado leitor) {
         this.leitor = leitor;
-        tratadorMapa = new TratadorMapa(1);
+        tratadorMapa = new TratadorMapa(2);
         mapa = tratadorMapa.atribuirMapa();
         setNumeroColunas(tratadorMapa.getMapaLargura()); // numero de linhas de tiles
         setNumeroLinhas(tratadorMapa.getMapaAltura()); // numero de colunas de tiles
