@@ -136,7 +136,7 @@ public class PainelJogo extends JPanel implements Runnable {
     // atualiza estado de todos os objetos
     public void atualizar() {
         pacman.atualizar();
-        fantasma.executarfuncao(pacman.getX(), pacman.getY());
+        //fantasma.executarfuncao(pacman.getX(), pacman.getY());
 
     }
 
@@ -152,7 +152,7 @@ public class PainelJogo extends JPanel implements Runnable {
             }
         }
         
-        fantasma.desenhar(caneta);
+        //fantasma.desenhar(caneta);
         pacman.desenhar(caneta);
 
         caneta.dispose();

@@ -140,6 +140,7 @@ public class Fantasma extends Entidade {
         while(!abertos.isEmpty()){
             Collections.sort(abertos, Comparator.comparingInt(Ponto::getHeuristica));
             Ponto atual = abertos.get(0);
+            visitados.add(atual);
             abertos.remove(0);
             if(atual.getX() == xm && atual.getY() == ym){
                 caminhoAtual = new ArrayList<>();
