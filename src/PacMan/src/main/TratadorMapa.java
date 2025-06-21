@@ -18,6 +18,7 @@ public class TratadorMapa {
     private final int maxLargura;
     private final int maxAltura;
     private File mapaArquivo;
+    private char[] charValidos = {'#', '.', ' ', '<'};      // Lista de caracteres válidos no mapa
 
     public TratadorMapa(int mapaEscolhido) {
         maxLargura = 40;
@@ -35,8 +36,9 @@ public class TratadorMapa {
         String mapa = "mapa" + Integer.toString(getMapaEscolhido());
         File mapaArquivo = new File(Paths.get("resources", "mapas", mapa).toString());
 
+        System.out.printf("\nCarregando mapa %d...", mapaEscolhido);
         if (mapaArquivo.isFile()) {
-            System.out.printf("Mapa %d carregado com sucesso.\n", mapaEscolhido);
+            System.out.printf("\nMapa %d carregado com sucesso.\n", mapaEscolhido);
             setMapaArquivo(mapaArquivo);
             checarMapa();
         }
@@ -45,6 +47,7 @@ public class TratadorMapa {
             System.out.println("Nenhum mapa encontrado. Configuração genérica será usada.");
             criarGenerico();
         }
+        System.out.println("Carregamento de mapa concluído!\n");
     }
 
     // Cria o mapa genérico para que o jogo não fique sem nenhum
@@ -104,35 +107,36 @@ public class TratadorMapa {
                 if (altura != 0) {
                     // Caso o mapa não seja em formato retangular
                     if (larguraUltima != largura)
-                        throw new ArquivoCorrompidoException(String.format("LINHA %d DE TAMANHO DIFERENTE DA ANTERIOR", altura));
+                        throw new ArquivoCorrompidoException(String.format("LINHA %d DE TAMANHO DIFERENTE DA ANTERIOR", altura + 1));
                 }
 
                 // Caso alguma linha seja maior que o máximo permitido
                 if (largura > getMaxLargura())
-                    throw new ArquivoCorrompidoException(String.format("HÁ UMA LINHA MAIOR QUE O PERMITIDO", altura));
+                    throw new ArquivoCorrompidoException(String.format("HÁ UMA LINHA MAIOR QUE O PERMITIDO"));
                 // Caso alguma coluna seja maior que o máximo permitido
                 if (altura > getMaxAltura())
                     throw new ArquivoCorrompidoException(String.format("HÁ UMA COLUNA MAIOR QUE O PERMITIDO"));                
 
                 for (int i = 0; i < largura; i++) {
                     // Caso algum caractere inválido esteja no mapa
-                    if (linha.charAt(i) != '#' && linha.charAt(i) != '.' && linha.charAt(i) != '<')
-                        throw new ArquivoCorrompidoException(String.format("CARACTERE NÃO RECONHECIDO EM [%d, %d]", i, altura));
+                    if (new String(charValidos).indexOf(linha.charAt(i)) < 0)
+                        throw new ArquivoCorrompidoException(String.format("CARACTERE NÃO RECONHECIDO NA LINHA %d, COLUNA %d", altura + 1, i + 1));
+
                     // Caso algum tunel seja posto no interior do mapa ao invés de só nas bordas
                     if (((altura != 0 && scan.hasNextLine()) && (i != 0 && i != largura - 1)) && linha.charAt(i) == '<')
-                        throw new ArquivoCorrompidoException(String.format("TUNEL COLOCADO NO INTERIOR DO MAPA EM [%d, %d]", i, altura));
+                        throw new ArquivoCorrompidoException(String.format("TÚ  NEL COLOCADO NO INTERIOR DO MAPA NA LINHA %d, COLUNA %d", altura + 1, i + 1));
 
                     // Caso em que apenas uma parte do túnel tenha sido posta horizontalmente
                     if (i == 0 && linha.charAt(i) == '<')
                         comecouTunelHorizontal = true;
                     if ((i == largura - 1 && comecouTunelHorizontal && linha.charAt(i) != '<') || (i == largura - 1 && !comecouTunelHorizontal && linha.charAt(i) == '<'))
-                        throw new ArquivoCorrompidoException(String.format("TUNEL COMEÇADO MAS NÃO ACABADO NA LINHA EM [X, %d]", altura));
+                        throw new ArquivoCorrompidoException(String.format("TÚNEL COMEÇADO MAS NÃO ACABADO NA LINHA %d", altura + 1));
 
                     // Caso em que apenas uma parte do túnel tenha sido posta verticalmente
                     if (altura == 0 && linha.charAt(i) == '<')
                         comecouTuneis[i] = true;
                     if ((!scan.hasNextLine() && comecouTuneis[i] && linha.charAt(i) != '<') || (!scan.hasNextLine() && !comecouTuneis[i] && linha.charAt(i) == '<'))
-                        throw new ArquivoCorrompidoException(String.format("TUNEL COMEÇADO MAS NÃO ACABADO NA COLUNA EM [%d, X]", i));
+                        throw new ArquivoCorrompidoException(String.format("TÚNEL COMEÇADO MAS NÃO ACABADO NA COLUNA %d", i + 1));
                 }
                 larguraUltima = largura;
                 altura++;
