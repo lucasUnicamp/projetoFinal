@@ -23,6 +23,8 @@ public class PainelOpcoes extends JPanel implements ActionListener, ChangeListen
 
     public PainelOpcoes(Clip clip, MenuPrincipal frame) {
         this.frame = frame;
+        this.clip = clip;
+        
         setLayout(new GridLayout(2,1));
 
         //pause da música
