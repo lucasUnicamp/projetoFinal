@@ -21,7 +21,7 @@ public class PainelExterno extends JPanel{
         labelPontos = new JLabel("Pontuação:");
         labelPontos.setFont(new Font("SansSerif", Font.BOLD, 24));
         labelPontos.setForeground(Color.WHITE);
-        add(labelPontos, new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+        add(labelPontos, new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 0, 10, 0), 0, 0));
         
         GridBagConstraints constraints = new GridBagConstraints(0, 1, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0);
         constraints.gridy = 1;
