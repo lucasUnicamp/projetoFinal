@@ -11,9 +11,6 @@ import main.PainelJogo;
 
 import java.awt.CardLayout;
 import java.awt.Color;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 
 public class MenuPrincipal extends JFrame{
     private CardLayout cardLayout;

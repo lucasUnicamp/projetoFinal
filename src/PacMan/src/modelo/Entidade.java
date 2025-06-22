@@ -1,7 +1,6 @@
 package modelo;
 
 import interfaces.Elemento;
-import main.LeitorTeclado;
 import main.PainelJogo;
 
 public class Entidade {
