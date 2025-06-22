@@ -84,6 +84,11 @@ public class PainelJogo extends JPanel implements Runnable {
                 atualizar();
                 repaint();
                 delta --;
+                try{
+                    Thread.sleep(1000/FPS);
+                } catch(InterruptedException e) {
+                    e.printStackTrace();
+                }
                 //System.out.printf("pontos: %d\n", getPontuacao());
             }
         }
