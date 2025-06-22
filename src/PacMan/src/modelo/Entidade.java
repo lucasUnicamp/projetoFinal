@@ -1,9 +1,11 @@
 package modelo;
 
+import java.io.Serializable;
+
 import interfaces.Elemento;
 import main.PainelJogo;
 
-public class Entidade {
+public class Entidade implements Serializable{
     private int posicaoX;
     private int posicaoY;
     private int velocidade; // pixels por frame
@@ -11,7 +13,7 @@ public class Entidade {
     private int alturaHitBox;
     private int larguraHitBox;
 
-    private PainelJogo painelJogo;
+    private transient PainelJogo painelJogo;
 
     public Entidade(PainelJogo painelJogo, int x, int y, int velocidade, String direcao) {
         setX(x);   
@@ -183,7 +185,7 @@ public class Entidade {
     }
 
     public void setDirecao(String direcao) {
-        if(direcao == "direita" || direcao == "esquerda" || direcao == "cima" || direcao == "baixo") 
+        if(direcao != null && (direcao.equals("direita") || direcao.equals("esquerda") || direcao.equals("cima") || direcao.equals("baixo"))) 
             this.direcao = direcao;
     }
 

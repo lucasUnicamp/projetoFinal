@@ -2,13 +2,15 @@ package modelo;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.io.Serializable;
+
 import main.PainelJogo;
 import interfaces.Elemento;
 
-public class Comestivel implements Elemento {
+public class Comestivel implements Elemento, Serializable{
     private int posicaoX;
     private int posicaoY;
-    private PainelJogo painelJogo;
+    private transient PainelJogo painelJogo;
     public boolean colidivel = false;
 
     public Comestivel(PainelJogo painelJogo, int x, int y) {
@@ -34,6 +36,10 @@ public class Comestivel implements Elemento {
         return colidivel;
     }
     
+    public char getRepresentacao() {
+        return '.';
+    }
+
     public int getX() {
         return posicaoX;
     }

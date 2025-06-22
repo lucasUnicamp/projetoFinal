@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,12 +13,11 @@ import java.util.Comparator;
 import javax.imageio.ImageIO;
 import main.PainelJogo;
 
-public class Fantasma extends Entidade {
+public class Fantasma extends Entidade implements Serializable{
     private int estadoPerseguicao; //1 se o fantasma estiver perseguindo o pacman e 0 caso esteja no modo dispersando
     private int metaCaminho;
-    private int correcoesPendentes;
-    private BufferedImage provisoria;
-    private ArrayList<Ponto> caminhoAtual;
+    private transient BufferedImage provisoria;
+    private transient ArrayList<Ponto> caminhoAtual;
     public Fantasma(PainelJogo painel) {
         super(painel);
         correcoesPendentes = 0;
