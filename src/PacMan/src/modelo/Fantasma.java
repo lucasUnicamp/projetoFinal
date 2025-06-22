@@ -15,11 +15,12 @@ import main.PainelJogo;
 public class Fantasma extends Entidade {
     private int estadoPerseguicao; //1 se o fantasma estiver perseguindo o pacman e 0 caso esteja no modo dispersando
     private int metaCaminho;
+    private int correcoesPendentes;
     private BufferedImage provisoria;
     private ArrayList<Ponto> caminhoAtual;
     public Fantasma(PainelJogo painel) {
         super(painel);
-
+        correcoesPendentes = 0;
         caminhoAtual = new ArrayList<>();
         metaCaminho = 0;
         estadoPerseguicao = 1;
@@ -122,7 +123,7 @@ public class Fantasma extends Entidade {
             
             Collections.sort(busca, Comparator.comparingInt(Ponto::getHeuristica));
         } catch (IndexOutOfBoundsException e){
-            
+
         }
     }
 
@@ -174,6 +175,13 @@ public class Fantasma extends Entidade {
 
     }
 
+    int correcaoPosicao(int x1, int x2){
+        if(x2 > x1)
+            return (x2 - x1);
+        else
+            return (x1 - x2);
+    }
+
     public void perseguir(int x, int y){
         //usara a funcao buscar ponto de acordo com o tipo do fantasma quando este estiver perseguindo o pacman
 
@@ -192,7 +200,15 @@ public class Fantasma extends Entidade {
             //o fantasma esta no meio do caminho
             if(xm == proximo.getX()){
                 if(getDirecao().equals("direita") || getDirecao().equals("esquerda")){
-                    setSpawn(xm, ym);
+                    correcoesPendentes = correcaoPosicao(getX(), getPainelJogo().getTamanhoTile() * xm + getPainelJogo().getTamanhoTile()/2);
+                    if(correcoesPendentes > 0){
+                        correcoesPendentes-= getVelocidade();
+                        if(getDirecao().equals("direita"))
+                            setX(getX() + getVelocidade());
+                        else
+                            setX(getX() - getVelocidade());
+                        return;
+                    }
                 }
                 //a proxima posicao no caminho varia em y: fantasma movera para cima ou para baixo
                 if (ym < proximo.getY()) {
@@ -208,7 +224,15 @@ public class Fantasma extends Entidade {
             else if (ym == proximo.getY()){
                 //a proxima posicao no caminho varia em x: fantasma movera para direita ou esquerda
                 if(getDirecao().equals("cima") || getDirecao().equals("baixo")){
-                    setSpawn(xm, ym);
+                    correcoesPendentes = correcaoPosicao(getY(), getPainelJogo().getTamanhoTile() * ym + getPainelJogo().getTamanhoTile()/2);
+                    if(correcoesPendentes > 0){
+                        correcoesPendentes-= getVelocidade();
+                        if(getDirecao().equals("cima"))
+                            setY(getY() - getVelocidade());
+                        else
+                            setY(getY() + getVelocidade());
+                        return;
+                    }  
                 }
                 if(xm < proximo.getX()) {
                     setDirecao("direita");
@@ -241,6 +265,21 @@ public class Fantasma extends Entidade {
 
         //perseguir(x, y): caso o fantasma e seu destino nao estejam no mesmo ponto da matriz
         if(xf != xm || yf != ym){
+            if(correcoesPendentes > 0){
+                if(getDirecao().equals("direita"))
+                    setX(getX() + getVelocidade());
+                else  if(getDirecao().equals("esquerda"))
+                    setX(getX() - getVelocidade());
+                else if(getDirecao().equals("cima"))
+                    setY(getY() - getVelocidade());
+                else if(getDirecao().equals("baixo"))
+                    setY(getY() + getVelocidade());
+                correcoesPendentes-= getVelocidade();
+                if(correcoesPendentes <= 0){
+                    //setSpawn(getX()/getPainelJogo().getTamanhoTile(), getY()/getPainelJogo().getTamanhoTile());
+                }
+                return;
+            }
             if(metaCaminho == 0)
                 menorCaminho(x, y);
             buscarPonto();
