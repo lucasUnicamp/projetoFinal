@@ -169,6 +169,7 @@ public class Fantasma extends Entidade {
     }
 
     public void buscarPonto(){
+        int corrigirPosicao = 0;
         //posicoes iniciais do fantasma na matriz
         int xm = getX()/getPainelJogo().getTamanhoTile();
         int ym = getY()/getPainelJogo().getTamanhoTile();
@@ -176,8 +177,11 @@ public class Fantasma extends Entidade {
         if(proximo != null && (proximo.getX() != xm || proximo.getY() != ym)){
             //o fantasma esta no meio do caminho
             if(xm == proximo.getX()){
+                if(getDirecao().equals("direita") || getDirecao().equals("esquerda")){
+                    setSpawn(xm, ym);
+                }
                 //a proxima posicao no caminho varia em y: fantasma movera para cima ou para baixo
-                if(ym < proximo.getY()) {
+                if (ym < proximo.getY()) {
                     setDirecao("baixo");
                     setY(getY() + getVelocidade());
                 }
@@ -189,6 +193,9 @@ public class Fantasma extends Entidade {
             }
             else if (ym == proximo.getY()){
                 //a proxima posicao no caminho varia em x: fantasma movera para direita ou esquerda
+                if(getDirecao().equals("cima") || getDirecao().equals("baixo")){
+                    setSpawn(xm, ym);
+                }
                 if(xm < proximo.getX()) {
                     setDirecao("direita");
                     setX(getX() + getVelocidade());
