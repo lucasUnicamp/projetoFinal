@@ -189,7 +189,6 @@ public class Fantasma extends Entidade implements Serializable{
     }
 
     public void buscarPonto(){
-        int corrigirPosicao = 0;
         //posicoes iniciais do fantasma na matriz
         int xm = getX()/getPainelJogo().getTamanhoTile();
         int ym = getY()/getPainelJogo().getTamanhoTile();
