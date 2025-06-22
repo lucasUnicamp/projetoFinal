@@ -165,6 +165,13 @@ public class PainelJogo extends JPanel implements Runnable {
         fantasma.desenhar(caneta);
         pacman.desenhar(caneta);
 
+        if(pacman.getVidas() >= 1)
+            caneta.drawImage(pacman.getImagemRepouso(), getLargura() - 20*escala, getAltura() - 20*escala, getTamanhoTile(), getTamanhoTile(), null);
+        if (pacman.getVidas() >= 2) 
+            caneta.drawImage(pacman.getImagemRepouso(), getLargura() - 40*escala, getAltura() - 20*escala, getTamanhoTile(), getTamanhoTile(), null);
+        if (pacman.getVidas() >= 3)
+            caneta.drawImage(pacman.getImagemRepouso(), getLargura() - 60*escala, getAltura() - 20*escala, getTamanhoTile(), getTamanhoTile(), null);
+
         painelExterno.setTextoLabelPontos(String.format("Pontuação: %d", getPontuacao()));
         
         caneta.dispose();

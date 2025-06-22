@@ -137,6 +137,10 @@ public class PacMan extends Entidade {
         return direcaoDesejada;
     }
 
+    public int getVidas() {
+        return vidas;
+    }
+
     // importa os sprites
     public void getImagem() {
         try {
