@@ -7,18 +7,19 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.nio.file.Paths;
 
 import javax.imageio.ImageIO;
 
-public class Tunel implements Elemento {
+public class Tunel implements Elemento, Serializable{
     private int xMatriz;
     private int yMatriz;
     private int xReal;
     private int yReal;
     public boolean colidivel = false;
-    private BufferedImage tunelNorte, tunelSul, tunelLeste, tunelOeste;
-    private PainelJogo painelJogo;
+    private transient BufferedImage tunelNorte, tunelSul, tunelLeste, tunelOeste;
+    private transient PainelJogo painelJogo;
 
     public Tunel(PainelJogo painelJogo, int x, int y) {
         this.painelJogo = painelJogo;
@@ -97,6 +98,10 @@ public class Tunel implements Elemento {
 
     public void setYMatriz(int y) {
         yMatriz = y;
+    }
+
+    public char getRepresentacao() {
+        return '<';
     }
 
     public int getXMatriz() {

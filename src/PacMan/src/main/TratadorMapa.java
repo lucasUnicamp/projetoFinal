@@ -6,12 +6,13 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.Scanner;
 import java.nio.file.Paths;
 
-public class TratadorMapa {
+public class TratadorMapa implements Serializable{
     private int mapaEscolhido;
     private int mapaLargura;
     private int mapaAltura;

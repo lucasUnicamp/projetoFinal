@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.nio.file.Paths;
 import javax.imageio.ImageIO;
 
@@ -11,15 +12,15 @@ import interfaces.Elemento;
 import main.LeitorTeclado;
 import main.PainelJogo;
 
-public class PacMan extends Entidade {
+public class PacMan extends Entidade{
     private int estadoBoca; // boca aberta ou fechada
     private int contadorSprite; // usado para saber quando mudar o sprite (animação)
-    private BufferedImage cima, baixo, esquerda, direita, repouso;
+    private transient BufferedImage cima, baixo, esquerda, direita, repouso;
     private String direcaoDesejada;
 
     private int vidas;
 
-    private LeitorTeclado leitor;
+    private transient LeitorTeclado leitor;
 
     public PacMan(PainelJogo painelJogo, LeitorTeclado leitor) {
         super(painelJogo);
@@ -54,28 +55,30 @@ public class PacMan extends Entidade {
         setDimensoesHitBox(getPainelJogo().getTamanhoTile()/2);
 
         try {
-            if ((getDirecao() == "cima" || getDirecao() == "baixo"))
-                if (getDirecaoDesejada() == "direita") {
-                    if(!matrizElementos[linhaMatriz][colunaMatriz + 1].ehColidivel() && Math.abs(getY() - linhaMatriz*getPainelJogo().getTamanhoTile() - getPainelJogo().getTamanhoTile()/2) <= getVelocidade())
-                        setDirecao("direita");
-                } else if (getDirecaoDesejada() == "esquerda") {
-                    if(!matrizElementos[linhaMatriz][colunaMatriz - 1].ehColidivel() && Math.abs(getY() - linhaMatriz*getPainelJogo().getTamanhoTile() - getPainelJogo().getTamanhoTile()/2) <= getVelocidade())
-                        setDirecao("esquerda");
-                } else {
-                    setDirecao(getDirecaoDesejada());
-                    setDimensoesHitBox(getPainelJogo().getTamanhoTile() - 1);
-                }
-            else if((getDirecao() == "direita" || getDirecao() == "esquerda"))
-                if (getDirecaoDesejada() == "cima") {
-                    if(!matrizElementos[linhaMatriz - 1][colunaMatriz].ehColidivel() && Math.abs(getX() - colunaMatriz*getPainelJogo().getTamanhoTile() - getPainelJogo().getTamanhoTile()/2) <= getVelocidade())
-                        setDirecao("cima");
-                } else if (getDirecaoDesejada() == "baixo") {
-                    if(!matrizElementos[linhaMatriz + 1][colunaMatriz].ehColidivel() && Math.abs(getX() - colunaMatriz*getPainelJogo().getTamanhoTile() - getPainelJogo().getTamanhoTile()/2) <= getVelocidade())
-                        setDirecao("baixo");
-                } else {
-                    setDirecao(getDirecaoDesejada());
-                    setDimensoesHitBox(getPainelJogo().getTamanhoTile() - 1);
-                }
+            if(getDirecaoDesejada() != null) {
+                if (getDirecao().equals("cima") || getDirecao().equals("baixo"))
+                    if (getDirecaoDesejada().equals("direita")) {
+                        if(!matrizElementos[linhaMatriz][colunaMatriz + 1].ehColidivel() && Math.abs(getY() - linhaMatriz*getPainelJogo().getTamanhoTile() - getPainelJogo().getTamanhoTile()/2) <= getVelocidade())
+                            setDirecao("direita");
+                    } else if (getDirecaoDesejada().equals("esquerda")) {
+                        if(!matrizElementos[linhaMatriz][colunaMatriz - 1].ehColidivel() && Math.abs(getY() - linhaMatriz*getPainelJogo().getTamanhoTile() - getPainelJogo().getTamanhoTile()/2) <= getVelocidade())
+                            setDirecao("esquerda");
+                    } else {
+                        setDirecao(getDirecaoDesejada());
+                        setDimensoesHitBox(getPainelJogo().getTamanhoTile() - 1);
+                    }
+                else if(getDirecao().equals("direita") || getDirecao().equals("esquerda"))
+                    if (getDirecaoDesejada().equals("cima")) {
+                        if(!matrizElementos[linhaMatriz - 1][colunaMatriz].ehColidivel() && Math.abs(getX() - colunaMatriz*getPainelJogo().getTamanhoTile() - getPainelJogo().getTamanhoTile()/2) <= getVelocidade())
+                            setDirecao("cima");
+                    } else if (getDirecaoDesejada().equals("baixo")) {
+                        if(!matrizElementos[linhaMatriz + 1][colunaMatriz].ehColidivel() && Math.abs(getX() - colunaMatriz*getPainelJogo().getTamanhoTile() - getPainelJogo().getTamanhoTile()/2) <= getVelocidade())
+                            setDirecao("baixo");
+                    } else {
+                        setDirecao(getDirecaoDesejada());
+                        setDimensoesHitBox(getPainelJogo().getTamanhoTile() - 1);
+                    }
+            }
 
         } catch (ArrayIndexOutOfBoundsException  e) {
             setDirecao(getDirecaoDesejada());
@@ -129,8 +132,16 @@ public class PacMan extends Entidade {
     }
 
     public void setDirecaoDesejada(String direcao) {
-        if(direcao == "direita" || direcao == "esquerda" || direcao == "cima" || direcao == "baixo") 
+        if(direcao != null && (direcao.equals("direita") || direcao.equals("esquerda") || direcao.equals("cima") || direcao.equals("baixo"))) 
             this.direcaoDesejada = direcao;
+    }
+
+    public void setVidas(int vidas) {
+        if(vidas <= 3 && vidas >= 0) {
+            this.vidas = vidas;
+        } else {
+            this.vidas = 3;
+        }
     }
 
     public String getDirecaoDesejada() {
