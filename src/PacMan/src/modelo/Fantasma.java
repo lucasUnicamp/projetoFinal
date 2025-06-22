@@ -18,6 +18,7 @@ public class Fantasma extends Entidade implements Serializable{
     private int metaCaminho;
     private transient BufferedImage provisoria;
     private transient ArrayList<Ponto> caminhoAtual;
+    private int correcoesPendentes;
     public Fantasma(PainelJogo painel) {
         super(painel);
         correcoesPendentes = 0;
