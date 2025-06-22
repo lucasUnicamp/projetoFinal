@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.Buffer;
 import java.nio.file.Paths;
 import javax.imageio.ImageIO;
 
@@ -17,10 +18,14 @@ public class PacMan extends Entidade {
     private BufferedImage cima, baixo, esquerda, direita, repouso;
     private String direcaoDesejada;
 
+    private int vidas;
+
     private LeitorTeclado leitor;
 
     public PacMan(PainelJogo painelJogo, LeitorTeclado leitor) {
         super(painelJogo);
+
+        vidas = 3;
 
         getImagem();
 
@@ -146,5 +151,9 @@ public class PacMan extends Entidade {
         } catch (IOException e) {
             System.err.println("!!! ERRO NA IMPORTAÇÃO DOS SPRITES DO PACMAN !!!");
         }
+    }
+
+    public BufferedImage getImagemRepouso() {
+        return repouso;
     }
 }

@@ -13,13 +13,14 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 
 public class MenuPrincipal extends JFrame{
     private CardLayout cardLayout;
     private JPanel cards;
     PainelOpcoes painelOpcoes;
     PainelJogo painelJogo;
-    JPanel painelExternoJogo;
+    PainelExterno painelExternoJogo;
     PainelMenu painelMenu;
     Clip clip;
     LeitorTeclado leitor = new LeitorTeclado();
@@ -40,11 +41,8 @@ public class MenuPrincipal extends JFrame{
         cards.addKeyListener(leitor);
         cards.setFocusable(true);
 
-        painelExternoJogo = new JPanel(new GridBagLayout());
+        painelExternoJogo = new PainelExterno(leitor);
         painelExternoJogo.setBackground(Color.BLACK);
-
-        painelJogo = new PainelJogo(leitor);
-        painelExternoJogo.add(painelJogo, new GridBagConstraints());
 
         painelMenu = new PainelMenu(clip, this);
         
@@ -57,8 +55,8 @@ public class MenuPrincipal extends JFrame{
         this.add(cards);
         this.cardLayout.show(cards, "painelMenu");
         this.pack();
+        this.setMinimumSize(getSize());
         this.setVisible(true);
-        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 
     public CardLayout getCardLayout() {

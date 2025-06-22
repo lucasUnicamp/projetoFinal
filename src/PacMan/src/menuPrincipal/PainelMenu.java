@@ -2,6 +2,7 @@ package menuPrincipal;
 
 import javax.swing.JPanel;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.sound.sampled.*;
 
 import java.awt.GridLayout;
@@ -48,8 +49,11 @@ public class PainelMenu extends JPanel implements ActionListener{
 
     @Override public void actionPerformed (ActionEvent e) {
         if (e.getSource() == novoJogo) {
-            this.frame.getCardLayout().show(this.frame.getCards(), "painelJogo");
-            this.frame.painelJogo.comecarThread();
+            frame.getCardLayout().show(this.frame.getCards(), "painelJogo");
+            frame.pack();
+            frame.setMinimumSize(frame.getSize());
+            frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            frame.painelExternoJogo.painelJogo.comecarThread();
 
         } else if (e.getSource() == continuar) {
             //ação correspondente

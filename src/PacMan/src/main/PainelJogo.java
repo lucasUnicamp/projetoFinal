@@ -1,8 +1,11 @@
 package main;
 
 import interfaces.Elemento;
+import menuPrincipal.PainelExterno;
+
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
@@ -37,11 +40,14 @@ public class PainelJogo extends JPanel implements Runnable {
     Fantasma fantasma;
 
     LeitorTeclado leitor = new LeitorTeclado(); // listener do teclado
+    PainelExterno painelExterno;
 
     Thread gameThread;
 
-    public PainelJogo(LeitorTeclado leitor) {
+    public PainelJogo(LeitorTeclado leitor, PainelExterno painelExterno) {
         this.leitor = leitor;
+        this.painelExterno = painelExterno;
+
         tratadorMapa = new TratadorMapa(2);
         mapa = tratadorMapa.atribuirMapa();
         setNumeroColunas(tratadorMapa.getMapaLargura()); // numero de linhas de tiles
@@ -160,6 +166,8 @@ public class PainelJogo extends JPanel implements Runnable {
         fantasma.desenhar(caneta);
         pacman.desenhar(caneta);
 
+        painelExterno.setTextoLabelPontos(String.format("Pontuação: %d", getPontuacao()));
+        
         caneta.dispose();
     }
 
