@@ -91,16 +91,29 @@ public class Fantasma extends Entidade {
                 int distanciasubida = calculaDistancia(x1, y1 - 1, x2, y2);
                 adicionarPonto(busca, atual, x1, y1 - 1, distanciasubida);        
             }
+        }catch (IndexOutOfBoundsException e) {
+            //casos em que o fantasma seguiu o pac man ate uma posicao de borda
+
+        }
+        try {
             //descida
             if(!mapa[y1 + 1][x1].ehColidivel() && !jaVisitado(visitados, x1, y1 + 1)){
                 int distanciadescida = calculaDistancia(x1, y1 + 1, x2, y2);
                 adicionarPonto(busca, atual, x1, y1 + 1, distanciadescida);
             }
+        } catch(IndexOutOfBoundsException e){
+
+        }
+        try{
             //direita
             if(!mapa[y1][x1 + 1].ehColidivel() && !jaVisitado(visitados, x1 + 1, y1)){
                 int distanciadireita = calculaDistancia(x1 + 1, y1, x2, y2);
                 adicionarPonto(busca, atual, x1 + 1, y1, distanciadireita);
             }
+        } catch(IndexOutOfBoundsException e){
+            
+        }
+        try{
             //esquerda
             if(!mapa[y1][x1 - 1].ehColidivel() && !jaVisitado(visitados, x1 - 1, y1)){
                 int distanciaesquerda = calculaDistancia(x1 - 1, y1, x2, y2);
@@ -108,8 +121,8 @@ public class Fantasma extends Entidade {
                 }
             
             Collections.sort(busca, Comparator.comparingInt(Ponto::getHeuristica));
-        } catch (IndexOutOfBoundsException e) {
-
+        } catch (IndexOutOfBoundsException e){
+            
         }
     }
 
