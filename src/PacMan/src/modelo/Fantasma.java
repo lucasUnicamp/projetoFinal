@@ -86,8 +86,7 @@ public class Fantasma extends Entidade {
         int x1 = atual.getX();
         int y1 = atual.getY();
         Elemento mapa[][] = getPainelJogo().elementos;
-        if(y1 < getPainelJogo().getAltura() && x1 < getPainelJogo().getLargura() && x1 > 0 && y1 > 0){
-
+        try {
             if(!mapa[y1 - 1][x1].ehColidivel() && !jaVisitado(visitados, x1, y1 - 1)){
                 int distanciasubida = calculaDistancia(x1, y1 - 1, x2, y2);
                 adicionarPonto(busca, atual, x1, y1 - 1, distanciasubida);        
@@ -106,12 +105,11 @@ public class Fantasma extends Entidade {
             if(!mapa[y1][x1 - 1].ehColidivel() && !jaVisitado(visitados, x1 - 1, y1)){
                 int distanciaesquerda = calculaDistancia(x1 - 1, y1, x2, y2);
                 adicionarPonto(busca, atual, x1 - 1, y1, distanciaesquerda);
-            }
+                }
             
             Collections.sort(busca, Comparator.comparingInt(Ponto::getHeuristica));
-        }
-        else{
-            System.out.println("Erro em acesso a posicao invalida de memoria");
+        } catch (IndexOutOfBoundsException e) {
+
         }
     }
 
@@ -173,7 +171,10 @@ public class Fantasma extends Entidade {
         //posicoes iniciais do fantasma na matriz
         int xm = getX()/getPainelJogo().getTamanhoTile();
         int ym = getY()/getPainelJogo().getTamanhoTile();
-        Ponto proximo = caminhoAtual.get(0);
+        Ponto proximo = null;
+        if(caminhoAtual.size() > 0) 
+            proximo = caminhoAtual.get(0);
+        
         if(proximo != null && (proximo.getX() != xm || proximo.getY() != ym)){
             //o fantasma esta no meio do caminho
             if(xm == proximo.getX()){
