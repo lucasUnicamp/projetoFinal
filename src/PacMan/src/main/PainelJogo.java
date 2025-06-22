@@ -28,11 +28,13 @@ public class PainelJogo extends JPanel implements Runnable {
 
     private int pontuacao;
     
-    public final Elemento[][] elementos;
-    private final ArrayList<Parede> paredes;
-    private final ArrayList<Comestivel> comestiveis;
-    private final TratadorMapa tratadorMapa;
+    public Elemento[][] elementos;
+    public ArrayList<Parede> paredes;
+    public ArrayList<Comestivel> comestiveis;
+    private TratadorMapa tratadorMapa;
     private String[] mapa;
+
+    private GameLoader gameLoader;
 
     int FPS = 30;
     PacMan pacman;
@@ -46,6 +48,8 @@ public class PainelJogo extends JPanel implements Runnable {
     public PainelJogo(LeitorTeclado leitor, PainelExterno painelExterno) {
         this.leitor = leitor;
         this.painelExterno = painelExterno;
+
+        this.gameLoader = new GameLoader(this);
 
         tratadorMapa = new TratadorMapa(2);
         mapa = tratadorMapa.atribuirMapa();
@@ -97,6 +101,14 @@ public class PainelJogo extends JPanel implements Runnable {
                 //System.out.printf("pontos: %d\n", getPontuacao());
             }
         }
+    }
+
+    public void continuarJogo() {
+        gameLoader.load();
+    }
+
+    public void salvarJogo() {
+        gameLoader.salvar();
     }
 
     public final void carregarElementos() {
@@ -165,6 +177,13 @@ public class PainelJogo extends JPanel implements Runnable {
         fantasma.desenhar(caneta);
         pacman.desenhar(caneta);
 
+        if(pacman.getVidas() >= 1)
+            caneta.drawImage(pacman.getImagemRepouso(), getLargura() - 20*escala, getAltura() - 20*escala, getTamanhoTile(), getTamanhoTile(), null);
+        if (pacman.getVidas() >= 2) 
+            caneta.drawImage(pacman.getImagemRepouso(), getLargura() - 40*escala, getAltura() - 20*escala, getTamanhoTile(), getTamanhoTile(), null);
+        if (pacman.getVidas() >= 3)
+            caneta.drawImage(pacman.getImagemRepouso(), getLargura() - 60*escala, getAltura() - 20*escala, getTamanhoTile(), getTamanhoTile(), null);
+
         painelExterno.setTextoLabelPontos(String.format("Pontuação: %d", getPontuacao()));
         
         caneta.dispose();
@@ -184,6 +203,22 @@ public class PainelJogo extends JPanel implements Runnable {
 
     public void setNumeroColunas(int colunas) {
         numeroColunas = colunas;
+    }
+
+    public void setTradadorMapa(TratadorMapa tratadorMapa) {
+        this.tratadorMapa = tratadorMapa;
+    }
+
+    public void setMapa(String[] mapa) {
+        this.mapa = mapa;
+    }
+
+    public void setPacMan(PacMan pacman) {
+        this.pacman = pacman;
+    }
+
+    public void setFantasma(Fantasma fantasma) {
+        this.fantasma = fantasma;
     }
 
     public String[] getMapa() {
@@ -220,6 +255,18 @@ public class PainelJogo extends JPanel implements Runnable {
 
     public int getFPS() {
         return FPS;
+    }
+
+    public TratadorMapa getTratadorMapa() {
+        return tratadorMapa;
+    }
+
+    public PacMan getPacMan() {
+        return pacman;
+    }
+
+    public Fantasma getFantasma() {
+        return fantasma;
     }
 
 }

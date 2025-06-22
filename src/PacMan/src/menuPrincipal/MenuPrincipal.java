@@ -1,5 +1,6 @@
 package menuPrincipal;
 
+import javax.sound.midi.SysexMessage;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
@@ -11,6 +12,9 @@ import main.PainelJogo;
 
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 public class MenuPrincipal extends JFrame{
     private CardLayout cardLayout;
@@ -30,9 +34,18 @@ public class MenuPrincipal extends JFrame{
             e.printStackTrace();
         }
 
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setResizable(true);
         this.setTitle("Pac-Man");
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                painelExternoJogo.painelJogo.salvarJogo();
+                dispose();
+                System.exit(0);
+            }
+        });
+
         this.cardLayout =  new CardLayout();
         this.cards = new JPanel(cardLayout);
         cards.addKeyListener(leitor);

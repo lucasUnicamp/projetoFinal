@@ -5,18 +5,19 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.nio.file.Paths;
 import javax.imageio.ImageIO;
 import main.PainelJogo;
 
-public class Parede implements Elemento {
+public class Parede implements Elemento, Serializable{
     private int xMatriz;
     private int yMatriz;
     private int xReal;
     private int yReal;
     public boolean colidivel = true;
-    private BufferedImage paredeLado, paredeCheia, paredeBorda;
-    private PainelJogo painelJogo;
+    private transient BufferedImage paredeLado, paredeCheia, paredeBorda;
+    private transient PainelJogo painelJogo;
 
     public Parede(PainelJogo painelJogo, int x, int y) {
         this.painelJogo = painelJogo;
@@ -98,6 +99,10 @@ public class Parede implements Elemento {
         yMatriz = y;
     }
 
+    public char getRepresentacao() {
+        return '#';
+    }
+    
     public int getXMatriz() {
         return xMatriz;
     }
