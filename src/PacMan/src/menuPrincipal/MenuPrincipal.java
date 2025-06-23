@@ -4,6 +4,7 @@ import javax.sound.midi.SysexMessage;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -12,6 +13,9 @@ import main.PainelJogo;
 
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.GridBagLayout;
+import java.awt.PopupMenu;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -24,7 +28,7 @@ public class MenuPrincipal extends JFrame{
     PainelExterno painelExternoJogo;
     PainelMenu painelMenu;
     Clip clip;
-    LeitorTeclado leitor = new LeitorTeclado();
+    LeitorTeclado leitor = new LeitorTeclado(this);
 
     public MenuPrincipal() {
         try {
@@ -54,6 +58,8 @@ public class MenuPrincipal extends JFrame{
         painelExternoJogo = new PainelExterno(leitor);
         painelExternoJogo.setBackground(Color.BLACK);
 
+        MenuPausa menuPausa = new MenuPausa();
+
         painelMenu = new PainelMenu(clip, this);
         
         painelOpcoes = new PainelOpcoes(clip, this);
@@ -67,6 +73,10 @@ public class MenuPrincipal extends JFrame{
         this.pack();
         this.setMinimumSize(getSize());
         this.setVisible(true);
+        ((JComponent) getGlassPane()).setLayout(new GridBagLayout());
+        ((JComponent) getGlassPane()).setOpaque(false);
+        ((JComponent) getGlassPane()).add(menuPausa);
+
     }
 
     public CardLayout getCardLayout() {

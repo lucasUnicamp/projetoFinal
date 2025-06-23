@@ -40,7 +40,7 @@ public class PainelJogo extends JPanel implements Runnable {
     PacMan pacman;
     Fantasma fantasma;
 
-    LeitorTeclado leitor = new LeitorTeclado(); // listener do teclado
+    LeitorTeclado leitor; // listener do teclado
     PainelExterno painelExterno;
 
     Thread gameThread;
@@ -90,8 +90,10 @@ public class PainelJogo extends JPanel implements Runnable {
             ultimoTempo = tempoAtual;
 
             if (delta >= 1) { // ações que vão acontecer a cada tick
-                atualizar();
-                repaint();
+                if(!leitor.pausado) {
+                    atualizar();
+                    repaint();
+                }
                 delta --;
                 try{
                     Thread.sleep(1000/FPS);

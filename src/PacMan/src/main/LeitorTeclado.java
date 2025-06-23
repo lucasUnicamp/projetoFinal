@@ -3,9 +3,20 @@ package main;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+
+import menuPrincipal.MenuPrincipal;
+
 public class LeitorTeclado implements KeyListener{
 
     public boolean cimaPressionado, baixoPressionado, direitaPressionado, esquerdaPressionado;
+    public boolean pausado;
+    MenuPrincipal menu;
+
+    public LeitorTeclado(MenuPrincipal menu) {
+        this.menu = menu;
+    }
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -42,6 +53,16 @@ public class LeitorTeclado implements KeyListener{
             esquerdaPressionado = false;
             direitaPressionado = true;
             baixoPressionado = false;
+        }
+
+        if (codigo == KeyEvent.VK_ESCAPE) {
+            if(!pausado) {
+                pausado = true;
+                ((JComponent) menu.getGlassPane()).setVisible(true);
+            } else {
+                pausado = false;
+                ((JComponent) menu.getGlassPane()).setVisible(false);
+            }
         }
     }
 
