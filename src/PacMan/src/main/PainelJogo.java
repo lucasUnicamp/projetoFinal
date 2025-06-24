@@ -43,7 +43,6 @@ public class PainelJogo extends JPanel implements Runnable {
 
     int FPS = 30;
     PacMan pacman;
-    Fantasma fantasma;
 
     LeitorTeclado leitor; // listener do teclado
     PainelExterno painelExterno;
@@ -159,8 +158,10 @@ public class PainelJogo extends JPanel implements Runnable {
                     case 'R':
                         EspacoVazio spawnFantVermelho = new EspacoVazio();
                         elementos[i][j] = spawnFantVermelho;
+                        Fantasma fantasma = new Fantasma(this);
                         fantasma.setSpawn(j, i);
                         fantasma.atualizarPosicaoInicial();
+                        fantasmas.add(fantasma);
                         break;
                 }
             }
@@ -176,7 +177,9 @@ public class PainelJogo extends JPanel implements Runnable {
             }
         }
         pacman.atualizar();
-        fantasma.executarfuncao(pacman.getX(), pacman.getY());
+        for(Fantasma fantasma : fantasmas) {
+            fantasma.executarfuncao(pacman.getX(), pacman.getY());
+        }
 
     }
 
@@ -192,7 +195,8 @@ public class PainelJogo extends JPanel implements Runnable {
             }
         }
         
-        fantasma.desenhar(caneta);
+        for(Fantasma fantasma : fantasmas)
+            fantasma.desenhar(caneta);
         pacman.desenhar(caneta);
 
         if(pacman.getVidas() >= 1)
@@ -216,10 +220,8 @@ public class PainelJogo extends JPanel implements Runnable {
         alturaTela = tamanhoTile * numeroLinhas; // altura em pixels do painel
 
         pacman = new PacMan(this, leitor);
-        fantasma = new Fantasma(this);
         elementos = new Elemento[numeroLinhas][numeroColunas];
         fantasmas = new ArrayList<>();
-        fantasmas.add(fantasma);
         comestiveis = new ArrayList<>();
         paredes = new ArrayList<>();
         this.carregarElementos();
@@ -229,8 +231,6 @@ public class PainelJogo extends JPanel implements Runnable {
         pacman.irPosicaoInicial();
         for(int i = 0; i < fantasmas.size(); i++) {
             fantasmas.set(i, new Fantasma(this, fantasmas.get(i).getXInicial(), fantasmas.get(i).getYInicial(), fantasmas.get(i).getVelocidade(), fantasmas.get(i).getDirecao()));     }
-        fantasma = new Fantasma(this, fantasma.getXInicial(), fantasma.getXInicial(), fantasma.getVelocidade(), fantasma.getDirecao());
-        fantasmas.set(0, fantasma);
     }
 
     public void aumentaPontuacao(int aumento) {
@@ -267,10 +267,6 @@ public class PainelJogo extends JPanel implements Runnable {
 
     public void setPacMan(PacMan pacman) {
         this.pacman = pacman;
-    }
-
-    public void setFantasma(Fantasma fantasma) {
-        this.fantasma = fantasma;
     }
 
     public Thread getThread() {
@@ -319,10 +315,6 @@ public class PainelJogo extends JPanel implements Runnable {
 
     public PacMan getPacMan() {
         return pacman;
-    }
-
-    public Fantasma getFantasma() {
-        return fantasma;
     }
 
     public JComponent getPainelVidro() {

@@ -18,10 +18,10 @@ public class DadosJogo implements Serializable{
     public int xInicialPacMan;
     public int yInicialPacMan;
     public String direcaoPacMan;
-    public int xFantasma;
-    public int yFantasma;
-    public int xInicialFantasma;
-    public int yInicialFantasma;
-    public String direcaoFantasma;
+    public ArrayList<Integer> xFantasmas;
+    public ArrayList<Integer> yFantasmas;
+    public ArrayList<Integer> xInicialFantasmas;
+    public ArrayList<Integer> yInicialFantasmas;
+    public ArrayList<String> direcaoFantasmas;
     Fantasma fantasma;
 }

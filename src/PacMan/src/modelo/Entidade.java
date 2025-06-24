@@ -154,7 +154,7 @@ public class Entidade implements Serializable{
 
     public void irPosicaoInicial() {
         setX(getXInicial());
-        setY(getXInicial());
+        setY(getYInicial());
     }
 
     public void atualizarPosicaoInicial() {

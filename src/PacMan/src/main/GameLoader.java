@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 
 import interfaces.Elemento;
 
@@ -43,11 +44,20 @@ public class GameLoader {
             dados.xInicialPacMan = painelJogo.getPacMan().getXInicial();
             dados.yInicialPacMan = painelJogo.getPacMan().getYInicial();
             dados.direcaoPacMan = painelJogo.getPacMan().getDirecao();
-            dados.xFantasma = painelJogo.getFantasma().getX();
-            dados.yFantasma = painelJogo.getFantasma().getY();
-            dados.xInicialFantasma = painelJogo.getPacMan().getXInicial();
-            dados.yInicialFantasma = painelJogo.getPacMan().getYInicial();
-            dados.direcaoFantasma = painelJogo.getFantasma().getDirecao();
+
+            dados.xFantasmas = new ArrayList<>();
+            dados.yFantasmas = new ArrayList<>();
+            dados.direcaoFantasmas = new ArrayList<>();
+            dados.xInicialFantasmas = new ArrayList<>();
+            dados.yInicialFantasmas = new ArrayList<>();
+
+            for(int i = 0; i < painelJogo.fantasmas.size(); i++) {
+                dados.xFantasmas.add(painelJogo.fantasmas.get(i).getX());
+                dados.yFantasmas.add(painelJogo.fantasmas.get(i).getY());
+                dados.direcaoFantasmas.add(painelJogo.fantasmas.get(i).getDirecao());
+                dados.xInicialFantasmas.add(painelJogo.fantasmas.get(i).getXInicial());
+                dados.yInicialFantasmas.add(painelJogo.fantasmas.get(i).getYInicial());
+            }
             dados.vidasPacMan = painelJogo.getPacMan().getVidas();
 
             arquivoSave.writeObject(dados);
@@ -74,11 +84,16 @@ public class GameLoader {
             painelJogo.getPacMan().setXInicial(dados.xInicialPacMan);
             painelJogo.getPacMan().setYInicial(dados.yInicialPacMan);
             painelJogo.getPacMan().setDirecao(dados.direcaoPacMan.toString());
-            painelJogo.getFantasma().setX(dados.xFantasma);
-            painelJogo.getFantasma().setY(dados.yFantasma);
-            painelJogo.getPacMan().setXInicial(dados.xInicialFantasma);
-            painelJogo.getPacMan().setYInicial(dados.yInicialFantasma);
-            painelJogo.getFantasma().setDirecao(dados.direcaoFantasma.toString());
+            
+            
+
+            for(int i = 0; i < painelJogo.fantasmas.size(); i++) {
+                painelJogo.fantasmas.get(i).setX(dados.xFantasmas.get(i));
+                painelJogo.fantasmas.get(i).setY(dados.yFantasmas.get(i));
+                painelJogo.fantasmas.get(i).setXInicial(dados.xInicialFantasmas.get(i));
+                painelJogo.fantasmas.get(i).setYInicial(dados.yInicialFantasmas.get(i));
+                painelJogo.fantasmas.get(i).setDirecao(dados.direcaoFantasmas.get(i).toString());
+            }
             
 
 
