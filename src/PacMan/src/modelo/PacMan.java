@@ -144,6 +144,10 @@ public class PacMan extends Entidade{
         }
     }
 
+    public void morrer() {
+        setVidas(getVidas() - 1);
+    }
+
     public String getDirecaoDesejada() {
         return direcaoDesejada;
     }

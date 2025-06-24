@@ -4,9 +4,11 @@ import javax.sound.midi.SysexMessage;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
+import javax.swing.AbstractAction;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 
 import main.LeitorTeclado;
 import main.PainelJogo;
@@ -16,6 +18,8 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.GridBagLayout;
 import java.awt.PopupMenu;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -29,6 +33,7 @@ public class MenuPrincipal extends JFrame{
     PainelMenu painelMenu;
     Clip clip;
     LeitorTeclado leitor = new LeitorTeclado(this);
+    JComponent painelVidro;
 
     public MenuPrincipal() {
         try {
@@ -38,27 +43,31 @@ public class MenuPrincipal extends JFrame{
             e.printStackTrace();
         }
 
-        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(true);
         this.setTitle("Pac-Man");
         addWindowListener(new WindowAdapter() {
             @Override
-            public void windowClosing(WindowEvent e) {
+            public void windowClosed(WindowEvent e) {
                 painelExternoJogo.painelJogo.salvarJogo();
+                if(painelExternoJogo.painelJogo.getThread() != null) {
+                    painelExternoJogo.painelJogo.getThread().interrupt();
+                }
                 dispose();
                 System.exit(0);
             }
         });
 
+        this.painelVidro = (JComponent) getGlassPane();
         this.cardLayout =  new CardLayout();
         this.cards = new JPanel(cardLayout);
         cards.addKeyListener(leitor);
         cards.setFocusable(true);
 
-        painelExternoJogo = new PainelExterno(leitor);
+        painelExternoJogo = new PainelExterno(leitor, getCards(), painelVidro);
         painelExternoJogo.setBackground(Color.BLACK);
 
-        MenuPausa menuPausa = new MenuPausa();
+        MenuPausa menuPausa = new MenuPausa(painelExternoJogo.painelJogo);
 
         painelMenu = new PainelMenu(clip, this);
         
@@ -68,14 +77,30 @@ public class MenuPrincipal extends JFrame{
         getCards().add(painelOpcoes, "painelOpcoes");
         getCards().add(painelExternoJogo, "painelJogo");
 
+        getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "PAUSAR");
+        getRootPane().getActionMap().put("PAUSAR", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(painelExternoJogo.isVisible())
+                    if(!painelExternoJogo.painelJogo.estaPausado()) {
+                        painelExternoJogo.painelJogo.setPausado(true);
+                        ((JComponent) getGlassPane()).setVisible(true);
+                    } else {
+                        painelExternoJogo.painelJogo.setPausado(false);
+                        ((JComponent) getGlassPane()).setVisible(false);
+                    }
+                    
+            }
+            
+        });
         this.add(cards);
         this.cardLayout.show(cards, "painelMenu");
         this.pack();
         this.setMinimumSize(getSize());
         this.setVisible(true);
-        ((JComponent) getGlassPane()).setLayout(new GridBagLayout());
-        ((JComponent) getGlassPane()).setOpaque(false);
-        ((JComponent) getGlassPane()).add(menuPausa);
+        painelVidro.setLayout(new GridBagLayout());
+        painelVidro.setOpaque(false);
+        painelVidro.add(menuPausa);
 
     }
 

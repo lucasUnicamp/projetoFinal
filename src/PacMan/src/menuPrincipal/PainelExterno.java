@@ -6,6 +6,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -15,7 +16,7 @@ import main.PainelJogo;
 public class PainelExterno extends JPanel{
     JLabel labelPontos;
     PainelJogo painelJogo;
-    public PainelExterno(LeitorTeclado leitor) {
+    public PainelExterno(LeitorTeclado leitor, JPanel cards, JComponent painelVidro) {
         super(new GridBagLayout());
         labelPontos = new JLabel("Pontuação:");
         labelPontos.setFont(new Font("SansSerif", Font.BOLD, 24));
@@ -24,7 +25,7 @@ public class PainelExterno extends JPanel{
         
         GridBagConstraints constraints = new GridBagConstraints(0, 1, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0);
         constraints.gridy = 1;
-        painelJogo = new PainelJogo(leitor, this);
+        painelJogo = new PainelJogo(leitor, this, cards, painelVidro);
         setPreferredSize(painelJogo.getPreferredSize());
         add(painelJogo, constraints);
     }

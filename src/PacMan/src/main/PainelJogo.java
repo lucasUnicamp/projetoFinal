@@ -3,11 +3,14 @@ package main;
 import interfaces.Elemento;
 import menuPrincipal.PainelExterno;
 
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
+
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import modelo.Comestivel;
 import modelo.EspacoVazio;
@@ -27,6 +30,7 @@ public class PainelJogo extends JPanel implements Runnable {
     private int alturaTela; // altura em pixels do painel
 
     private int pontuacao;
+    private boolean pausado;
     
     public Elemento[][] elementos;
     public ArrayList<Parede> paredes;
@@ -42,38 +46,33 @@ public class PainelJogo extends JPanel implements Runnable {
 
     LeitorTeclado leitor; // listener do teclado
     PainelExterno painelExterno;
+    JPanel cards;
+    private JComponent painelVidro;
 
-    Thread gameThread;
+    private Thread gameThread;
 
-    public PainelJogo(LeitorTeclado leitor, PainelExterno painelExterno) {
+    public PainelJogo(LeitorTeclado leitor, PainelExterno painelExterno, JPanel cards, JComponent painelVidro) {
+        this.cards = cards;
         this.leitor = leitor;
         this.painelExterno = painelExterno;
+        this.painelVidro = painelVidro;
 
         this.gameLoader = new GameLoader(this);
 
         tratadorMapa = new TratadorMapa(2);
-        mapa = tratadorMapa.atribuirMapa();
-        setNumeroColunas(tratadorMapa.getMapaLargura()); // numero de linhas de tiles
-        setNumeroLinhas(tratadorMapa.getMapaAltura()); // numero de colunas de tiles
-        larguraTela = tamanhoTile * numeroColunas; // largura em pixels do painel
-        alturaTela = tamanhoTile * numeroLinhas; // altura em pixels do painel
+
+        novoJogo();
 
         setPreferredSize(new Dimension(larguraTela, alturaTela));
         setBackground(Color.BLACK);
         setDoubleBuffered(true);
         setFocusable(true);
-
-        pacman = new PacMan(this, leitor);
-        fantasma = new Fantasma(this);
-        elementos = new Elemento[numeroLinhas][numeroColunas];
-        comestiveis = new ArrayList<>();
-        paredes = new ArrayList<>();
-        this.carregarElementos();
     }
 
     public void comecarThread() {
         gameThread = new Thread(this);
         gameThread.start();
+        setPausado(false);
     }
 
     public void run() {
@@ -82,7 +81,7 @@ public class PainelJogo extends JPanel implements Runnable {
         long ultimoTempo = System.nanoTime();
         long tempoAtual;
 
-        while (gameThread != null) { // loop principal do jogo
+        while (gameThread != null && !gameThread.isInterrupted()) { // loop principal do jogo
 
             tempoAtual = System.nanoTime();
 
@@ -90,7 +89,7 @@ public class PainelJogo extends JPanel implements Runnable {
             ultimoTempo = tempoAtual;
 
             if (delta >= 1) { // ações que vão acontecer a cada tick
-                if(!leitor.pausado) {
+                if(!estaPausado()) {
                     atualizar();
                     repaint();
                 }
@@ -98,12 +97,13 @@ public class PainelJogo extends JPanel implements Runnable {
                 try{
                     Thread.sleep(1000/FPS);
                 } catch(InterruptedException e) {
-                    e.printStackTrace();
+                    Thread.currentThread().interrupt();
                 }
                 //System.out.printf("pontos: %d\n", getPontuacao());
             }
         }
     }
+
 
     public void continuarJogo() {
         gameLoader.load();
@@ -111,6 +111,13 @@ public class PainelJogo extends JPanel implements Runnable {
 
     public void salvarJogo() {
         gameLoader.salvar();
+    }
+
+    public void voltarMenu() {
+        salvarJogo();
+        painelVidro.setVisible(false);
+        ((CardLayout) cards.getLayout()).show(cards, "painelMenu");
+        getThread().interrupt();
     }
 
     public final void carregarElementos() {
@@ -195,6 +202,14 @@ public class PainelJogo extends JPanel implements Runnable {
         pontuacao += aumento;
     }
 
+    public boolean estaPausado() {
+        return pausado;
+    }
+
+    public void setPausado(boolean pausado) {
+        this.pausado = pausado;
+    }
+
     public void setPontuacao(int pontuacao) {
         this.pontuacao = pontuacao;
     }
@@ -221,6 +236,10 @@ public class PainelJogo extends JPanel implements Runnable {
 
     public void setFantasma(Fantasma fantasma) {
         this.fantasma = fantasma;
+    }
+
+    public Thread getThread() {
+        return gameThread;
     }
 
     public String[] getMapa() {
@@ -269,6 +288,25 @@ public class PainelJogo extends JPanel implements Runnable {
 
     public Fantasma getFantasma() {
         return fantasma;
+    }
+
+    public JComponent getPainelVidro() {
+        return painelVidro;
+    }
+
+    public void novoJogo() {
+        mapa = tratadorMapa.atribuirMapa();
+        setNumeroColunas(tratadorMapa.getMapaLargura()); // numero de linhas de tiles
+        setNumeroLinhas(tratadorMapa.getMapaAltura()); // numero de colunas de tiles
+        larguraTela = tamanhoTile * numeroColunas; // largura em pixels do painel
+        alturaTela = tamanhoTile * numeroLinhas; // altura em pixels do painel
+
+        pacman = new PacMan(this, leitor);
+        fantasma = new Fantasma(this);
+        elementos = new Elemento[numeroLinhas][numeroColunas];
+        comestiveis = new ArrayList<>();
+        paredes = new ArrayList<>();
+        this.carregarElementos();
     }
 
 }
