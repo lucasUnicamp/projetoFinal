@@ -25,9 +25,22 @@ public class Fantasma extends Entidade implements Serializable{
         caminhoAtual = new ArrayList<>();
         metaCaminho = 0;
         estadoPerseguicao = 1;
+
         setVelocidade((70 * getPainelJogo().getEscala()) / getPainelJogo().getFPS()); 
 
-        setDirecao("cima");
+        try {
+            provisoria = ImageIO.read(new File(Paths.get("resources", "imagens", "fantasmaVermelho.png").toString()));
+        } catch (IOException e) {
+            System.err.println("!!! ERRO NA IMPORTAÇÃO DO SPRITE DO FANTASMA !!!");
+        }
+    }
+
+    public Fantasma(PainelJogo painel, int x, int y, int velocidade, String direcao) {
+        super(painel, x, y, velocidade, direcao);
+        correcoesPendentes = 0;
+        caminhoAtual = new ArrayList<>();
+        metaCaminho = 0;
+        estadoPerseguicao = 1;
 
         try {
             provisoria = ImageIO.read(new File(Paths.get("resources", "imagens", "fantasmaVermelho.png").toString()));

@@ -40,9 +40,13 @@ public class GameLoader {
             dados.pontuacao = painelJogo.getPontuacao();
             dados.xPacMan = painelJogo.getPacMan().getX();
             dados.yPacMan = painelJogo.getPacMan().getY();
+            dados.xInicialPacMan = painelJogo.getPacMan().getXInicial();
+            dados.yInicialPacMan = painelJogo.getPacMan().getYInicial();
             dados.direcaoPacMan = painelJogo.getPacMan().getDirecao();
             dados.xFantasma = painelJogo.getFantasma().getX();
             dados.yFantasma = painelJogo.getFantasma().getY();
+            dados.xInicialFantasma = painelJogo.getPacMan().getXInicial();
+            dados.yInicialFantasma = painelJogo.getPacMan().getYInicial();
             dados.direcaoFantasma = painelJogo.getFantasma().getDirecao();
             dados.vidasPacMan = painelJogo.getPacMan().getVidas();
 
@@ -67,9 +71,13 @@ public class GameLoader {
             painelJogo.setPontuacao(dados.pontuacao);
             painelJogo.getPacMan().setX(dados.xPacMan);
             painelJogo.getPacMan().setY(dados.yPacMan);
+            painelJogo.getPacMan().setXInicial(dados.xInicialPacMan);
+            painelJogo.getPacMan().setYInicial(dados.yInicialPacMan);
             painelJogo.getPacMan().setDirecao(dados.direcaoPacMan.toString());
             painelJogo.getFantasma().setX(dados.xFantasma);
             painelJogo.getFantasma().setY(dados.yFantasma);
+            painelJogo.getPacMan().setXInicial(dados.xInicialFantasma);
+            painelJogo.getPacMan().setYInicial(dados.yInicialFantasma);
             painelJogo.getFantasma().setDirecao(dados.direcaoFantasma.toString());
             
 

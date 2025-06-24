@@ -2,12 +2,16 @@ package modelo;
 
 import java.io.Serializable;
 
+import javax.xml.xpath.XPathFactoryConfigurationException;
+
 import interfaces.Elemento;
 import main.PainelJogo;
 
 public class Entidade implements Serializable{
     private int posicaoX;
     private int posicaoY;
+    private int posicaoXInicial;
+    private int posicaoYInicial;
     private int velocidade; // pixels por frame
     private String direcao;
     private int alturaHitBox;
@@ -18,6 +22,8 @@ public class Entidade implements Serializable{
     public Entidade(PainelJogo painelJogo, int x, int y, int velocidade, String direcao) {
         setX(x);   
         setY(y);
+        setXInicial(x);
+        setYInicial(y);
         this.velocidade = velocidade;
         this.direcao = direcao;
         this.alturaHitBox = painelJogo.getTamanhoTile()/2;
@@ -146,11 +152,23 @@ public class Entidade implements Serializable{
         setY((getY()/painelJogo.getTamanhoTile())*painelJogo.getTamanhoTile() + painelJogo.getTamanhoTile()/2);
     }
 
+    public void irPosicaoInicial() {
+        setX(getXInicial());
+        setY(getXInicial());
+    }
+
+    public void atualizarPosicaoInicial() {
+        setXInicial(getX());
+        setYInicial(getY());
+    }
+
     private void setPadrao() {
         int velocidade = 90; // pixels por segundo
         // Mantem uma posição padrão mesmo tendo o 'setSpawn' por precaução
         setX(getPainelJogo().getTamanhoTile() + getPainelJogo().getTamanhoTile()/2);   
         setY(getPainelJogo().getTamanhoTile() + getPainelJogo().getTamanhoTile()/2);
+        setXInicial(getX());
+        setYInicial(getY());
         setVelocidade((velocidade * getPainelJogo().getEscala()) / getPainelJogo().getFPS()); 
         setDirecao("direita");
     }
@@ -189,12 +207,28 @@ public class Entidade implements Serializable{
             this.direcao = direcao;
     }
 
+    public void setXInicial(int x) {
+        posicaoXInicial = x;
+    }
+
+    public void setYInicial(int y) {
+        posicaoYInicial = y;
+    }
+
     public void setX(int x) {
         posicaoX = x;
     }
 
     public void setY(int y) {
         posicaoY = y;
+    }
+
+    public int getXInicial() {
+        return posicaoXInicial;
+    }
+
+    public int getYInicial() {
+        return posicaoYInicial;
     }
 
     public String getDirecao() {

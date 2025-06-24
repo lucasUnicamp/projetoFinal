@@ -1,6 +1,5 @@
 package menuPrincipal;
 
-import javax.sound.midi.SysexMessage;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
@@ -15,14 +14,11 @@ import main.PainelJogo;
 
 import java.awt.CardLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.GridBagLayout;
-import java.awt.PopupMenu;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 
 public class MenuPrincipal extends JFrame{
     private CardLayout cardLayout;

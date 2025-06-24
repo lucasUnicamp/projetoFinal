@@ -35,6 +35,7 @@ public class PainelJogo extends JPanel implements Runnable {
     public Elemento[][] elementos;
     public ArrayList<Parede> paredes;
     public ArrayList<Comestivel> comestiveis;
+    public ArrayList<Fantasma> fantasmas;
     private TratadorMapa tratadorMapa;
     private String[] mapa;
 
@@ -59,7 +60,7 @@ public class PainelJogo extends JPanel implements Runnable {
 
         this.gameLoader = new GameLoader(this);
 
-        tratadorMapa = new TratadorMapa(2);
+        tratadorMapa = new TratadorMapa(0);
 
         novoJogo();
 
@@ -152,12 +153,14 @@ public class PainelJogo extends JPanel implements Runnable {
                         EspacoVazio spawnPacMan = new EspacoVazio();
                         elementos[i][j] = spawnPacMan;
                         pacman.setSpawn(j, i);
+                        pacman.atualizarPosicaoInicial();
                         break;
 
                     case 'R':
                         EspacoVazio spawnFantVermelho = new EspacoVazio();
                         elementos[i][j] = spawnFantVermelho;
                         fantasma.setSpawn(j, i);
+                        fantasma.atualizarPosicaoInicial();
                         break;
                 }
             }
@@ -166,6 +169,12 @@ public class PainelJogo extends JPanel implements Runnable {
     
     // atualiza estado de todos os objetos
     public void atualizar() {
+        for(Fantasma fantasma : fantasmas) {
+            if(Math.abs(getPacMan().getX() - fantasma.getX()) <= getTamanhoTile() && Math.abs(getPacMan().getY() - fantasma.getY()) <= getTamanhoTile()) {
+                pacman.morrer();
+                resetPosicoes();
+            }
+        }
         pacman.atualizar();
         fantasma.executarfuncao(pacman.getX(), pacman.getY());
 
@@ -196,6 +205,32 @@ public class PainelJogo extends JPanel implements Runnable {
         painelExterno.setTextoLabelPontos(String.format("Pontuação: %d", getPontuacao()));
         
         caneta.dispose();
+    }
+
+    
+    public void novoJogo() {
+        mapa = tratadorMapa.atribuirMapa();
+        setNumeroColunas(tratadorMapa.getMapaLargura()); // numero de linhas de tiles
+        setNumeroLinhas(tratadorMapa.getMapaAltura()); // numero de colunas de tiles
+        larguraTela = tamanhoTile * numeroColunas; // largura em pixels do painel
+        alturaTela = tamanhoTile * numeroLinhas; // altura em pixels do painel
+
+        pacman = new PacMan(this, leitor);
+        fantasma = new Fantasma(this);
+        elementos = new Elemento[numeroLinhas][numeroColunas];
+        fantasmas = new ArrayList<>();
+        fantasmas.add(fantasma);
+        comestiveis = new ArrayList<>();
+        paredes = new ArrayList<>();
+        this.carregarElementos();
+    }
+
+    public void resetPosicoes() {
+        pacman.irPosicaoInicial();
+        for(int i = 0; i < fantasmas.size(); i++) {
+            fantasmas.set(i, new Fantasma(this, fantasmas.get(i).getXInicial(), fantasmas.get(i).getYInicial(), fantasmas.get(i).getVelocidade(), fantasmas.get(i).getDirecao()));     }
+        fantasma = new Fantasma(this, fantasma.getXInicial(), fantasma.getXInicial(), fantasma.getVelocidade(), fantasma.getDirecao());
+        fantasmas.set(0, fantasma);
     }
 
     public void aumentaPontuacao(int aumento) {
@@ -292,21 +327,6 @@ public class PainelJogo extends JPanel implements Runnable {
 
     public JComponent getPainelVidro() {
         return painelVidro;
-    }
-
-    public void novoJogo() {
-        mapa = tratadorMapa.atribuirMapa();
-        setNumeroColunas(tratadorMapa.getMapaLargura()); // numero de linhas de tiles
-        setNumeroLinhas(tratadorMapa.getMapaAltura()); // numero de colunas de tiles
-        larguraTela = tamanhoTile * numeroColunas; // largura em pixels do painel
-        alturaTela = tamanhoTile * numeroLinhas; // altura em pixels do painel
-
-        pacman = new PacMan(this, leitor);
-        fantasma = new Fantasma(this);
-        elementos = new Elemento[numeroLinhas][numeroColunas];
-        comestiveis = new ArrayList<>();
-        paredes = new ArrayList<>();
-        this.carregarElementos();
     }
 
 }
