@@ -276,7 +276,7 @@ public class Fantasma extends Entidade implements Serializable{
                     setY(getY() + getVelocidade());
                 correcoesPendentes-= getVelocidade();
                 if(correcoesPendentes <= 0){
-                    //setSpawn(getX()/getPainelJogo().getTamanhoTile(), getY()/getPainelJogo().getTamanhoTile());
+                    setSpawn(getX()/getPainelJogo().getTamanhoTile(), getY()/getPainelJogo().getTamanhoTile());
                 }
                 return;
             }
