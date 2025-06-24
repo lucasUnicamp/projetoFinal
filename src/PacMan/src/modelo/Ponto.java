@@ -36,7 +36,7 @@ public class Ponto {
     }
 
     public int getHeuristica(){
-        return custo + distancia;
+        return -(custo + distancia);
     }
 
     public int getDistancia(){
