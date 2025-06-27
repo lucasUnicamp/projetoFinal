@@ -14,25 +14,22 @@ import javax.imageio.ImageIO;
 import main.PainelJogo;
 
 public class Fantasma extends Entidade implements Serializable{
-    private int estadoPerseguicao; //1 se o fantasma estiver perseguindo o pacman e 0 caso esteja no modo dispersando
+    private int estadoPerseguicao; // 1 se o fantasma estiver perseguindo o pacman e 0 caso esteja no modo dispersando
     private int metaCaminho;
-    private transient BufferedImage provisoria;
+    private transient BufferedImage fantasma, perseguido;
     private transient ArrayList<Ponto> caminhoAtual;
     private int correcoesPendentes;
+
     public Fantasma(PainelJogo painel) {
         super(painel);
         correcoesPendentes = 0;
         caminhoAtual = new ArrayList<>();
         metaCaminho = 0;
-        estadoPerseguicao = 1;
+        estadoPerseguicao = 0;
 
         setVelocidade((70 * getPainelJogo().getEscala()) / getPainelJogo().getFPS()); 
 
-        try {
-            provisoria = ImageIO.read(new File(Paths.get("resources", "imagens", "fantasmaVermelho.png").toString()));
-        } catch (IOException e) {
-            System.err.println("!!! ERRO NA IMPORTAÇÃO DO SPRITE DO FANTASMA !!!");
-        }
+        getImagem();
     }
 
     public Fantasma(PainelJogo painel, int x, int y, int velocidade, String direcao) {
@@ -42,15 +39,11 @@ public class Fantasma extends Entidade implements Serializable{
         metaCaminho = 0;
         estadoPerseguicao = 1;
 
-        try {
-            provisoria = ImageIO.read(new File(Paths.get("resources", "imagens", "fantasmaVermelho.png").toString()));
-        } catch (IOException e) {
-            System.err.println("!!! ERRO NA IMPORTAÇÃO DO SPRITE DO FANTASMA !!!");
-        }
+        getImagem();
     }
 
     public void desenhar(Graphics2D caneta) {
-        BufferedImage imagem = provisoria;
+        BufferedImage imagem = fantasma;
         caneta.drawImage(imagem, getX()  - (getPainelJogo().getTamanhoTile())/2, getY() - (getPainelJogo().getTamanhoTile())/2, getPainelJogo().getTamanhoTile(), getPainelJogo().getTamanhoTile(), null);
     }
 
@@ -296,9 +289,15 @@ public class Fantasma extends Entidade implements Serializable{
             if(metaCaminho == 0)
                 menorCaminho(x, y);
             buscarPonto();
-        }
-        
+        }  
     }
 
-
+    public void getImagem() {
+        try {
+            fantasma = ImageIO.read(new File(Paths.get("resources", "imagens", "fantasmaVermelho.png").toString()));
+            perseguido = ImageIO.read(new File(Paths.get("resources", "imagens", "fantasmaFoge.png").toString()));
+        } catch (IOException erro) {
+            System.err.println("!!! ERRO NA IMPORTAÇÃO DOS SPRITES DO FANTASMA !!!");
+        }
+    }
 }
