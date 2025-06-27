@@ -28,6 +28,7 @@ public class PainelJogo extends JPanel implements Runnable {
     private int numeroLinhas; // numero de colunas de tiles
     private int larguraTela; // largura em pixels do painel
     private int alturaTela; // altura em pixels do painel
+    private boolean recomecar;
 
     private int pontuacao;
     private boolean pausado;
@@ -93,6 +94,11 @@ public class PainelJogo extends JPanel implements Runnable {
                 if(!estaPausado()) {
                     atualizar();
                     repaint();
+
+                    if (recomecar) {
+                        delayComeco();
+                        setRecomecar(false);
+                    }
                 }
                 delta --;
                 try{
@@ -185,9 +191,13 @@ public class PainelJogo extends JPanel implements Runnable {
     // atualiza estado de todos os objetos
     public void atualizar() {
         for(Fantasma fantasma : fantasmas) {
+            // Tem que ver se o fantasma não está comestível, se tiver o pacman não deve morrer 
             if(Math.abs(getPacMan().getX() - fantasma.getX()) <= getTamanhoTile() && Math.abs(getPacMan().getY() - fantasma.getY()) <= getTamanhoTile()) {
+                // if (fantasma.getEstadoPerseguicao() == 0)
                 pacman.morrer();
                 resetPosicoes();
+                setRecomecar(true);
+                //else
             }
         }
         pacman.atualizar();
@@ -244,7 +254,8 @@ public class PainelJogo extends JPanel implements Runnable {
     public void resetPosicoes() {
         pacman.irPosicaoInicial();
         for(int i = 0; i < fantasmas.size(); i++) {
-            fantasmas.set(i, new Fantasma(this, fantasmas.get(i).getXInicial(), fantasmas.get(i).getYInicial(), fantasmas.get(i).getVelocidade(), fantasmas.get(i).getDirecao()));     }
+            fantasmas.set(i, new Fantasma(this, fantasmas.get(i).getXInicial(), fantasmas.get(i).getYInicial(), fantasmas.get(i).getVelocidade(), fantasmas.get(i).getDirecao()));     
+        }
     }
 
     public void aumentaPontuacao(int aumento) {
@@ -257,6 +268,10 @@ public class PainelJogo extends JPanel implements Runnable {
 
     public void setPausado(boolean pausado) {
         this.pausado = pausado;
+    }
+
+    public void setRecomecar(boolean recomecar) {
+        this.recomecar = recomecar;
     }
 
     public void setPontuacao(int pontuacao) {
@@ -282,6 +297,8 @@ public class PainelJogo extends JPanel implements Runnable {
     public void setPacMan(PacMan pacman) {
         this.pacman = pacman;
     }
+
+
 
     public Thread getThread() {
         return gameThread;

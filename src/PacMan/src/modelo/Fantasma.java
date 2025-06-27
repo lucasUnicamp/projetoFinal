@@ -300,4 +300,8 @@ public class Fantasma extends Entidade implements Serializable{
             System.err.println("!!! ERRO NA IMPORTAÇÃO DOS SPRITES DO FANTASMA !!!");
         }
     }
+
+    public int getEstadoPerseguicao() {
+        return estadoPerseguicao;
+    }
 }
