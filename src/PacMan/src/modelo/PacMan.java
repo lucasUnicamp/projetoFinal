@@ -15,7 +15,7 @@ import main.PainelJogo;
 public class PacMan extends Entidade{
     private int estadoBoca; // boca aberta ou fechada
     private int contadorSprite; // usado para saber quando mudar o sprite (animação)
-    private transient BufferedImage cima, baixo, esquerda, direita, repouso;
+    private transient BufferedImage cima, baixo, esquerda, direita, repouso, frameMorte;
     private String direcaoDesejada;
 
     private int vidas;
@@ -143,7 +143,19 @@ public class PacMan extends Entidade{
     }
 
     public void morrer() {
+        BufferedImage imagem = null;
         setVidas(getVidas() - 1);
+
+        try {
+            for (int i = 0; i < 7; i++) {
+                Thread.sleep(100);
+                imagem = getFrameAnimacao(i);
+            }
+
+        } catch (InterruptedException erro) {
+            System.err.println("!!! ERRO NA INTERRUPÇÃO DA THREAD !!!");
+        }
+
     }
 
     public String getDirecaoDesejada() {
@@ -157,7 +169,6 @@ public class PacMan extends Entidade{
     // importa os sprites
     public void getImagem() {
         try {
-            // Substituir por sprites com transparência
             cima = ImageIO.read(new File(Paths.get("resources", "imagens", "pacmanNorte.png").toString())); 
             baixo = ImageIO.read(new File(Paths.get("resources", "imagens", "pacmanSul.png").toString()));
             direita = ImageIO.read(new File(Paths.get("resources", "imagens", "pacmanLeste.png").toString()));
@@ -167,6 +178,19 @@ public class PacMan extends Entidade{
         } catch (IOException e) {
             System.err.println("!!! ERRO NA IMPORTAÇÃO DOS SPRITES DO PACMAN !!!");
         }
+    }
+
+    public BufferedImage getFrameAnimacao(int frame) {
+        BufferedImage frameMorte = null;
+        String numero = Integer.toString(frame) + ".png";
+
+        try {
+            frameMorte = ImageIO.read(new File(Paths.get("resources", "imagens", "pacmanMorte", numero).toString())); 
+        } catch (IOException e) {
+            System.err.println("!!! ERRO NA IMPORTAÇÃO DOS SPRITES DE MORTE DO PACMAN !!!");
+        }
+
+        return frameMorte;
     }
 
     public BufferedImage getImagemRepouso() {

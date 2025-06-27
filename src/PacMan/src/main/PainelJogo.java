@@ -120,11 +120,11 @@ public class PainelJogo extends JPanel implements Runnable {
         setPausado(true);
         try {
             painelExterno.setTextoLabelComeco(String.format("3..."));
-            Thread.sleep(1000);
+            Thread.sleep(30000/FPS);
             painelExterno.setTextoLabelComeco(String.format("2..."));
-            Thread.sleep(1000);
+            Thread.sleep(30000/FPS);
             painelExterno.setTextoLabelComeco(String.format("1..."));
-            Thread.sleep(1000);
+            Thread.sleep(30000/FPS);
             painelExterno.setTextoLabelComeco(String.format(""));
         } catch (InterruptedException erro) {
             System.err.println("!!! ERRO NA INTERRUPÇÃO DA THREAD !!!");
@@ -197,9 +197,9 @@ public class PainelJogo extends JPanel implements Runnable {
     
     // atualiza estado de todos os objetos
     public void atualizar() {
-        for(Fantasma fantasma : fantasmas) {
+        for (Fantasma fantasma : fantasmas) {
             // Tem que ver se o fantasma não está comestível, se tiver o pacman não deve morrer 
-            if(Math.abs(getPacMan().getX() - fantasma.getX()) <= getTamanhoTile() && Math.abs(getPacMan().getY() - fantasma.getY()) <= getTamanhoTile()) {
+            if (Math.abs(getPacMan().getX() - fantasma.getX()) <= getTamanhoTile() && Math.abs(getPacMan().getY() - fantasma.getY()) <= getTamanhoTile()) {
                 // if (fantasma.getEstadoPerseguicao() == 0)
                 pacman.morrer();
                 resetPosicoes();
@@ -208,7 +208,7 @@ public class PainelJogo extends JPanel implements Runnable {
             }
         }
         pacman.atualizar();
-        for(Fantasma fantasma : fantasmas) {
+        for (Fantasma fantasma : fantasmas) {
             fantasma.executarfuncao(pacman.getX(), pacman.getY());
         }
 
@@ -358,5 +358,4 @@ public class PainelJogo extends JPanel implements Runnable {
     public JComponent getPainelVidro() {
         return painelVidro;
     }
-
 }
