@@ -17,6 +17,7 @@ public class PacMan extends Entidade{
     private int contadorSprite; // usado para saber quando mudar o sprite (animação)
     private transient BufferedImage cima, baixo, esquerda, direita, repouso, frameMorte;
     private String direcaoDesejada;
+    private Boolean morreu;
 
     private int vidas;
 
@@ -24,7 +25,7 @@ public class PacMan extends Entidade{
 
     public PacMan(PainelJogo painelJogo, LeitorTeclado leitor) {
         super(painelJogo);
-
+        setMorreu(false);
         vidas = 3;
 
         getImagem();
@@ -131,6 +132,7 @@ public class PacMan extends Entidade{
         caneta.drawImage(imagem, getX()  - (getPainelJogo().getTamanhoTile())/2, getY() - (getPainelJogo().getTamanhoTile())/2, getPainelJogo().getTamanhoTile(), getPainelJogo().getTamanhoTile(), null);
     }
 
+
     public void setDirecaoDesejada(String direcao) {
         if(direcao != null && (direcao.equals("direita") || direcao.equals("esquerda") || direcao.equals("cima") || direcao.equals("baixo"))) 
             this.direcaoDesejada = direcao;
@@ -143,19 +145,12 @@ public class PacMan extends Entidade{
     }
 
     public void morrer() {
-        BufferedImage imagem = null;
+        setMorreu(true);
         setVidas(getVidas() - 1);
+    }
 
-        try {
-            for (int i = 0; i < 7; i++) {
-                Thread.sleep(100);
-                imagem = getFrameAnimacao(i);
-            }
-
-        } catch (InterruptedException erro) {
-            System.err.println("!!! ERRO NA INTERRUPÇÃO DA THREAD !!!");
-        }
-
+    public void setMorreu(Boolean morreu) {
+        this.morreu = morreu;
     }
 
     public String getDirecaoDesejada() {
@@ -164,6 +159,10 @@ public class PacMan extends Entidade{
 
     public int getVidas() {
         return vidas;
+    }
+
+    public Boolean getMorreu() {
+        return morreu;
     }
 
     // importa os sprites
@@ -180,8 +179,7 @@ public class PacMan extends Entidade{
         }
     }
 
-    public BufferedImage getFrameAnimacao(int frame) {
-        BufferedImage frameMorte = null;
+    public void setFrameAnimacao(int frame) {
         String numero = Integer.toString(frame) + ".png";
 
         try {
@@ -189,8 +187,6 @@ public class PacMan extends Entidade{
         } catch (IOException e) {
             System.err.println("!!! ERRO NA IMPORTAÇÃO DOS SPRITES DE MORTE DO PACMAN !!!");
         }
-
-        return frameMorte;
     }
 
     public BufferedImage getImagemRepouso() {

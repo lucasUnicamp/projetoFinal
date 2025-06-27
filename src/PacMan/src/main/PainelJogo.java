@@ -95,6 +95,8 @@ public class PainelJogo extends JPanel implements Runnable {
                     atualizar();
                     repaint();
 
+                    // Quando morre, muda o 'recomear' para 'true', assim consegue colocar o delay do começo
+                    // como primeira ação 
                     if (recomecar) {
                         delayComeco();
                         setRecomecar(false);
@@ -204,6 +206,7 @@ public class PainelJogo extends JPanel implements Runnable {
                 pacman.morrer();
                 resetPosicoes();
                 setRecomecar(true);
+            
                 //else
             }
         }
