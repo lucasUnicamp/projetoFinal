@@ -20,16 +20,23 @@ import main.PainelJogo;
 
 public class PainelExterno extends JPanel {
     JLabel labelPontos;
+    JLabel labelComeco;
     PainelJogo painelJogo;
     Font fonte;
 
     public PainelExterno(LeitorTeclado leitor, JPanel cards, JComponent painelVidro) {
         super(new GridBagLayout());
         labelPontos = new JLabel("Pontuação:");
+        labelComeco = new JLabel("3...");
         fonte = carregarFonte();
+
         labelPontos.setFont(fonte);
+        labelComeco.setFont(fonte);
         labelPontos.setForeground(Color.WHITE);
+        labelComeco.setForeground(Color.WHITE);
+
         add(labelPontos, new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 0, 10, 0), 0, 0));
+        add(labelComeco, new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(0, 0, 10, 0), 0, 0));
         
         GridBagConstraints constraints = new GridBagConstraints(0, 1, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0);
         constraints.gridy = 1;
@@ -42,8 +49,16 @@ public class PainelExterno extends JPanel {
         labelPontos.setText(texto);
     }
 
+    public void setTextoLabelComeco(String texto) {
+        labelComeco.setText(texto);
+    }
+
     public JLabel getLabelPontos() {
         return labelPontos;
+    }
+
+    public JLabel getLabelComeco() {
+        return labelComeco;
     }
 
     public Font carregarFonte() {

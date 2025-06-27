@@ -113,12 +113,19 @@ public class PainelJogo extends JPanel implements Runnable {
 
     /**
      * Cria um delay de alguns segundos em que nada acontece para dar um tempo ao usuário
-     * de processar que o jogo começou
+     * de processar que o jogo começou. Deve ser chamado no início do jogo e toda vez que
+     * o pacman morrer
      */
     public void delayComeco() {
         setPausado(true);
         try {
-            Thread.sleep(2000);
+            painelExterno.setTextoLabelComeco(String.format("3..."));
+            Thread.sleep(1000);
+            painelExterno.setTextoLabelComeco(String.format("2..."));
+            Thread.sleep(1000);
+            painelExterno.setTextoLabelComeco(String.format("1..."));
+            Thread.sleep(1000);
+            painelExterno.setTextoLabelComeco(String.format(""));
         } catch (InterruptedException erro) {
             System.err.println("!!! ERRO NA INTERRUPÇÃO DA THREAD !!!");
         }
