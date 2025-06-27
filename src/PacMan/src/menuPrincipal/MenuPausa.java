@@ -46,6 +46,7 @@ public class MenuPausa extends JPanel implements ActionListener{
         add(botaoSalvar, constraints);
         add(botaoSair, constraints);
     }
+    
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == botaoRetomar) {
