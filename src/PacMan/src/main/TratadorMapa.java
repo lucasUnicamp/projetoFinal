@@ -22,7 +22,7 @@ public class TratadorMapa implements Serializable{
     private char[] charValidos = {'#', '.', ' ', '<', 'P', 'R'};      // Lista de caracteres válidos no mapa
 
     public TratadorMapa(int mapaEscolhido) {
-        maxLargura = 40;
+        maxLargura = 30;
         maxAltura = 30;
         this.mapaEscolhido = mapaEscolhido;
         carregarMapa();

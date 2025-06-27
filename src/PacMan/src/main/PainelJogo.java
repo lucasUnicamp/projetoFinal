@@ -72,7 +72,6 @@ public class PainelJogo extends JPanel implements Runnable {
     public void comecarThread() {
         gameThread = new Thread(this);
         gameThread.start();
-        setPausado(false);
     }
 
     public void run() {
@@ -80,6 +79,8 @@ public class PainelJogo extends JPanel implements Runnable {
         double delta = 0;
         long ultimoTempo = System.nanoTime();
         long tempoAtual;
+
+        delayComeco();
 
         while (gameThread != null && !gameThread.isInterrupted()) { // loop principal do jogo
 
@@ -104,6 +105,19 @@ public class PainelJogo extends JPanel implements Runnable {
         }
     }
 
+    /**
+     * Cria um delay de alguns segundos em que nada acontece para dar um tempo ao usuário
+     * de processar que o jogo começou
+     */
+    public void delayComeco() {
+        setPausado(true);
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException erro) {
+            System.err.println("!!! ERRO NA INTERRUPÇÃO DA THREAD !!!");
+        }
+        setPausado(false);
+    }
 
     public void continuarJogo() {
         gameLoader.load();
@@ -199,7 +213,7 @@ public class PainelJogo extends JPanel implements Runnable {
             fantasma.desenhar(caneta);
         pacman.desenhar(caneta);
 
-        if(pacman.getVidas() >= 1)
+        if (pacman.getVidas() >= 1)
             caneta.drawImage(pacman.getImagemRepouso(), getLargura() - 20*escala, getAltura() - 20*escala, getTamanhoTile(), getTamanhoTile(), null);
         if (pacman.getVidas() >= 2) 
             caneta.drawImage(pacman.getImagemRepouso(), getLargura() - 40*escala, getAltura() - 20*escala, getTamanhoTile(), getTamanhoTile(), null);
