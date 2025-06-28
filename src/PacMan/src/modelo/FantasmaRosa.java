@@ -91,10 +91,6 @@ public final class FantasmaRosa extends Fantasma{
         //coordenadas do destino na matriz
         definirDestino();
 
-        int dist = 0;
-
-        while(dist ==0 )
-
 
         //perseguir(x, y): caso o fantasma e seu destino nao estejam no mesmo ponto da matriz
         if(xf != xbusca || yf != ybusca){
