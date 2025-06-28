@@ -6,6 +6,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.BorderLayout;
 import java.util.ArrayList;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -94,6 +95,23 @@ public class PainelJogo extends JPanel implements Runnable {
                     atualizar();
                     repaint();
 
+                    if (comestiveis.isEmpty()) {
+                        setPausado(true);
+                        int proximoMapa = tratadorMapa.getMapaEscolhido() + 1;
+
+                        if (proximoMapa <= TratadorMapa.numeroMapas) {
+                            mostrarTransicao("Fase Concluída!", () -> {
+                                tratadorMapa = new TratadorMapa(proximoMapa);
+                                novoJogo();
+                                setPausado(false);
+                            });
+                        } else {
+                            mostrarTransicao("Parabéns, Você venceu!", () -> {
+                                voltarMenu();
+                            });
+                        }
+                    }
+
                     // Quando morre, muda o 'recomear' para 'true', assim consegue colocar o delay do começo
                     // como primeira ação 
                     if (recomecar) {
@@ -109,8 +127,24 @@ public class PainelJogo extends JPanel implements Runnable {
                 }
                 //System.out.printf("pontos: %d\n", getPontuacao());
             }
+        
+        //feito por joao pedro frare, que é burro, pode ser que esteja errado...
         }
     }
+
+    //Transição de Fase
+    public void mostrarTransicao(String mensagem, Runnable proximaAcao) {
+    TransicaoFase transicao = new TransicaoFase(mensagem, () -> {
+        painelVidro.setVisible(false); // esconde a transição
+        proximaAcao.run();             // executa o que vier depois
+    });
+
+    painelVidro.removeAll();
+    painelVidro.setLayout(new BorderLayout());
+    painelVidro.add(transicao, BorderLayout.CENTER);
+    painelVidro.setVisible(true);
+    transicao.iniciar();
+}
 
     /**
      * Cria um delay de alguns segundos em que nada acontece para dar um tempo ao usuário
