@@ -13,6 +13,7 @@ import menuPrincipal.PainelExterno;
 import modelo.Comestivel;
 import modelo.EspacoVazio;
 import modelo.Fantasma;
+import modelo.FantasmaVermelho;
 import modelo.PacMan;
 import modelo.Parede;
 import modelo.Tunel;
@@ -185,7 +186,7 @@ public class PainelJogo extends JPanel implements Runnable {
                     case 'R':
                         EspacoVazio spawnFantVermelho = new EspacoVazio();
                         elementos[i][j] = spawnFantVermelho;
-                        Fantasma fantasma = new Fantasma(this);
+                        FantasmaVermelho fantasma = new FantasmaVermelho(this);
                         fantasma.setSpawn(j, i);
                         fantasma.atualizarPosicaoInicial();
                         fantasmas.add(fantasma);
@@ -263,7 +264,7 @@ public class PainelJogo extends JPanel implements Runnable {
     public void resetPosicoes() {
         pacman.irPosicaoInicial();
         for(int i = 0; i < fantasmas.size(); i++) {
-            fantasmas.set(i, new Fantasma(this, fantasmas.get(i).getXInicial(), fantasmas.get(i).getYInicial(), fantasmas.get(i).getVelocidade(), fantasmas.get(i).getDirecao()));     
+            fantasmas.set(i, new FantasmaVermelho(this, fantasmas.get(i).getXInicial(), fantasmas.get(i).getYInicial(), fantasmas.get(i).getVelocidade(), fantasmas.get(i).getDirecao()));     
         }
     }
 
