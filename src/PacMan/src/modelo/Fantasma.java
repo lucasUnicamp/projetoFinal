@@ -9,7 +9,7 @@ import java.util.Comparator;
 import main.PainelJogo;
 
 public abstract class Fantasma extends Entidade implements Serializable{
-    private boolean perseguicao; // 1 se o fantasma estiver perseguindo o pacman e 0 caso esteja no modo dispersando
+    private EstadoPerseguicao perseguicao; // 1 se o fantasma estiver perseguindo o pacman e 0 caso esteja no modo dispersando
     private boolean perdeu;
     private int metaCaminho;
     private transient ArrayList<Ponto> caminhoAtual;
@@ -23,7 +23,7 @@ public abstract class Fantasma extends Entidade implements Serializable{
         correcoesPendentes = 0;
         caminhoAtual = new ArrayList<>();
         metaCaminho = 0;
-        perseguicao = true;
+        perseguicao = EstadoPerseguicao.PERSEGUINDO;
         perdeu = false;
         setVelocidade((60 * getPainelJogo().getEscala()) / getPainelJogo().getFPS()); 
     }
@@ -33,7 +33,7 @@ public abstract class Fantasma extends Entidade implements Serializable{
         correcoesPendentes = 0;
         caminhoAtual = new ArrayList<>();
         metaCaminho = 0;
-        perseguicao = true;
+        perseguicao = EstadoPerseguicao.PERSEGUINDO;
     }
 
     public int getMetaCaminho(){
@@ -124,7 +124,7 @@ public abstract class Fantasma extends Entidade implements Serializable{
                 adicionarPonto(busca, atual, x1 - 1, y1, distanciaesquerda);
             }
         } catch (IndexOutOfBoundsException e){}
-        Collections.sort(busca, Comparator.comparingInt(ponto -> ponto.getHeuristica(perseguicao)));
+        Collections.sort(busca, Comparator.comparingInt(ponto -> ponto.getHeuristica(this.perseguicao.getEstadoPerseguicao())));
     }
 
     public void montarCaminho(Ponto destino){
@@ -144,7 +144,7 @@ public abstract class Fantasma extends Entidade implements Serializable{
 
 
         while(!abertos.isEmpty()){
-            Collections.sort(abertos, Comparator.comparingInt(ponto -> ponto.getHeuristica(perseguicao)));
+            Collections.sort(abertos, Comparator.comparingInt(ponto -> ponto.getHeuristica(this.perseguicao.getEstadoPerseguicao())));
 
             Ponto atual = abertos.get(0);
             visitados.add(atual);
@@ -246,7 +246,7 @@ public abstract class Fantasma extends Entidade implements Serializable{
     }
 
     public void perder(){
-        perseguicao = true;
+        perseguicao = EstadoPerseguicao.PERSEGUINDO;
         perdeu = true;
         setVelocidade((60 * getPainelJogo().getEscala()) / getPainelJogo().getFPS());
         metaCaminho = 1;
