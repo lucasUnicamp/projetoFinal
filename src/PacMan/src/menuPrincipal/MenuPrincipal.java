@@ -40,7 +40,7 @@ public class MenuPrincipal extends JFrame{
         }
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setResizable(false);
+        this.setResizable(true);
         this.setTitle("Pac-Man");
         addWindowListener(new WindowAdapter() {
             @Override

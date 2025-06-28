@@ -5,6 +5,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.sound.sampled.*;
 
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -24,6 +25,7 @@ public class PainelMenu extends JPanel implements ActionListener{
     private Clip clip;
 
     public PainelMenu (Clip clip, MenuPrincipal frame) {
+        setPreferredSize(new Dimension (500, 500));
         this.clip = clip;
         this.frame = frame;
 
@@ -50,15 +52,15 @@ public class PainelMenu extends JPanel implements ActionListener{
     @Override public void actionPerformed (ActionEvent e) {
         if (e.getSource() == novoJogo) {
             frame.getCardLayout().show(this.frame.getCards(), "painelJogo");
-            frame.pack();
             frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            frame.setResizable(false);
             frame.painelExternoJogo.painelJogo.novoJogo(0);
             frame.painelExternoJogo.painelJogo.comecarThread();
 
         } else if (e.getSource() == continuar) {
             frame.getCardLayout().show(this.frame.getCards(), "painelJogo");
-            frame.pack();
             frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            frame.setResizable(false);
             frame.painelExternoJogo.painelJogo.carregarJogo();
             frame.painelExternoJogo.painelJogo.comecarThread();
 

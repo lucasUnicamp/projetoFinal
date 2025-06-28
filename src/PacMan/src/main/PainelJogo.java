@@ -13,6 +13,7 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import javax.tools.Tool;
 
 import menuPrincipal.PainelExterno;
 import modelo.Comestivel;
@@ -308,9 +309,9 @@ public class PainelJogo extends JPanel implements Runnable {
         setNumeroColunas(tratadorMapa.getMapaLargura()); // numero de linhas de tiles
         setNumeroLinhas(tratadorMapa.getMapaAltura()); // numero de colunas de tiles
 
-        JFrame janela = (JFrame) SwingUtilities.getWindowAncestor(this);
-        int escalaPossivel1 = (int) (0.95*janela.getWidth() )/ (numeroColunas * tamanhoPadraoTile);
-        int escalaPossivel2 = (int) (0.8*janela.getHeight()) / (numeroLinhas * tamanhoPadraoTile);
+        Dimension tamanhoTela = Toolkit.getDefaultToolkit().getScreenSize().getSize();
+        int escalaPossivel1 = (int) (0.8*tamanhoTela.width )/ (numeroColunas * tamanhoPadraoTile);
+        int escalaPossivel2 = (int) (0.8*tamanhoTela.height) / (numeroLinhas * tamanhoPadraoTile);
 
         if(escalaPossivel1 > escalaPossivel2) {
             escala = escalaPossivel2;
