@@ -67,7 +67,6 @@ public final class FantasmaRosa extends Fantasma{
         else
             ymax = ypac + distancia;
         
-        //if(getPainelJogo().get)
         for(int i = xmin; i < xmax; i++){
             for(int j = ymin; j < ymax; j++){
                 if(!mapa[j][i].ehColidivel()){
@@ -106,7 +105,8 @@ public final class FantasmaRosa extends Fantasma{
                     setY(getY() + getVelocidade());
                 setCorrecoesPendentes(getCorrecoesPendentes() - getVelocidade());
                 if(getCorrecoesPendentes() <= 0){
-                    setSpawn(getX()/getPainelJogo().getTamanhoTile(), getY()/getPainelJogo().getTamanhoTile());
+                    centralizarX();
+                    centralizarY();
                 }
                 return;
             }

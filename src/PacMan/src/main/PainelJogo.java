@@ -61,7 +61,7 @@ public class PainelJogo extends JPanel implements Runnable {
 
         this.gameLoader = new GameLoader(this);
 
-        tratadorMapa = new TratadorMapa(1);
+        tratadorMapa = new TratadorMapa(2);
 
         novoJogo();
 
