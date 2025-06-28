@@ -60,7 +60,7 @@ public class PainelJogo extends JPanel implements Runnable {
 
         this.gameLoader = new GameLoader(this);
 
-        tratadorMapa = new TratadorMapa(2);
+        tratadorMapa = new TratadorMapa(0);
 
         novoJogo();
 
@@ -99,7 +99,7 @@ public class PainelJogo extends JPanel implements Runnable {
                         setPausado(true);
                         int proximoMapa = tratadorMapa.getMapaEscolhido() + 1;
 
-                        if (proximoMapa <= TratadorMapa.numeroMapas) {
+                        if (proximoMapa <= getTratadorMapa().getNumeroMapas()) {
                             mostrarTransicao("Fase Concluída!", () -> {
                                 tratadorMapa = new TratadorMapa(proximoMapa);
                                 novoJogo();
@@ -160,7 +160,7 @@ public class PainelJogo extends JPanel implements Runnable {
             Thread.sleep(30000/FPS);
             painelExterno.setTextoLabelComeco(String.format("1..."));
             Thread.sleep(30000/FPS);
-            painelExterno.setTextoLabelComeco(String.format(""));
+            painelExterno.setTextoLabelComeco(String.format("Mapa %s", getTratadorMapa().getNumMapa()));
         } catch (InterruptedException erro) {
             System.err.println("!!! ERRO NA INTERRUPÇÃO DA THREAD !!!");
         }
