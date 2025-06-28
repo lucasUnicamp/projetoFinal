@@ -33,6 +33,7 @@ public final class FantasmaVermelho extends Fantasma{
     }
     @Override
     public void executarfuncao(){
+        //coordenadas do pac man
         int x = getPainelJogo().getPacMan().getX();
         int y = getPainelJogo().getPacMan().getY();
         //coordenadas do fantasma na matriz

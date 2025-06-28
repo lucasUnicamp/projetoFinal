@@ -1,12 +1,12 @@
 package main;
 
 import interfaces.Elemento;
+import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.BorderLayout;
 import java.util.ArrayList;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -14,7 +14,7 @@ import menuPrincipal.PainelExterno;
 import modelo.Comestivel;
 import modelo.EspacoVazio;
 import modelo.Fantasma;
-import modelo.FantasmaVermelho;
+import modelo.FantasmaRosa;
 import modelo.PacMan;
 import modelo.Parede;
 import modelo.Tunel;
@@ -220,7 +220,7 @@ public class PainelJogo extends JPanel implements Runnable {
                     case 'R':
                         EspacoVazio spawnFantVermelho = new EspacoVazio();
                         elementos[i][j] = spawnFantVermelho;
-                        FantasmaVermelho fantasma = new FantasmaVermelho(this);
+                        FantasmaRosa fantasma = new FantasmaRosa(this);
                         fantasma.setSpawn(j, i);
                         fantasma.atualizarPosicaoInicial();
                         fantasmas.add(fantasma);
@@ -298,7 +298,7 @@ public class PainelJogo extends JPanel implements Runnable {
     public void resetPosicoes() {
         pacman.irPosicaoInicial();
         for(int i = 0; i < fantasmas.size(); i++) {
-            fantasmas.set(i, new FantasmaVermelho(this, fantasmas.get(i).getXInicial(), fantasmas.get(i).getYInicial(), fantasmas.get(i).getVelocidade(), fantasmas.get(i).getDirecao()));     
+            fantasmas.set(i, new FantasmaRosa(this, fantasmas.get(i).getXInicial(), fantasmas.get(i).getYInicial(), fantasmas.get(i).getVelocidade(), fantasmas.get(i).getDirecao()));     
         }
     }
 
