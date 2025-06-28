@@ -10,6 +10,7 @@ import main.PainelJogo;
 
 public abstract class Fantasma extends Entidade implements Serializable{
     private boolean perseguicao; // 1 se o fantasma estiver perseguindo o pacman e 0 caso esteja no modo dispersando
+    private boolean perdeu;
     private int metaCaminho;
     private transient ArrayList<Ponto> caminhoAtual;
     private int correcoesPendentes;
@@ -23,6 +24,7 @@ public abstract class Fantasma extends Entidade implements Serializable{
         caminhoAtual = new ArrayList<>();
         metaCaminho = 0;
         perseguicao = true;
+        perdeu = false;
         setVelocidade((60 * getPainelJogo().getEscala()) / getPainelJogo().getFPS()); 
     }
 
@@ -243,8 +245,33 @@ public abstract class Fantasma extends Entidade implements Serializable{
         }
     }
 
-    public void voltarSpawn() {
-        // Para quando for comido, deve voltar à posição inicial, sair do modo 'morto' e voltar a perseguir o pacman
+    public void perder(){
+        perseguicao = true;
+        perdeu = true;
+        setVelocidade((60 * getPainelJogo().getEscala()) / getPainelJogo().getFPS());
+        metaCaminho = 1;
+        menorCaminho(getXInicial()/getPainelJogo().getTamanhoTile(), getYInicial()/getPainelJogo().getTamanhoTile());
+    }
+
+    public void voltarPosicaoInicial(){
+        if(getCorrecoesPendentes() > 0){
+            if(getDirecao().equals("direita"))
+                setX(getX() + getVelocidade());
+            else  if(getDirecao().equals("esquerda"))
+                setX(getX() - getVelocidade());
+            else if(getDirecao().equals("cima"))
+                setY(getY() - getVelocidade());
+            else if(getDirecao().equals("baixo"))
+                 setY(getY() + getVelocidade());
+            setCorrecoesPendentes(getCorrecoesPendentes() - getVelocidade());
+            if(getCorrecoesPendentes() <= 0){
+                setSpawn(getX()/getPainelJogo().getTamanhoTile(), getY()/getPainelJogo().getTamanhoTile());
+            }
+            return;
+        }
+        if(getX() != getXInicial() && getY() != getYInicial()){
+            buscarPonto();
+        }
     }
 
     public abstract void executarfuncao();
