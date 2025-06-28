@@ -52,15 +52,15 @@ public class PainelMenu extends JPanel implements ActionListener{
     @Override public void actionPerformed (ActionEvent e) {
         if (e.getSource() == novoJogo) {
             frame.getCardLayout().show(this.frame.getCards(), "painelJogo");
+            frame.pack();
             frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-            frame.setResizable(false);
             frame.painelExternoJogo.painelJogo.novoJogo(0);
             frame.painelExternoJogo.painelJogo.comecarThread();
 
         } else if (e.getSource() == continuar) {
             frame.getCardLayout().show(this.frame.getCards(), "painelJogo");
+            frame.pack();
             frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-            frame.setResizable(false);
             frame.painelExternoJogo.painelJogo.carregarJogo();
             frame.painelExternoJogo.painelJogo.comecarThread();
 
