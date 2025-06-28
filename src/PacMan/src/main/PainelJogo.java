@@ -37,7 +37,7 @@ public class PainelJogo extends JPanel implements Runnable {
     private int numeroLinhas; // numero de colunas de tiles
     private int larguraTela; // largura em pixels do painel
     private int alturaTela; // altura em pixels do painel
-    private boolean recomecar;
+    private boolean vaiRecomecar, terminouTransicao = true;
 
     private int pontuacao;
     private boolean pausado;
@@ -89,11 +89,11 @@ public class PainelJogo extends JPanel implements Runnable {
         delayComeco();
         
         while (gameThread != null && !gameThread.isInterrupted()) { // loop principal do jogo
-            // Quando morre, muda o 'recomecar' para 'true', assim consegue colocar o delay do começo
+            // Quando morre, muda o 'vaiRecomecar' para 'true', assim consegue colocar o delay do começo
             // como primeira ação 
-            if (recomecar) {
+            if (vaiRecomecar && terminouTransicao) {
                 delayComeco();
-                setRecomecar(false);
+                setVaiRecomecar(false);
             }
             
             tempoAtual = System.nanoTime();
@@ -114,11 +114,13 @@ public class PainelJogo extends JPanel implements Runnable {
                         if (proximoMapa <= getTratadorMapa().getNumeroMapas()) {
                             // Primeira transição para o fade in
                             mostrarTransicao("Fase Concluída!", () -> {
+                                terminouTransicao = false;
                                 novoJogo(proximoMapa);
-                                setRecomecar(true);
+                                setVaiRecomecar(true);
                                 // Segunda transição para o fade out
                                 mostrarTransicao("Carregando próximo mapa...", () -> {
                                     setPausado(false);
+                                    terminouTransicao = true;
                                 });
                             });
                             
@@ -153,7 +155,7 @@ public class PainelJogo extends JPanel implements Runnable {
         painelVidro.add(transicao, BorderLayout.CENTER);
         painelVidro.setVisible(true);
         // Jogo registra que deve recomeçar apenas após o fade in, então começa fazendo o fade in
-        if (!recomecar) {
+        if (!vaiRecomecar) {
             transicao.setOpacidade(0f);
             transicao.iniciar();
         }
@@ -272,7 +274,7 @@ public class PainelJogo extends JPanel implements Runnable {
                 // if (fantasma.getEstadoPerseguicao() == 0)
                     pacman.morrer();
                     resetPosicoes();
-                    setRecomecar(true);
+                    setVaiRecomecar(true);
             
                 //else
                 // pacman tem que comer o fantasma
@@ -369,8 +371,8 @@ public class PainelJogo extends JPanel implements Runnable {
         this.pausado = pausado;
     }
 
-    public void setRecomecar(boolean recomecar) {
-        this.recomecar = recomecar;
+    public void setVaiRecomecar(boolean vaiRecomecar) {
+        this.vaiRecomecar = vaiRecomecar;
     }
 
     public void setPontuacao(int pontuacao) {
