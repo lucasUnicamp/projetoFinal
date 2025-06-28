@@ -16,11 +16,11 @@ public final class FantasmaRosa extends Fantasma{
 
     public FantasmaRosa(PainelJogo painel){
         super(painel);
-        if(getPainelJogo().getAltura() > getPainelJogo().getLargura()){
-            distancia = getPainelJogo().getAltura() / 4;
+        if(getPainelJogo().getNumeroLinhas() > getPainelJogo().getNumeroColunas()){
+            distancia = getPainelJogo().getNumeroLinhas() / 4;
         }
         else{
-            distancia = getPainelJogo().getLargura() / 4;
+            distancia = getPainelJogo().getNumeroColunas() / 4;
         }
         getImagem();
     }
