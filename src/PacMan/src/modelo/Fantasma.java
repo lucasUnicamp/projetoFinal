@@ -23,7 +23,7 @@ public abstract class Fantasma extends Entidade implements Serializable{
         caminhoAtual = new ArrayList<>();
         metaCaminho = 0;
         perseguicao = true;
-        setVelocidade((70 * getPainelJogo().getEscala()) / getPainelJogo().getFPS()); 
+        setVelocidade((60 * getPainelJogo().getEscala()) / getPainelJogo().getFPS()); 
     }
 
     public Fantasma(PainelJogo painel, int x, int y, int velocidade, String direcao) {
@@ -134,12 +134,10 @@ public abstract class Fantasma extends Entidade implements Serializable{
     }
 
     public void menorCaminho(int x, int y){
-        int xm = x/getPainelJogo().getTamanhoTile();
-        int ym = y/getPainelJogo().getTamanhoTile();
         ArrayList<Ponto> visitados = new ArrayList<>();
         ArrayList<Ponto> abertos = new ArrayList<>();
 
-        Ponto inicio = new Ponto(getX()/getPainelJogo().getTamanhoTile(), getY()/getPainelJogo().getTamanhoTile(), 0,  calculaDistancia(getX()/getPainelJogo().getTamanhoTile(), getY()/getPainelJogo().getTamanhoTile(), xm, ym), null);
+        Ponto inicio = new Ponto(getX()/getPainelJogo().getTamanhoTile(), getY()/getPainelJogo().getTamanhoTile(), 0,  calculaDistancia(getX()/getPainelJogo().getTamanhoTile(), getY()/getPainelJogo().getTamanhoTile(), x, y), null);
         abertos.add(inicio);
 
 
@@ -148,7 +146,7 @@ public abstract class Fantasma extends Entidade implements Serializable{
 
             Ponto atual = abertos.get(0);
             visitados.add(atual);
-            if(atual.getX() == xm && atual.getY() == ym){
+            if(atual.getX() == x && atual.getY() == y){
                 caminhoAtual = new ArrayList<>();
                 montarCaminho(atual);
                 caminhoAtual.remove(0);
@@ -162,7 +160,7 @@ public abstract class Fantasma extends Entidade implements Serializable{
             if(abertos.isEmpty()){ //nao encontrou caminho
                 return;
             }
-            posicoesAdjacentes(atual, xm, ym, abertos, visitados); //busca pelas posicoes adjacentes tentando avancar ate o destino
+            posicoesAdjacentes(atual, x, y, abertos, visitados); //busca pelas posicoes adjacentes tentando avancar ate o destino
             abertos.remove(atual);
         }
     }

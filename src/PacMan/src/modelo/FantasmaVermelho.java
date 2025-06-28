@@ -62,7 +62,7 @@ public final class FantasmaVermelho extends Fantasma{
                 return;
             }
             if(getMetaCaminho() == 0)
-                menorCaminho(x, y);
+                menorCaminho(xm, ym);
             buscarPonto();
         }  
     }
