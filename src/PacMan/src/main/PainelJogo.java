@@ -318,6 +318,10 @@ public class PainelJogo extends JPanel implements Runnable {
             escala = escalaPossivel1;
         }
 
+        if(escala <= 0) {
+            escala = 1;
+        }
+
         tamanhoTile = tamanhoPadraoTile * escala;
         larguraTela = tamanhoTile * numeroColunas; // largura em pixels do painel
         alturaTela = tamanhoTile * numeroLinhas; // altura em pixels do painel
