@@ -17,6 +17,7 @@ public class DadosJogo implements Serializable{
     public int yPacMan;
     public int xInicialPacMan;
     public int yInicialPacMan;
+    public int mapaAtual;
     public String direcaoPacMan;
     public ArrayList<Integer> xFantasmas;
     public ArrayList<Integer> yFantasmas;
