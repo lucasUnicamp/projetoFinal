@@ -333,8 +333,9 @@ public class PainelJogo extends JPanel implements Runnable {
 
     public void resetPosicoes() {
         pacman.irPosicaoInicial();
-        for(int i = 0; i < fantasmas.size(); i++) {
-            fantasmas.set(i, new FantasmaRosa(this, fantasmas.get(i).getXInicial(), fantasmas.get(i).getYInicial(), fantasmas.get(i).getVelocidade(), fantasmas.get(i).getDirecao()));     
+        for(Fantasma fantasma: fantasmas) {
+            fantasma.setSpawn(fantasma.getXInicial()/getTamanhoTile(), fantasma.getYInicial()/getTamanhoTile());   
+            fantasma.setMetaCaminho(0); 
         }
     }
 

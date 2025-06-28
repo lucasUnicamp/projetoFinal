@@ -174,6 +174,10 @@ public abstract class Fantasma extends Entidade implements Serializable{
             return (x1 - x2);
     }
 
+    public void setMetaCaminho(int x){
+        metaCaminho = x;
+    }
+
     public void perseguir(int x, int y){
         //usara a funcao buscar ponto de acordo com o tipo do fantasma quando este estiver perseguindo o pacman
 

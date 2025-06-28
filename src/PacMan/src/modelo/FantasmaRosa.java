@@ -17,10 +17,10 @@ public final class FantasmaRosa extends Fantasma{
     public FantasmaRosa(PainelJogo painel){
         super(painel);
         if(getPainelJogo().getNumeroLinhas() > getPainelJogo().getNumeroColunas()){
-            distancia = getPainelJogo().getNumeroLinhas() / 4;
+            distancia = getPainelJogo().getNumeroLinhas() / 3;
         }
         else{
-            distancia = getPainelJogo().getNumeroColunas() / 4;
+            distancia = getPainelJogo().getNumeroColunas() / 3;
         }
         getImagem();
     }
@@ -105,7 +105,8 @@ public final class FantasmaRosa extends Fantasma{
                     setY(getY() + getVelocidade());
                 setCorrecoesPendentes(getCorrecoesPendentes() - getVelocidade());
                 if(getCorrecoesPendentes() <= 0){
-                    centralizarPorPixel(getX()/getPainelJogo().getTamanhoTile(), getY()/getPainelJogo().getTamanhoTile());
+                    setX(xf * getPainelJogo().getTamanhoTile() + getPainelJogo().getTamanhoTile()/2);
+                    setY(yf * getPainelJogo().getTamanhoTile() + getPainelJogo().getTamanhoTile()/2);
                 }
                 return;
             }
