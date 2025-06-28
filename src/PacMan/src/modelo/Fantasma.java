@@ -40,6 +40,10 @@ public abstract class Fantasma extends Entidade implements Serializable{
         return metaCaminho;
     }
 
+    public boolean getEstadoPerseguicao(){
+        return perseguicao.getEstadoPerseguicao();
+    }
+
     public int getCorrecoesPendentes(){
         return correcoesPendentes;
     }

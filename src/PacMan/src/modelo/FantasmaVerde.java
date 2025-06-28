@@ -86,8 +86,7 @@ public final class FantasmaVerde extends Fantasma{
         superiorEsquerdo();
     }
 
-    @Override
-    public void executarfuncao(){
+    public void funcaoPerseguicao(){
         if (cantos.isEmpty()){
             definirCantos();
         }
@@ -103,6 +102,13 @@ public final class FantasmaVerde extends Fantasma{
             menorCaminho(cantos.get(prox).getX(), cantos.get(prox).getY());
             setMetaCaminho(getCaminhoatual().size());
             buscarPonto();
+        }
+    }
+
+    @Override
+    public void executarfuncao(){
+        if(getEstadoPerseguicao()){
+            funcaoPerseguicao();
         }
     }
 

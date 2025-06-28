@@ -93,15 +93,12 @@ public final class FantasmaRosa extends Fantasma{
         
     }
 
-     @Override
-    public void executarfuncao(){
+    public void funcaoPerseguicao(){
         //coordenadas do fantasma na matriz
         int xf = getX()/getPainelJogo().getTamanhoTile();
         int yf = getY()/getPainelJogo().getTamanhoTile();
         //coordenadas do destino na matriz
         definirDestino();
-
-
         //perseguir(x, y): caso o fantasma e seu destino nao estejam no mesmo ponto da matriz
         if(xf != xbusca || yf != ybusca){
             if(getCorrecoesPendentes() > 0){
@@ -124,6 +121,14 @@ public final class FantasmaRosa extends Fantasma{
                 menorCaminho(xbusca, ybusca);
             buscarPonto();
         } 
+
+    }
+
+     @Override
+    public void executarfuncao(){
+        if (getEstadoPerseguicao()){
+            funcaoPerseguicao();
+        }
     }
     @Override
     public void desenhar(Graphics2D caneta) {
