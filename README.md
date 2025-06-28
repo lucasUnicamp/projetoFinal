@@ -1,4 +1,4 @@
-![Logo](src/Pacman/resources/logo.png)
+![Logo](src/PacMan/resources/imagens/logoGrande.png)
 ### *Projeto final da disciplina MC322*
 
 Feito pelos alunos:<br>
