@@ -13,12 +13,15 @@ import java.util.Comparator;
 import javax.imageio.ImageIO;
 import main.PainelJogo;
 
-public class Fantasma extends Entidade implements Serializable{
+public class Fantasma extends Entidade implements Serializable {
     private int estadoPerseguicao; // 1 se o fantasma estiver perseguindo o pacman e 0 caso esteja no modo dispersando
     private int metaCaminho;
-    private transient BufferedImage fantasma, perseguido;
+    private transient BufferedImage fantasma, fugindo, olhos;
     private transient ArrayList<Ponto> caminhoAtual;
     private int correcoesPendentes;
+
+    // 'comestivel' para quando o pacman comer uma super fruta; talvez fazer com que o pacman mude uma variável do painelJogo e o fantasma acesse ela  
+    private boolean comestivel;
 
     public Fantasma(PainelJogo painel) {
         super(painel);
@@ -40,6 +43,16 @@ public class Fantasma extends Entidade implements Serializable{
         estadoPerseguicao = 1;
 
         getImagem();
+    }
+
+    public void getImagem() {
+        try {
+            fantasma = ImageIO.read(new File(Paths.get("resources", "imagens", "fantasmaVermelho.png").toString()));
+            fugindo = ImageIO.read(new File(Paths.get("resources", "imagens", "fantasmaFoge.png").toString()));
+            olhos = ImageIO.read(new File(Paths.get("resources", "imagens", "fantasmaOlhos.png").toString()));
+        } catch (IOException erro) {
+            System.err.println("!!! ERRO NA IMPORTAÇÃO DOS SPRITES DO FANTASMA !!!");
+        }
     }
 
     public void desenhar(Graphics2D caneta) {
@@ -166,9 +179,6 @@ public class Fantasma extends Entidade implements Serializable{
             posicoesAdjacentes(atual, xm, ym, abertos, visitados); //busca pelas posicoes adjacentes tentando avancar ate o destino
             abertos.remove(atual);
         }
-
-
-
     }
 
     int correcaoPosicao(int x1, int x2){
@@ -249,6 +259,10 @@ public class Fantasma extends Entidade implements Serializable{
         }
     }
 
+    public void voltarSpawn() {
+        // Para quando for comido, deve voltar à posição inicial, sair do modo 'morto' e voltar a perseguir o pacman
+    }
+
     public void executarfuncao(int x, int y){
         //coordenadas do fantasma na matriz
         int xf = getX()/getPainelJogo().getTamanhoTile();
@@ -279,15 +293,6 @@ public class Fantasma extends Entidade implements Serializable{
                 menorCaminho(x, y);
             buscarPonto();
         }  
-    }
-
-    public void getImagem() {
-        try {
-            fantasma = ImageIO.read(new File(Paths.get("resources", "imagens", "fantasmaVermelho.png").toString()));
-            perseguido = ImageIO.read(new File(Paths.get("resources", "imagens", "fantasmaFoge.png").toString()));
-        } catch (IOException erro) {
-            System.err.println("!!! ERRO NA IMPORTAÇÃO DOS SPRITES DO FANTASMA !!!");
-        }
     }
 
     public int getEstadoPerseguicao() {

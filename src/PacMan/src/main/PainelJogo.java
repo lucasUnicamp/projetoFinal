@@ -203,11 +203,12 @@ public class PainelJogo extends JPanel implements Runnable {
             // Tem que ver se o fantasma não está comestível, se tiver o pacman não deve morrer 
             if (Math.abs(getPacMan().getX() - fantasma.getX()) <= getTamanhoTile() && Math.abs(getPacMan().getY() - fantasma.getY()) <= getTamanhoTile()) {
                 // if (fantasma.getEstadoPerseguicao() == 0)
-                pacman.morrer();
-                resetPosicoes();
-                setRecomecar(true);
+                    pacman.morrer();
+                    resetPosicoes();
+                    setRecomecar(true);
             
                 //else
+                // pacman tem que comer o fantasma
             }
         }
         pacman.atualizar();
