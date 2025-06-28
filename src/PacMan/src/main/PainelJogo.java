@@ -309,7 +309,7 @@ public class PainelJogo extends JPanel implements Runnable {
         setNumeroLinhas(tratadorMapa.getMapaAltura()); // numero de colunas de tiles
 
         JFrame janela = (JFrame) SwingUtilities.getWindowAncestor(this);
-        int escalaPossivel1 = (int) (0.8*janela.getWidth() )/ (numeroColunas * tamanhoPadraoTile);
+        int escalaPossivel1 = (int) (0.95*janela.getWidth() )/ (numeroColunas * tamanhoPadraoTile);
         int escalaPossivel2 = (int) (0.8*janela.getHeight()) / (numeroLinhas * tamanhoPadraoTile);
 
         if(escalaPossivel1 > escalaPossivel2) {
