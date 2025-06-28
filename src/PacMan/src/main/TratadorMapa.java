@@ -45,7 +45,6 @@ public class TratadorMapa implements Serializable{
             setMapaArquivo(mapaArquivo);
             checarMapa();
         }
-        // Mesmo se o 'mapa0' já existir, cria outro por precaução
         else {
             System.out.println("Nenhum mapa encontrado. Configuração genérica será usada.");
             criarGenerico();

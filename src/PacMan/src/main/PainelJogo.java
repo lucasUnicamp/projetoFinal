@@ -61,7 +61,7 @@ public class PainelJogo extends JPanel implements Runnable {
 
         this.gameLoader = new GameLoader(this);
 
-        tratadorMapa = new TratadorMapa(0);
+        tratadorMapa = new TratadorMapa(1);
 
         novoJogo();
 
@@ -243,7 +243,7 @@ public class PainelJogo extends JPanel implements Runnable {
                     case 'R':
                         EspacoVazio spawnFantRosa = new EspacoVazio();
                         elementos[i][j] = spawnFantRosa;
-                        FantasmaVermelho fantRosa = new FantasmaVermelho(this);
+                        FantasmaRosa fantRosa = new FantasmaRosa(this);
                         fantRosa.setSpawn(j, i);
                         fantRosa.atualizarPosicaoInicial();
                         fantasmas.add(fantRosa);
