@@ -18,11 +18,12 @@ public class TratadorMapa implements Serializable{
     private int mapaAltura;
     private final int maxLargura;
     private final int maxAltura;
+    public int numeroMapas;
     private File mapaArquivo;
     private char[] charValidos = {'#', '.', ' ', '<', 'P', 'R'};      // Lista de caracteres válidos no mapa
-    public static int numeroMapas = 2;
 
     public TratadorMapa(int mapaEscolhido) {
+        contarMapas();
         maxLargura = 30;
         maxAltura = 30;
         this.mapaEscolhido = mapaEscolhido;
@@ -184,8 +185,30 @@ public class TratadorMapa implements Serializable{
         return mapa.toArray(new String[mapa.size()]);
     }
 
+    /**
+     * Faz uma lista com o diretório dos mapas, percorrendo-os para contar quantos existem.
+     * No momento é redundante mas talvez tenha que mudar
+     */
+    public void contarMapas() {
+        int numero = 0;
+        File pasta = new File(Paths.get("resources", "mapas").toString());
+        File[] listaMapas = pasta.listFiles();
+
+        if (listaMapas != null) {
+            for (File mapa: listaMapas) {
+                // Checagem aqui?
+                numero++;
+            }
+        }
+        setNumeroMapas(numero);
+    }
+
     public void setMapaArquivo(File mapaArquivo) {
         this.mapaArquivo = mapaArquivo;
+    }
+
+    public void setNumeroMapas(int num) {
+        numeroMapas = num;
     }
 
     public void setMapaLargura(int largura) {
@@ -196,12 +219,28 @@ public class TratadorMapa implements Serializable{
         mapaAltura = altura;
     }
 
+    /**
+     * Pega o número do mapa assumindo que está seguindo a convenção de nomes dada, pois
+     * pega o último caractere antes do '.'
+     * @return String de um caractere que deve ser o número do mapa
+     */
+    public String getNumMapa() {
+        String nomeArquivo = getMapaArquivo().getName();
+        int i = nomeArquivo.lastIndexOf('.');
+        
+        return nomeArquivo.substring(i - 1, i);    
+    }
+
     public int getMapaEscolhido() {
         return mapaEscolhido;
     }
 
     public File getMapaArquivo() {
         return mapaArquivo;
+    }
+
+    public int getNumeroMapas() {
+        return numeroMapas;
     }
 
     public int getMapaLargura() {
