@@ -40,7 +40,7 @@ public class MenuPrincipal extends JFrame{
         }
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setResizable(true);
+        this.setResizable(false);
         this.setTitle("Pac-Man");
         addWindowListener(new WindowAdapter() {
             @Override
@@ -94,7 +94,6 @@ public class MenuPrincipal extends JFrame{
         this.add(cards);
         this.cardLayout.show(cards, "painelMenu");
         this.pack();
-        this.setMinimumSize(getSize());
         this.setVisible(true);
         painelVidro.setLayout(new GridBagLayout());
         painelVidro.setOpaque(false);

@@ -2,7 +2,6 @@ package menuPrincipal;
 
 import javax.swing.JPanel;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.sound.sampled.*;
 
@@ -53,7 +52,6 @@ public class PainelMenu extends JPanel implements ActionListener{
             frame.getCardLayout().show(this.frame.getCards(), "painelJogo");
             frame.pack();
             frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-            frame.setMinimumSize(frame.getSize());
             frame.painelExternoJogo.painelJogo.novoJogo(0);
             frame.painelExternoJogo.painelJogo.comecarThread();
 
@@ -61,8 +59,7 @@ public class PainelMenu extends JPanel implements ActionListener{
             frame.getCardLayout().show(this.frame.getCards(), "painelJogo");
             frame.pack();
             frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-            frame.setMinimumSize(frame.getSize());
-            frame.painelExternoJogo.painelJogo.continuarJogo();
+            frame.painelExternoJogo.painelJogo.carregarJogo();
             frame.painelExternoJogo.painelJogo.comecarThread();
 
         } else if (e.getSource() == opcoes){

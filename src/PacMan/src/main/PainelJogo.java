@@ -10,7 +10,10 @@ import java.awt.Graphics2D;
 import java.awt.Toolkit;
 import java.util.ArrayList;
 import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+
 import menuPrincipal.PainelExterno;
 import modelo.Comestivel;
 import modelo.EspacoVazio;
@@ -61,8 +64,6 @@ public class PainelJogo extends JPanel implements Runnable {
         this.painelVidro = painelVidro;
 
         this.gameLoader = new GameLoader(this);
-
-        novoJogo(0);
 
         setPreferredSize(new Dimension(larguraTela, alturaTela));
         setBackground(Color.BLACK);
@@ -179,7 +180,7 @@ public class PainelJogo extends JPanel implements Runnable {
         setPausado(false);
     }
 
-    public void continuarJogo() {
+    public void carregarJogo() {
         gameLoader.load();
     }
 
@@ -307,11 +308,12 @@ public class PainelJogo extends JPanel implements Runnable {
         setNumeroColunas(tratadorMapa.getMapaLargura()); // numero de linhas de tiles
         setNumeroLinhas(tratadorMapa.getMapaAltura()); // numero de colunas de tiles
 
-        int escalaPossivel1 = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth() / (numeroColunas * tamanhoPadraoTile);
-        int escalaPossivel2 = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight() / (numeroLinhas * tamanhoPadraoTile);
+        JFrame janela = (JFrame) SwingUtilities.getWindowAncestor(this);
+        int escalaPossivel1 = (int) (0.8*janela.getWidth() )/ (numeroColunas * tamanhoPadraoTile);
+        int escalaPossivel2 = (int) (0.8*janela.getHeight()) / (numeroLinhas * tamanhoPadraoTile);
 
         if(escalaPossivel1 > escalaPossivel2) {
-             escala = escalaPossivel2;
+            escala = escalaPossivel2;
         } else {
             escala = escalaPossivel1;
         }
@@ -328,6 +330,8 @@ public class PainelJogo extends JPanel implements Runnable {
         paredes = new ArrayList<>();
         this.carregarElementos();
     }
+
+    
 
     public void resetPosicoes() {
         pacman.irPosicaoInicial();
