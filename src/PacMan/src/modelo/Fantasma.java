@@ -264,7 +264,9 @@ public class Fantasma extends Entidade implements Serializable{
         // Para quando for comido, deve voltar à posição inicial, sair do modo 'morto' e voltar a perseguir o pacman
     }
 
-    public void executarfuncao(int x, int y){
+    public void executarfuncao(){
+        int x = getPainelJogo().getPacMan().getX();
+        int y = getPainelJogo().getPacMan().getY();
         //coordenadas do fantasma na matriz
         int xf = getX()/getPainelJogo().getTamanhoTile();
         int yf = getY()/getPainelJogo().getTamanhoTile();

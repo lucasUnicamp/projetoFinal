@@ -1,17 +1,15 @@
 package main;
 
 import interfaces.Elemento;
-import menuPrincipal.PainelExterno;
-
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
-
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+import menuPrincipal.PainelExterno;
 import modelo.Comestivel;
 import modelo.EspacoVazio;
 import modelo.Fantasma;
@@ -213,7 +211,7 @@ public class PainelJogo extends JPanel implements Runnable {
         }
         pacman.atualizar();
         for (Fantasma fantasma : fantasmas) {
-            fantasma.executarfuncao(pacman.getX(), pacman.getY());
+            fantasma.executarfuncao();
         }
 
     }
