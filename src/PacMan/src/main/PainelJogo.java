@@ -62,9 +62,7 @@ public class PainelJogo extends JPanel implements Runnable {
 
         this.gameLoader = new GameLoader(this);
 
-        tratadorMapa = new TratadorMapa(0);
-
-        novoJogo();
+        novoJogo(0);
 
         setPreferredSize(new Dimension(larguraTela, alturaTela));
         setBackground(Color.BLACK);
@@ -111,8 +109,7 @@ public class PainelJogo extends JPanel implements Runnable {
                         if (proximoMapa <= getTratadorMapa().getNumeroMapas()) {
                             // Primeira transição para o fade in
                             mostrarTransicao("Fase Concluída!", () -> {
-                                tratadorMapa = new TratadorMapa(proximoMapa);
-                                novoJogo();
+                                novoJogo(proximoMapa);
                                 setRecomecar(true);
                                 // Segunda transição para o fade out
                                 mostrarTransicao("Carregando próximo mapa...", () -> {
@@ -304,7 +301,8 @@ public class PainelJogo extends JPanel implements Runnable {
     }
 
     
-    public void novoJogo() {
+    public void novoJogo(int mapaAtual) {
+        setTratadorMapa(new TratadorMapa(mapaAtual));
         mapa = tratadorMapa.atribuirMapa();
         setNumeroColunas(tratadorMapa.getMapaLargura()); // numero de linhas de tiles
         setNumeroLinhas(tratadorMapa.getMapaAltura()); // numero de colunas de tiles

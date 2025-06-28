@@ -42,7 +42,7 @@ public class TransicaoFase extends JPanel {
         });
         timerOut = new Timer(100, e -> {
             opacidade -= 0.02f;
-
+            System.out.println("estou aqui");
             if (opacidade <= 0.8f) {
                 label.setText("");
                 opacidade -= 0.1f;
