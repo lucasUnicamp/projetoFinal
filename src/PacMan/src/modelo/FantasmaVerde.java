@@ -27,41 +27,63 @@ public final class FantasmaVerde extends Fantasma{
         getImagem();
     }
 
-    public void definirCantos(){
+    private void superiorEsquerdo(){
         Elemento[][] mapa = getPainelJogo().elementos;
         int i, j;
         for(i = 0; i < getPainelJogo().getNumeroLinhas(); i++){
             for(j = 0; j < getPainelJogo().getNumeroColunas(); j++){
                 if(!mapa[i][j].ehColidivel()){
                     cantos.add(new Coordenada(j, i)); //canto superior esquerdo
-                    break;
+                    return;
                 }
             }
         }
+    }
+
+    private void superiorDireito(){
+        Elemento[][] mapa = getPainelJogo().elementos;
+        int i, j;
         for(i = 0; i < getPainelJogo().getNumeroLinhas(); i++){
             for(j = getPainelJogo().getNumeroColunas() - 1; j > 0 ; j--){
                 if(!mapa[i][j].ehColidivel()){
                     cantos.add(new Coordenada(j, i)); //canto superior direito
-                    break;
+                    return;
                 }
             }
         }
+    }
+
+    private void inferiorEsquerdo(){
+        Elemento[][] mapa = getPainelJogo().elementos;
+        int i, j;
         for(i = getPainelJogo().getNumeroLinhas() - 1; i > 0; i--){
             for(j = 0; j < getPainelJogo().getNumeroColunas(); j++){
                 if(!mapa[i][j].ehColidivel()){
                     cantos.add(new Coordenada(j, i)); //canto inferior esquerdo
-                    break;
+                    return;
                 }
             }
         }
+    }
+
+    private void inferiorDireito(){
+        Elemento[][] mapa = getPainelJogo().elementos;
+        int i, j;
         for(i = getPainelJogo().getNumeroLinhas() - 1; i > 0; i--){
-            for(j = 0; j < getPainelJogo().getNumeroColunas(); j++){
+            for(j = getPainelJogo().getNumeroColunas() - 1; j > 0; j--){
                 if(!mapa[i][j].ehColidivel()){
                     cantos.add(new Coordenada(j, i)); //canto inferior direito
-                    break;
+                    return;
                 }
             }
         }
+    }
+
+    public void definirCantos(){
+        inferiorDireito();
+        inferiorEsquerdo();
+        superiorDireito();
+        superiorEsquerdo();
     }
 
     @Override
@@ -74,7 +96,7 @@ public final class FantasmaVerde extends Fantasma{
         if(prox == cantos.size())
             prox--;
         
-        if(!getCaminhoatual().isEmpty()){
+        if(!getCaminhoatual().isEmpty() && getMetaCaminho() != 0){
             buscarPonto();
         }
         else{
