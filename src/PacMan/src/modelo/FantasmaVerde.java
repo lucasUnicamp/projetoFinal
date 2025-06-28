@@ -6,7 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-
+import java.util.Random;
 import javax.imageio.ImageIO;
 
 import interfaces.Elemento;
@@ -29,7 +29,7 @@ public final class FantasmaVerde extends Fantasma{
         getImagem();
     }
 
-    public definirCantos(){
+    public void definirCantos(){
         Elemento[][] mapa = getPainelJogo().elementos;
         int i, j;
         for(i = 0; i < getPainelJogo().getNumeroLinhas(); i++){
@@ -67,6 +67,23 @@ public final class FantasmaVerde extends Fantasma{
     }
 
     @Override
+    public void executarfuncao(){
+        Random r = new Random();
+        int prox = r.nextInt(cantos.size());
+        if(prox == cantos.size())
+            prox--;
+        
+        if(!getCaminhoatual().isEmpty()){
+            buscarPonto();
+        }
+        else{
+            menorCaminho(cantos.get(prox).getX(), cantos.get(prox).getY());
+            setMetaCaminho(getCaminhoatual().size());
+            buscarPonto();
+        }
+    }
+
+    @Override
     public void getImagem() {
         try {
             fantasma = ImageIO.read(new File(Paths.get("resources", "imagens", "fantasmaVerde.png").toString()));
@@ -75,6 +92,12 @@ public final class FantasmaVerde extends Fantasma{
         } catch (IOException erro) {
             System.err.println("!!! ERRO NA IMPORTAÇÃO DOS SPRITES DO FANTASMA !!!");
         }
+    }
+
+    @Override
+    public void desenhar(Graphics2D caneta) {
+        BufferedImage imagem = fantasma;
+        caneta.drawImage(imagem, getX()  - (getPainelJogo().getTamanhoTile())/2, getY() - (getPainelJogo().getTamanhoTile())/2, getPainelJogo().getTamanhoTile(), getPainelJogo().getTamanhoTile(), null);
     }
 
 }

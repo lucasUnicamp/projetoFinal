@@ -135,6 +135,10 @@ public abstract class Fantasma extends Entidade implements Serializable{
         }
     }
 
+    public ArrayList<Ponto> getCaminhoatual(){
+        return caminhoAtual;
+    }
+
     public void menorCaminho(int x, int y){
         ArrayList<Ponto> visitados = new ArrayList<>();
         ArrayList<Ponto> abertos = new ArrayList<>();

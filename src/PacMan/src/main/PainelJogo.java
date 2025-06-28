@@ -16,6 +16,7 @@ import modelo.Comestivel;
 import modelo.EspacoVazio;
 import modelo.Fantasma;
 import modelo.FantasmaRosa;
+import modelo.FantasmaVerde;
 import modelo.FantasmaVermelho;
 import modelo.PacMan;
 import modelo.Parede;
@@ -248,6 +249,14 @@ public class PainelJogo extends JPanel implements Runnable {
                         fantRosa.setSpawn(j, i);
                         fantRosa.atualizarPosicaoInicial();
                         fantasmas.add(fantRosa);
+                        break;
+                    case 'G':
+                        EspacoVazio spawnFantVerde = new EspacoVazio();
+                        elementos[i][j] = spawnFantVerde;
+                        FantasmaVerde fantVerde = new FantasmaVerde(this);
+                        fantVerde.setSpawn(j, i);
+                        fantVerde.atualizarPosicaoInicial();
+                        fantasmas.add(fantVerde);
                         break;
                 }
             }
