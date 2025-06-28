@@ -7,6 +7,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GraphicsEnvironment;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.util.ArrayList;
 import javax.swing.JComponent;
@@ -309,9 +311,9 @@ public class PainelJogo extends JPanel implements Runnable {
         setNumeroColunas(tratadorMapa.getMapaLargura()); // numero de linhas de tiles
         setNumeroLinhas(tratadorMapa.getMapaAltura()); // numero de colunas de tiles
 
-        Dimension tamanhoTela = Toolkit.getDefaultToolkit().getScreenSize().getSize();
-        int escalaPossivel1 = (int) (0.8*tamanhoTela.width )/ (numeroColunas * tamanhoPadraoTile);
-        int escalaPossivel2 = (int) (0.8*tamanhoTela.height) / (numeroLinhas * tamanhoPadraoTile);
+        Rectangle tamanhoTela = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration().getBounds();
+        int escalaPossivel1 = (int) (tamanhoTela.width)/ (numeroColunas * tamanhoPadraoTile);
+        int escalaPossivel2 = (int) (0.9*tamanhoTela.height) / (numeroLinhas * tamanhoPadraoTile);
 
         if(escalaPossivel1 > escalaPossivel2) {
             escala = escalaPossivel2;
