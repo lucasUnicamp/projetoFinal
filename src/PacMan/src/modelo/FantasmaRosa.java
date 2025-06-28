@@ -106,7 +106,7 @@ public final class FantasmaRosa extends Fantasma{
                     setY(getY() + getVelocidade());
                 setCorrecoesPendentes(getCorrecoesPendentes() - getVelocidade());
                 if(getCorrecoesPendentes() <= 0){
-                    setSpawn(getX()/getPainelJogo().getTamanhoTile(), getY()/getPainelJogo().getTamanhoTile());
+                    centralizarPorPixel(getX()/getPainelJogo().getTamanhoTile(), getY()/getPainelJogo().getTamanhoTile());
                 }
                 return;
             }
