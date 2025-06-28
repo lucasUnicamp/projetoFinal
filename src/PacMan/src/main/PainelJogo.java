@@ -1,21 +1,19 @@
 package main;
 
 import interfaces.Elemento;
-import menuPrincipal.PainelExterno;
-
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
-import java.awt.BorderLayout;
-
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+import menuPrincipal.PainelExterno;
 import modelo.Comestivel;
 import modelo.EspacoVazio;
 import modelo.Fantasma;
+import modelo.FantasmaVermelho;
 import modelo.PacMan;
 import modelo.Parede;
 import modelo.Tunel;
@@ -221,7 +219,7 @@ public class PainelJogo extends JPanel implements Runnable {
                     case 'R':
                         EspacoVazio spawnFantVermelho = new EspacoVazio();
                         elementos[i][j] = spawnFantVermelho;
-                        Fantasma fantasma = new Fantasma(this);
+                        FantasmaVermelho fantasma = new FantasmaVermelho(this);
                         fantasma.setSpawn(j, i);
                         fantasma.atualizarPosicaoInicial();
                         fantasmas.add(fantasma);
@@ -237,16 +235,17 @@ public class PainelJogo extends JPanel implements Runnable {
             // Tem que ver se o fantasma não está comestível, se tiver o pacman não deve morrer 
             if (Math.abs(getPacMan().getX() - fantasma.getX()) <= getTamanhoTile() && Math.abs(getPacMan().getY() - fantasma.getY()) <= getTamanhoTile()) {
                 // if (fantasma.getEstadoPerseguicao() == 0)
-                pacman.morrer();
-                resetPosicoes();
-                setRecomecar(true);
+                    pacman.morrer();
+                    resetPosicoes();
+                    setRecomecar(true);
             
                 //else
+                // pacman tem que comer o fantasma
             }
         }
         pacman.atualizar();
         for (Fantasma fantasma : fantasmas) {
-            fantasma.executarfuncao(pacman.getX(), pacman.getY());
+            fantasma.executarfuncao();
         }
 
     }
@@ -298,7 +297,7 @@ public class PainelJogo extends JPanel implements Runnable {
     public void resetPosicoes() {
         pacman.irPosicaoInicial();
         for(int i = 0; i < fantasmas.size(); i++) {
-            fantasmas.set(i, new Fantasma(this, fantasmas.get(i).getXInicial(), fantasmas.get(i).getYInicial(), fantasmas.get(i).getVelocidade(), fantasmas.get(i).getDirecao()));     
+            fantasmas.set(i, new FantasmaVermelho(this, fantasmas.get(i).getXInicial(), fantasmas.get(i).getYInicial(), fantasmas.get(i).getVelocidade(), fantasmas.get(i).getDirecao()));     
         }
     }
 
