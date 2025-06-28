@@ -60,7 +60,7 @@ public class PainelJogo extends JPanel implements Runnable {
 
         this.gameLoader = new GameLoader(this);
 
-        tratadorMapa = new TratadorMapa(0);
+        tratadorMapa = new TratadorMapa(1);
 
         novoJogo();
 
@@ -94,6 +94,13 @@ public class PainelJogo extends JPanel implements Runnable {
                 if(!estaPausado()) {
                     atualizar();
                     repaint();
+                    
+                    // Quando morre, muda o 'recomecar' para 'true', assim consegue colocar o delay do começo
+                    // como primeira ação 
+                    if (recomecar) {
+                        delayComeco();
+                        setRecomecar(false);
+                    }
 
                     if (comestiveis.isEmpty()) {
                         System.out.println("Acabaram");
@@ -101,11 +108,11 @@ public class PainelJogo extends JPanel implements Runnable {
                         int proximoMapa = tratadorMapa.getMapaEscolhido() + 1;
 
                         if (proximoMapa <= getTratadorMapa().getNumeroMapas()) {
-                            System.out.println("Vai mudar");
                             mostrarTransicao("Fase Concluída!", () -> {
                                 tratadorMapa = new TratadorMapa(proximoMapa);
                                 novoJogo();
                                 setPausado(false);
+                                setRecomecar(true);
                             });
                         } else {
                             mostrarTransicao("Parabéns, Você venceu!", () -> {
@@ -114,14 +121,8 @@ public class PainelJogo extends JPanel implements Runnable {
                         }
                     }
 
-                    // Quando morre, muda o 'recomear' para 'true', assim consegue colocar o delay do começo
-                    // como primeira ação 
-                    if (recomecar) {
-                        delayComeco();
-                        setRecomecar(false);
-                    }
                 }
-                delta --;
+                delta--;
                 try{
                     Thread.sleep(1000/FPS);
                 } catch(InterruptedException e) {

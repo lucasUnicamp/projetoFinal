@@ -22,7 +22,7 @@ public class PainelExterno extends JPanel {
     JLabel labelPontos;
     JLabel labelComeco;
     PainelJogo painelJogo;
-    Font fonte;
+    private Font fonte;
 
     public PainelExterno(LeitorTeclado leitor, JPanel cards, JComponent painelVidro) {
         super(new GridBagLayout());
