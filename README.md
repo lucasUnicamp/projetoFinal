@@ -18,7 +18,7 @@ Versão do Java: 21.0.6<br>
 
 [...]
 
-## O projetohttps://github.com/lucasUnicamp/projetoFinal/wiki
+## O projeto
 
 Trata-se de uma recriação do jogo [Pac-Man][1] usando o conhecimento de Programação Orientada a Objetos adquirida durante o semestre.<br>
 Foram implementadas as funções mais crucias do jogo original, como Fantasmas perseguidores, sistema de pontuação, mapa com colisão e túneis, um meio de vencer e também de perder. Mas também foram feitas adições como mapas personalizáveis, opções de pausa e de salvamento.
