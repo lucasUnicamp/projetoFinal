@@ -57,8 +57,7 @@ public final class FantasmaVermelho extends Fantasma{
                     setY(getY() + getVelocidade());
                 setCorrecoesPendentes(getCorrecoesPendentes() - getVelocidade());
                 if(getCorrecoesPendentes() <= 0){
-                    centralizarX();
-                    centralizarY();
+                    centralizarPorPixel(getX()/getPainelJogo().getTamanhoTile(), getY()/getPainelJogo().getTamanhoTile());
                 }
                 return;
             }

@@ -7,6 +7,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Toolkit;
 import java.util.ArrayList;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -22,9 +23,9 @@ import modelo.Tunel;
 
 public class PainelJogo extends JPanel implements Runnable {
     private final int tamanhoPadraoTile = 16; // tamanho em pixels do tile original
-    private final int escala = 2; // taxa de escalonamento do sprite na tela
+    private int escala = 2; // taxa de escalonamento do sprite na tela
 
-    private final int tamanhoTile = tamanhoPadraoTile * escala; // tamanho em pixel de cada lado do tile
+    private int tamanhoTile = tamanhoPadraoTile * escala; // tamanho em pixel de cada lado do tile
     private int numeroColunas; // numero de linhas de tiles
     private int numeroLinhas; // numero de colunas de tiles
     private int larguraTela; // largura em pixels do painel
@@ -61,7 +62,7 @@ public class PainelJogo extends JPanel implements Runnable {
 
         this.gameLoader = new GameLoader(this);
 
-        tratadorMapa = new TratadorMapa(2);
+        tratadorMapa = new TratadorMapa(0);
 
         novoJogo();
 
@@ -307,8 +308,20 @@ public class PainelJogo extends JPanel implements Runnable {
         mapa = tratadorMapa.atribuirMapa();
         setNumeroColunas(tratadorMapa.getMapaLargura()); // numero de linhas de tiles
         setNumeroLinhas(tratadorMapa.getMapaAltura()); // numero de colunas de tiles
+
+        int escalaPossivel1 = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth() / (numeroColunas * tamanhoPadraoTile);
+        int escalaPossivel2 = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight() / (numeroLinhas * tamanhoPadraoTile);
+
+        if(escalaPossivel1 > escalaPossivel2) {
+             escala = escalaPossivel2;
+        } else {
+            escala = escalaPossivel1;
+        }
+
+        tamanhoTile = tamanhoPadraoTile * escala;
         larguraTela = tamanhoTile * numeroColunas; // largura em pixels do painel
         alturaTela = tamanhoTile * numeroLinhas; // altura em pixels do painel
+        setPreferredSize(new Dimension(larguraTela, alturaTela));
 
         pacman = new PacMan(this, leitor);
         elementos = new Elemento[numeroLinhas][numeroColunas];
@@ -353,7 +366,7 @@ public class PainelJogo extends JPanel implements Runnable {
         numeroColunas = colunas;
     }
 
-    public void setTradadorMapa(TratadorMapa tratadorMapa) {
+    public void setTratadorMapa(TratadorMapa tratadorMapa) {
         this.tratadorMapa = tratadorMapa;
     }
 

@@ -38,6 +38,7 @@ public class GameLoader {
             }
 
             dados.mapa = mapa;
+            dados.mapaAtual = painelJogo.getTratadorMapa().getMapaEscolhido();
             dados.pontuacao = painelJogo.getPontuacao();
             dados.xPacMan = painelJogo.getPacMan().getX();
             dados.yPacMan = painelJogo.getPacMan().getY();
@@ -75,6 +76,7 @@ public class GameLoader {
             ObjectInputStream arquivoSave = new ObjectInputStream(new FileInputStream(Paths.get("resources", "saves", "save0.dat").toString()));
             DadosJogo dados = (DadosJogo) arquivoSave.readObject();
 
+            painelJogo.setTratadorMapa(new TratadorMapa(dados.mapaAtual));
             painelJogo.setMapa(dados.mapa);
             painelJogo.carregarElementos();
             painelJogo.getPacMan().setVidas(dados.vidasPacMan);
@@ -84,7 +86,6 @@ public class GameLoader {
             painelJogo.getPacMan().setXInicial(dados.xInicialPacMan);
             painelJogo.getPacMan().setYInicial(dados.yInicialPacMan);
             painelJogo.getPacMan().setDirecao(dados.direcaoPacMan.toString());
-            
             
 
             for(int i = 0; i < painelJogo.fantasmas.size(); i++) {
