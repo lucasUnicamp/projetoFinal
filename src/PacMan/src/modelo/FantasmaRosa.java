@@ -71,9 +71,10 @@ public final class FantasmaRosa extends Fantasma{
         for(int i = xmin; i < xmax; i++){
             for(int j = ymin; j < ymax; j++){
                 if(!mapa[j][i].ehColidivel()){
-                    if(distancia * distancia >= (j - xpac) * (j - xpac) + (i - ypac) * (i- ypac)){
+                    if(distancia * distancia >= (i - xpac) * (i - xpac) + (j - ypac) * (j- ypac)){
                         xbusca = i;
                         ybusca = j;
+                        return;
                     }
                 }
             }
