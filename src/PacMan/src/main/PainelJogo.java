@@ -1,20 +1,20 @@
 package main;
 
 import interfaces.Elemento;
-import menuPrincipal.PainelExterno;
-
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.BorderLayout;
 import java.util.ArrayList;
-
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+import menuPrincipal.PainelExterno;
 import modelo.Comestivel;
 import modelo.EspacoVazio;
 import modelo.Fantasma;
+import modelo.FantasmaVermelho;
 import modelo.PacMan;
 import modelo.Parede;
 import modelo.Tunel;
@@ -60,7 +60,7 @@ public class PainelJogo extends JPanel implements Runnable {
 
         this.gameLoader = new GameLoader(this);
 
-        tratadorMapa = new TratadorMapa(0);
+        tratadorMapa = new TratadorMapa(2);
 
         novoJogo();
 
@@ -95,6 +95,23 @@ public class PainelJogo extends JPanel implements Runnable {
                     atualizar();
                     repaint();
 
+                    if (comestiveis.isEmpty()) {
+                        setPausado(true);
+                        int proximoMapa = tratadorMapa.getMapaEscolhido() + 1;
+
+                        if (proximoMapa <= TratadorMapa.numeroMapas) {
+                            mostrarTransicao("Fase Concluída!", () -> {
+                                tratadorMapa = new TratadorMapa(proximoMapa);
+                                novoJogo();
+                                setPausado(false);
+                            });
+                        } else {
+                            mostrarTransicao("Parabéns, Você venceu!", () -> {
+                                voltarMenu();
+                            });
+                        }
+                    }
+
                     // Quando morre, muda o 'recomear' para 'true', assim consegue colocar o delay do começo
                     // como primeira ação 
                     if (recomecar) {
@@ -110,8 +127,24 @@ public class PainelJogo extends JPanel implements Runnable {
                 }
                 //System.out.printf("pontos: %d\n", getPontuacao());
             }
+        
+        //feito por joao pedro frare, que é burro, pode ser que esteja errado...
         }
     }
+
+    //Transição de Fase
+    public void mostrarTransicao(String mensagem, Runnable proximaAcao) {
+    TransicaoFase transicao = new TransicaoFase(mensagem, () -> {
+        painelVidro.setVisible(false); // esconde a transição
+        proximaAcao.run();             // executa o que vier depois
+    });
+
+    painelVidro.removeAll();
+    painelVidro.setLayout(new BorderLayout());
+    painelVidro.add(transicao, BorderLayout.CENTER);
+    painelVidro.setVisible(true);
+    transicao.iniciar();
+}
 
     /**
      * Cria um delay de alguns segundos em que nada acontece para dar um tempo ao usuário
@@ -187,7 +220,7 @@ public class PainelJogo extends JPanel implements Runnable {
                     case 'R':
                         EspacoVazio spawnFantVermelho = new EspacoVazio();
                         elementos[i][j] = spawnFantVermelho;
-                        Fantasma fantasma = new Fantasma(this);
+                        FantasmaVermelho fantasma = new FantasmaVermelho(this);
                         fantasma.setSpawn(j, i);
                         fantasma.atualizarPosicaoInicial();
                         fantasmas.add(fantasma);
@@ -213,7 +246,7 @@ public class PainelJogo extends JPanel implements Runnable {
         }
         pacman.atualizar();
         for (Fantasma fantasma : fantasmas) {
-            fantasma.executarfuncao(pacman.getX(), pacman.getY());
+            fantasma.executarfuncao();
         }
 
     }
@@ -265,7 +298,7 @@ public class PainelJogo extends JPanel implements Runnable {
     public void resetPosicoes() {
         pacman.irPosicaoInicial();
         for(int i = 0; i < fantasmas.size(); i++) {
-            fantasmas.set(i, new Fantasma(this, fantasmas.get(i).getXInicial(), fantasmas.get(i).getYInicial(), fantasmas.get(i).getVelocidade(), fantasmas.get(i).getDirecao()));     
+            fantasmas.set(i, new FantasmaVermelho(this, fantasmas.get(i).getXInicial(), fantasmas.get(i).getYInicial(), fantasmas.get(i).getVelocidade(), fantasmas.get(i).getDirecao()));     
         }
     }
 
