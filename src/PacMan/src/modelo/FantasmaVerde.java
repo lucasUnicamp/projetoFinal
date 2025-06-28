@@ -1,6 +1,7 @@
 package modelo;
 
-//import java.awt.Graphics2D;
+import interfaces.Elemento;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -8,8 +9,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Random;
 import javax.imageio.ImageIO;
-
-import interfaces.Elemento;
 import main.PainelJogo;
 
 public final class FantasmaVerde extends Fantasma{
@@ -20,7 +19,6 @@ public final class FantasmaVerde extends Fantasma{
     public FantasmaVerde(PainelJogo painel){
         super(painel);
         cantos = new ArrayList<>();
-        definirCantos();
         getImagem();
     }
 
@@ -68,6 +66,9 @@ public final class FantasmaVerde extends Fantasma{
 
     @Override
     public void executarfuncao(){
+        if (cantos.isEmpty()){
+            definirCantos();
+        }
         Random r = new Random();
         int prox = r.nextInt(cantos.size());
         if(prox == cantos.size())
