@@ -63,8 +63,6 @@ public class MenuPrincipal extends JFrame{
         painelExternoJogo = new PainelExterno(leitor, getCards(), painelVidro);
         painelExternoJogo.setBackground(Color.BLACK);
 
-        MenuPausa menuPausa = new MenuPausa(painelExternoJogo.painelJogo);
-
         painelMenu = new PainelMenu(clip, this);
         
         painelOpcoes = new PainelOpcoes(clip, this);
@@ -77,7 +75,11 @@ public class MenuPrincipal extends JFrame{
         getRootPane().getActionMap().put("PAUSAR", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(painelExternoJogo.isVisible())
+                if(painelExternoJogo.isVisible()) {
+                    painelVidro.removeAll();
+                    painelVidro.revalidate();
+                    painelVidro.repaint();;
+                    painelVidro.add(new MenuPausa(painelExternoJogo.painelJogo));
                     if(!painelExternoJogo.painelJogo.estaPausado()) {
                         painelExternoJogo.painelJogo.setPausado(true);
                         ((JComponent) getGlassPane()).setVisible(true);
@@ -85,18 +87,16 @@ public class MenuPrincipal extends JFrame{
                         painelExternoJogo.painelJogo.setPausado(false);
                         ((JComponent) getGlassPane()).setVisible(false);
                     }
-                    
+                }
             }
             
         });
         this.add(cards);
         this.cardLayout.show(cards, "painelMenu");
         this.pack();
-        this.setMinimumSize(getSize());
         this.setVisible(true);
         painelVidro.setLayout(new GridBagLayout());
         painelVidro.setOpaque(false);
-        painelVidro.add(menuPausa);
 
     }
 

@@ -7,10 +7,16 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GraphicsEnvironment;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.util.ArrayList;
 import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+import javax.tools.Tool;
+
 import menuPrincipal.PainelExterno;
 import modelo.Comestivel;
 import modelo.EspacoVazio;
@@ -63,10 +69,6 @@ public class PainelJogo extends JPanel implements Runnable {
 
         this.gameLoader = new GameLoader(this);
 
-        tratadorMapa = new TratadorMapa(0);
-
-        novoJogo();
-
         setPreferredSize(new Dimension(larguraTela, alturaTela));
         setBackground(Color.BLACK);
         setDoubleBuffered(true);
@@ -112,8 +114,7 @@ public class PainelJogo extends JPanel implements Runnable {
                         if (proximoMapa <= getTratadorMapa().getNumeroMapas()) {
                             // Primeira transição para o fade in
                             mostrarTransicao("Fase Concluída!", () -> {
-                                tratadorMapa = new TratadorMapa(proximoMapa);
-                                novoJogo();
+                                novoJogo(proximoMapa);
                                 setRecomecar(true);
                                 // Segunda transição para o fade out
                                 mostrarTransicao("Carregando próximo mapa...", () -> {
@@ -183,7 +184,7 @@ public class PainelJogo extends JPanel implements Runnable {
         setPausado(false);
     }
 
-    public void continuarJogo() {
+    public void carregarJogo() {
         gameLoader.load();
     }
 
@@ -313,18 +314,24 @@ public class PainelJogo extends JPanel implements Runnable {
     }
 
     
-    public void novoJogo() {
+    public void novoJogo(int mapaAtual) {
+        setTratadorMapa(new TratadorMapa(mapaAtual));
         mapa = tratadorMapa.atribuirMapa();
         setNumeroColunas(tratadorMapa.getMapaLargura()); // numero de linhas de tiles
         setNumeroLinhas(tratadorMapa.getMapaAltura()); // numero de colunas de tiles
 
-        int escalaPossivel1 = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth() / (numeroColunas * tamanhoPadraoTile);
-        int escalaPossivel2 = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight() / (numeroLinhas * tamanhoPadraoTile);
+        Rectangle tamanhoTela = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration().getBounds();
+        int escalaPossivel1 = (int) (tamanhoTela.width)/ (numeroColunas * tamanhoPadraoTile);
+        int escalaPossivel2 = (int) (0.9*tamanhoTela.height) / (numeroLinhas * tamanhoPadraoTile);
 
         if(escalaPossivel1 > escalaPossivel2) {
-             escala = escalaPossivel2;
+            escala = escalaPossivel2;
         } else {
             escala = escalaPossivel1;
+        }
+
+        if(escala <= 0) {
+            escala = 1;
         }
 
         tamanhoTile = tamanhoPadraoTile * escala;
@@ -339,6 +346,8 @@ public class PainelJogo extends JPanel implements Runnable {
         paredes = new ArrayList<>();
         this.carregarElementos();
     }
+
+    
 
     public void resetPosicoes() {
         pacman.irPosicaoInicial();
