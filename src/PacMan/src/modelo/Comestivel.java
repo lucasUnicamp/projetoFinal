@@ -29,7 +29,8 @@ public class Comestivel implements Elemento, Serializable{
         int linhaMatriz = getY()/painelJogo.getTamanhoTile();
         int colunaMatriz = getX()/painelJogo.getTamanhoTile();
         painelJogo.elementos[linhaMatriz][colunaMatriz] = new EspacoVazio();
-        painelJogo.aumentaPontuacao(1);
+        painelJogo.aumentaPontuacao(10);
+        painelJogo.comestiveis.removeFirst();
     }
 
     public boolean ehColidivel() {

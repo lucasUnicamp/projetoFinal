@@ -96,10 +96,12 @@ public class PainelJogo extends JPanel implements Runnable {
                     repaint();
 
                     if (comestiveis.isEmpty()) {
+                        System.out.println("Acabaram");
                         setPausado(true);
                         int proximoMapa = tratadorMapa.getMapaEscolhido() + 1;
 
                         if (proximoMapa <= getTratadorMapa().getNumeroMapas()) {
+                            System.out.println("Vai mudar");
                             mostrarTransicao("Fase Concluída!", () -> {
                                 tratadorMapa = new TratadorMapa(proximoMapa);
                                 novoJogo();
