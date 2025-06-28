@@ -246,7 +246,7 @@ public abstract class Fantasma extends Entidade implements Serializable{
     }
 
     public void perder(){
-        perseguicao = true;
+        perseguicao = EstadoPerseguicao.PERSEGUINDO;
         perdeu = true;
         setVelocidade((60 * getPainelJogo().getEscala()) / getPainelJogo().getFPS());
         metaCaminho = 1;
