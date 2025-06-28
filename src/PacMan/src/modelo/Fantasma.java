@@ -14,7 +14,7 @@ import javax.imageio.ImageIO;
 import main.PainelJogo;
 
 public class Fantasma extends Entidade implements Serializable{
-    private int estadoPerseguicao; // 1 se o fantasma estiver perseguindo o pacman e 0 caso esteja no modo dispersando
+    private boolean perseguicao; // 1 se o fantasma estiver perseguindo o pacman e 0 caso esteja no modo dispersando
     private int metaCaminho;
     private transient BufferedImage fantasma, perseguido;
     private transient ArrayList<Ponto> caminhoAtual;
@@ -25,7 +25,7 @@ public class Fantasma extends Entidade implements Serializable{
         correcoesPendentes = 0;
         caminhoAtual = new ArrayList<>();
         metaCaminho = 0;
-        estadoPerseguicao = 0;
+        perseguicao = true;
 
         setVelocidade((70 * getPainelJogo().getEscala()) / getPainelJogo().getFPS()); 
 
@@ -37,8 +37,7 @@ public class Fantasma extends Entidade implements Serializable{
         correcoesPendentes = 0;
         caminhoAtual = new ArrayList<>();
         metaCaminho = 0;
-        estadoPerseguicao = 1;
-
+        perseguicao = true;
         getImagem();
     }
 
@@ -99,28 +98,29 @@ public class Fantasma extends Entidade implements Serializable{
                 int distanciasubida = calculaDistancia(x1, y1 - 1, x2, y2);
                 adicionarPonto(busca, atual, x1, y1 - 1, distanciasubida);        
             }
-            //casos em que o fantasma seguiu o pac man ate uma posicao de borda
-
+        } catch (IndexOutOfBoundsException e){}
+        try{
             //descida
             if(!mapa[y1 + 1][x1].ehColidivel() && !jaVisitado(visitados, x1, y1 + 1)){
                 int distanciadescida = calculaDistancia(x1, y1 + 1, x2, y2);
                 adicionarPonto(busca, atual, x1, y1 + 1, distanciadescida);
             }
+        } catch (IndexOutOfBoundsException e){}
+        try{
             //direita
             if(!mapa[y1][x1 + 1].ehColidivel() && !jaVisitado(visitados, x1 + 1, y1)){
                 int distanciadireita = calculaDistancia(x1 + 1, y1, x2, y2);
                 adicionarPonto(busca, atual, x1 + 1, y1, distanciadireita);
             }
+        } catch (IndexOutOfBoundsException e){}  
+        try{
             //esquerda
             if(!mapa[y1][x1 - 1].ehColidivel() && !jaVisitado(visitados, x1 - 1, y1)){
                 int distanciaesquerda = calculaDistancia(x1 - 1, y1, x2, y2);
                 adicionarPonto(busca, atual, x1 - 1, y1, distanciaesquerda);
-                }
-            
-            Collections.sort(busca, Comparator.comparingInt(Ponto::getHeuristica));
-        } catch (IndexOutOfBoundsException e){
-
-        }
+            }
+        } catch (IndexOutOfBoundsException e){}
+        Collections.sort(busca, Comparator.comparingInt(ponto -> ponto.getHeuristica(perseguicao)));
     }
 
     public void montarCaminho(Ponto destino){
@@ -146,7 +146,8 @@ public class Fantasma extends Entidade implements Serializable{
 
 
         while(!abertos.isEmpty()){
-            Collections.sort(abertos, Comparator.comparingInt(Ponto::getHeuristica));
+            Collections.sort(abertos, Comparator.comparingInt(ponto -> ponto.getHeuristica(perseguicao)));
+
             Ponto atual = abertos.get(0);
             visitados.add(atual);
             if(atual.getX() == xm && atual.getY() == ym){
@@ -290,7 +291,5 @@ public class Fantasma extends Entidade implements Serializable{
         }
     }
 
-    public int getEstadoPerseguicao() {
-        return estadoPerseguicao;
-    }
+    
 }
