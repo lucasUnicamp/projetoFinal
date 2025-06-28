@@ -20,7 +20,7 @@ public class TratadorMapa implements Serializable{
     private final int maxAltura;
     public int numeroMapas;
     private File mapaArquivo;
-    private char[] charValidos = {'#', '.', ' ', '<', 'P', 'R'};      // Lista de caracteres válidos no mapa
+    private char[] charValidos = {'#', '.', ' ', '<', 'P', 'V', 'R'};      // Lista de caracteres válidos no mapa
 
     public TratadorMapa(int mapaEscolhido) {
         contarMapas();
@@ -45,7 +45,6 @@ public class TratadorMapa implements Serializable{
             setMapaArquivo(mapaArquivo);
             checarMapa();
         }
-        // Mesmo se o 'mapa0' já existir, cria outro por precaução
         else {
             System.out.println("Nenhum mapa encontrado. Configuração genérica será usada.");
             criarGenerico();
@@ -66,8 +65,8 @@ public class TratadorMapa implements Serializable{
                               "#....#...#...#....#\n" +
                               "####.### # ###.####\n" +
                               "####.#       #.####\n" +
-                              "####.# ## ## #.####\n" +
-                              "<   .  #   #  .   <\n" +
+                              "####.# ##V## #.####\n" +
+                              "<   .  # R #  .   <\n" +
                               "####.# ##### #.####\n" +
                               "####.#       #.####\n" +
                               "####.# ##### #.####\n" +

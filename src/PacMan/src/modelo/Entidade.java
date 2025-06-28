@@ -152,6 +152,11 @@ public class Entidade implements Serializable{
         setY((getY()/painelJogo.getTamanhoTile())*painelJogo.getTamanhoTile() + painelJogo.getTamanhoTile()/2);
     }
 
+    public void centralizarPorPixel(int x, int y) {
+        setX(getPainelJogo().getTamanhoTile() * x + getPainelJogo().getTamanhoTile()/2);   
+        setY(getPainelJogo().getTamanhoTile() * y + getPainelJogo().getTamanhoTile()/2);
+    }
+
     public void irPosicaoInicial() {
         setX(getXInicial());
         setY(getYInicial());

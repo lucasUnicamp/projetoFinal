@@ -16,6 +16,7 @@ import modelo.Comestivel;
 import modelo.EspacoVazio;
 import modelo.Fantasma;
 import modelo.FantasmaRosa;
+import modelo.FantasmaVermelho;
 import modelo.PacMan;
 import modelo.Parede;
 import modelo.Tunel;
@@ -108,10 +109,12 @@ public class PainelJogo extends JPanel implements Runnable {
                         int proximoMapa = tratadorMapa.getMapaEscolhido() + 1;
 
                         if (proximoMapa <= getTratadorMapa().getNumeroMapas()) {
+                            // Primeira transição para o fade in
                             mostrarTransicao("Fase Concluída!", () -> {
                                 tratadorMapa = new TratadorMapa(proximoMapa);
                                 novoJogo();
                                 setRecomecar(true);
+                                // Segunda transição para o fade out
                                 mostrarTransicao("Carregando próximo mapa...", () -> {
                                     setPausado(false);
                                 });
@@ -123,7 +126,6 @@ public class PainelJogo extends JPanel implements Runnable {
                             });
                         }
                     }
-
                 }
                 delta--;
                 try{
@@ -148,6 +150,7 @@ public class PainelJogo extends JPanel implements Runnable {
         painelVidro.setLayout(new BorderLayout());
         painelVidro.add(transicao, BorderLayout.CENTER);
         painelVidro.setVisible(true);
+        // Jogo registra que deve recomeçar apenas após o fade in, então começa fazendo o fade in
         if (!recomecar) {
             transicao.setOpacidade(0f);
             transicao.iniciar();
@@ -229,13 +232,22 @@ public class PainelJogo extends JPanel implements Runnable {
                         pacman.atualizarPosicaoInicial();
                         break;
 
-                    case 'R':
+                    case 'V':
                         EspacoVazio spawnFantVermelho = new EspacoVazio();
                         elementos[i][j] = spawnFantVermelho;
-                        FantasmaRosa fantasma = new FantasmaRosa(this);
-                        fantasma.setSpawn(j, i);
-                        fantasma.atualizarPosicaoInicial();
-                        fantasmas.add(fantasma);
+                        FantasmaVermelho fantVermelho = new FantasmaVermelho(this);
+                        fantVermelho.setSpawn(j, i);
+                        fantVermelho.atualizarPosicaoInicial();
+                        fantasmas.add(fantVermelho);
+                        break;
+
+                    case 'R':
+                        EspacoVazio spawnFantRosa = new EspacoVazio();
+                        elementos[i][j] = spawnFantRosa;
+                        FantasmaRosa fantRosa = new FantasmaRosa(this);
+                        fantRosa.setSpawn(j, i);
+                        fantRosa.atualizarPosicaoInicial();
+                        fantasmas.add(fantRosa);
                         break;
                 }
             }

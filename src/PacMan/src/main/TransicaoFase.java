@@ -17,8 +17,8 @@ import java.awt.AlphaComposite;
 
 public class TransicaoFase extends JPanel {
     private float opacidade;
-    private Timer timer;
-    private Timer timer2;
+    private Timer timerIn;
+    private Timer timerOut;
     private Font fonte;
 
     public TransicaoFase(String mensagem, Runnable quandoAcabar) {
@@ -31,16 +31,16 @@ public class TransicaoFase extends JPanel {
         add(label);
 
         // Animação com Timer
-        timer = new Timer(100, e -> {
+        timerIn = new Timer(100, e -> {
             opacidade += 0.05f;
             System.out.println(opacidade);
             if (opacidade >= 1f) {
-                timer.stop();
+                timerIn.stop();
                 quandoAcabar.run();
             }
             repaint();
         });
-        timer2 = new Timer(100, e -> {
+        timerOut = new Timer(100, e -> {
             opacidade -= 0.02f;
 
             if (opacidade <= 0.8f) {
@@ -48,7 +48,7 @@ public class TransicaoFase extends JPanel {
                 opacidade -= 0.1f;
             }
             if (opacidade <= 0f) {
-                timer2.stop();
+                timerOut.stop();
                 quandoAcabar.run();
             }
             repaint();
@@ -56,11 +56,11 @@ public class TransicaoFase extends JPanel {
     }
 
     public void iniciar() {
-        timer.start();
+        timerIn.start();
     }
 
     public void finalizar() {
-        timer2.start();
+        timerOut.start();
     }
 
     @Override
