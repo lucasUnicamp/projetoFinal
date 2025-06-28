@@ -82,9 +82,15 @@ public class PainelJogo extends JPanel implements Runnable {
         long tempoAtual;
 
         delayComeco();
-
+        
         while (gameThread != null && !gameThread.isInterrupted()) { // loop principal do jogo
-
+            // Quando morre, muda o 'recomecar' para 'true', assim consegue colocar o delay do começo
+            // como primeira ação 
+            if (recomecar) {
+                delayComeco();
+                setRecomecar(false);
+            }
+            
             tempoAtual = System.nanoTime();
 
             delta += (tempoAtual - ultimoTempo) / intervaloDesenho;
@@ -95,15 +101,8 @@ public class PainelJogo extends JPanel implements Runnable {
                     atualizar();
                     repaint();
                     
-                    // Quando morre, muda o 'recomecar' para 'true', assim consegue colocar o delay do começo
-                    // como primeira ação 
-                    if (recomecar) {
-                        delayComeco();
-                        setRecomecar(false);
-                    }
 
                     if (comestiveis.isEmpty()) {
-                        System.out.println("Acabaram");
                         setPausado(true);
                         int proximoMapa = tratadorMapa.getMapaEscolhido() + 1;
 
@@ -111,9 +110,12 @@ public class PainelJogo extends JPanel implements Runnable {
                             mostrarTransicao("Fase Concluída!", () -> {
                                 tratadorMapa = new TratadorMapa(proximoMapa);
                                 novoJogo();
-                                setPausado(false);
                                 setRecomecar(true);
+                                mostrarTransicao("Carregando próximo mapa...", () -> {
+                                    setPausado(false);
+                                });
                             });
+                            
                         } else {
                             mostrarTransicao("Parabéns, Você venceu!", () -> {
                                 voltarMenu();
@@ -128,7 +130,6 @@ public class PainelJogo extends JPanel implements Runnable {
                 } catch(InterruptedException e) {
                     Thread.currentThread().interrupt();
                 }
-                //System.out.printf("pontos: %d\n", getPontuacao());
             }
         
         //feito por joao pedro frare, que é burro, pode ser que esteja errado...
@@ -137,16 +138,23 @@ public class PainelJogo extends JPanel implements Runnable {
 
     //Transição de Fase
     public void mostrarTransicao(String mensagem, Runnable proximaAcao) {
-    TransicaoFase transicao = new TransicaoFase(mensagem, () -> {
-        painelVidro.setVisible(false); // esconde a transição
-        proximaAcao.run();             // executa o que vier depois
-    });
+        TransicaoFase transicao = new TransicaoFase(mensagem, () -> {
+            painelVidro.setVisible(false); // esconde a transição
+            proximaAcao.run();             // executa o que vier depois
+        });
 
-    painelVidro.removeAll();
-    painelVidro.setLayout(new BorderLayout());
-    painelVidro.add(transicao, BorderLayout.CENTER);
-    painelVidro.setVisible(true);
-    transicao.iniciar();
+        painelVidro.removeAll();
+        painelVidro.setLayout(new BorderLayout());
+        painelVidro.add(transicao, BorderLayout.CENTER);
+        painelVidro.setVisible(true);
+        if (!recomecar) {
+            transicao.setOpacidade(0f);
+            transicao.iniciar();
+        }
+        else {
+            transicao.setOpacidade(1f);
+            transicao.finalizar();
+        }
 }
 
     /**
