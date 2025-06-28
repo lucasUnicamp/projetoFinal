@@ -6,6 +6,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Random;
 import javax.imageio.ImageIO;
 import main.PainelJogo;
 
@@ -17,10 +19,10 @@ public final class FantasmaRosa extends Fantasma{
     public FantasmaRosa(PainelJogo painel){
         super(painel);
         if(getPainelJogo().getNumeroLinhas() > getPainelJogo().getNumeroColunas()){
-            distancia = getPainelJogo().getNumeroLinhas() / 3;
+            distancia = getPainelJogo().getNumeroLinhas() / 4;
         }
         else{
-            distancia = getPainelJogo().getNumeroColunas() / 3;
+            distancia = getPainelJogo().getNumeroColunas() / 4;
         }
         getImagem();
     }
@@ -42,6 +44,7 @@ public final class FantasmaRosa extends Fantasma{
     }
     
     private void definirDestino(){
+        ArrayList<Coordenada> possiveis = new ArrayList<>();
         int xmin, ymin, xmax, ymax;
         Elemento[][] mapa = getPainelJogo().elementos;
         int xpac = getPainelJogo().getPacMan().getX()/getPainelJogo().getTamanhoTile();
@@ -70,16 +73,23 @@ public final class FantasmaRosa extends Fantasma{
         for(int i = xmin; i < xmax; i++){
             for(int j = ymin; j < ymax; j++){
                 if(!mapa[j][i].ehColidivel()){
-                    if(distancia * distancia >= (i - xpac) * (i - xpac) + (j - ypac) * (j- ypac)){
-                        xbusca = i;
-                        ybusca = j;
-                        return;
-                    }
+                    if(distancia * distancia <= (i - xpac) * (i - xpac) + (j - ypac) * (j- ypac))
+                        possiveis.add(new Coordenada(i, j)); 
                 }
             }
         }
-        xbusca = xpac;
-        ybusca = ypac;
+        if (!possiveis.isEmpty()){
+            Random r = new Random();
+            int pos = r.nextInt(possiveis.size());
+            if(pos == possiveis.size())
+                pos--;
+            xbusca = possiveis.get(pos).getX();
+            ybusca = possiveis.get(pos).getY();
+        }
+        else{
+            xbusca = xpac;
+            ybusca = ypac;
+        }
         
     }
 
