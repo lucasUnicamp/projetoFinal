@@ -138,7 +138,7 @@ public final class FantasmaVerde extends Fantasma{
                 }
                 return;
             }
-            if(getMetaCaminho() == 0)
+            if(getMetaCaminho() == 0 || calculaDistancia(xm, ym, xf, yf) < 5)
                 menorCaminho(xm, ym);
             buscarPonto();
         }
@@ -148,6 +148,9 @@ public final class FantasmaVerde extends Fantasma{
     public void executarfuncao(){
         if(getEstadoPerseguicao()){
             funcaoPerseguicao();
+        }
+        else{
+            funcaoFuga();
         }
     }
 

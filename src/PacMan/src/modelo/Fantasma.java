@@ -23,7 +23,7 @@ public abstract class Fantasma extends Entidade implements Serializable{
         correcoesPendentes = 0;
         caminhoAtual = new ArrayList<>();
         metaCaminho = 0;
-        perseguicao = EstadoPerseguicao.PERSEGUINDO;
+        perseguicao = EstadoPerseguicao.DISPERSO;
         perdeu = false;
         setVelocidade((60 * getPainelJogo().getEscala()) / getPainelJogo().getFPS()); 
     }
@@ -33,7 +33,7 @@ public abstract class Fantasma extends Entidade implements Serializable{
         correcoesPendentes = 0;
         caminhoAtual = new ArrayList<>();
         metaCaminho = 0;
-        perseguicao = EstadoPerseguicao.PERSEGUINDO;
+        perseguicao = EstadoPerseguicao.DISPERSO;
     }
 
     public int getMetaCaminho(){
