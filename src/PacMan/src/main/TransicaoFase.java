@@ -33,7 +33,6 @@ public class TransicaoFase extends JPanel {
         // Animação com Timer
         timerIn = new Timer(100, e -> {
             opacidade += 0.05f;
-            System.out.println(opacidade);
             if (opacidade >= 1f) {
                 timerIn.stop();
                 quandoAcabar.run();
