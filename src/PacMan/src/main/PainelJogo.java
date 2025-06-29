@@ -40,8 +40,8 @@ public class PainelJogo extends JPanel implements Runnable {
     private int pontuacao;
     private int numeroMapaAtual = 0;
     private boolean pausado;
-    private boolean vaiRecomecar, terminouTransicaoFase = true;
-    private boolean gameOver = false, vaiGameOver, terminouTransicaoGameOver = true;
+    private boolean vaiRecomecar = false, terminouTransicaoFase = true;
+    private boolean gameOver = false, vaiGameOver = false;
     private boolean estaPerseguindo = false;
     
     public Elemento[][] elementos;
@@ -112,15 +112,13 @@ public class PainelJogo extends JPanel implements Runnable {
                     repaint();
                     if (pacman.getVidas() <= 0) {
                         setPausado(true);
-                        gameOver = true;
+                        setGameOver(true);
 
                         mostrarTransicao("GAME OVER", () -> {
                             voltarMenuSemSalvar();
-                            terminouTransicaoGameOver = false;
                             vaiGameOver = true;
                             mostrarTransicao("Saindo...", () -> {
-                                setPausado(false);
-                                terminouTransicaoGameOver = true;
+                                setPausado(false);   
                             });
                         });
                     }
@@ -136,7 +134,7 @@ public class PainelJogo extends JPanel implements Runnable {
                             mostrarTransicao("Fase Concluída!", () -> {
                                 novoJogo(proximoMapa);
                                 // Esse label que faz com que o mapa apareça na posição certa durante o load
-                                painelExterno.setTextoLabelComeco(String.format("Preparando..."));
+                                painelExterno.setTextoLabelCanto(String.format("Preparando..."));
                                 terminouTransicaoFase = false;
                                 setVaiRecomecar(true);
                                 // Segunda transição para o fade out
@@ -212,13 +210,13 @@ public class PainelJogo extends JPanel implements Runnable {
     public void delayComeco() {
         setPausado(true);
         try {
-            painelExterno.setTextoLabelComeco(String.format("3..."));
+            painelExterno.setTextoLabelCanto(String.format("3..."));
             Thread.sleep(30000/FPS);
-            painelExterno.setTextoLabelComeco(String.format("2..."));
+            painelExterno.setTextoLabelCanto(String.format("2..."));
             Thread.sleep(30000/FPS);
-            painelExterno.setTextoLabelComeco(String.format("1..."));
+            painelExterno.setTextoLabelCanto(String.format("1..."));
             Thread.sleep(30000/FPS);
-            painelExterno.setTextoLabelComeco(String.format("Mapa %s", getNumeroMapaAtual()));
+            painelExterno.setTextoLabelCanto(String.format("Mapa %s", getNumeroMapaAtual()));
         } catch (InterruptedException erro) {
             System.err.println("!!! ERRO NA INTERRUPÇÃO DA THREAD DELAY COMECO !!!");
         }
@@ -372,7 +370,7 @@ public class PainelJogo extends JPanel implements Runnable {
         try {
             pacman.morrer();
             repaint();
-            painelExterno.setTextoLabelComeco(String.format("Ouch!"));
+            painelExterno.setTextoLabelCanto(String.format("Ouch!"));
             Thread.sleep(30000/FPS); 
             pacman.setEstaMorto(false);
         } catch (InterruptedException erro) {
@@ -414,23 +412,23 @@ public class PainelJogo extends JPanel implements Runnable {
         pacman.desenhar(caneta);
 
         if (pacman.getVidas() >= 1)
-            caneta.drawImage(pacman.getImagemRepouso(), getLargura() - 20*escala, getAltura() - 20*escala, getTamanhoTile(), getTamanhoTile(), null);
+            caneta.drawImage(pacman.getImagemRepouso(), getLargura() - 10*escala, getAltura() - 10*escala, getTamanhoTile()/2, getTamanhoTile()/2, null);
         if (pacman.getVidas() >= 2) 
-            caneta.drawImage(pacman.getImagemRepouso(), getLargura() - 40*escala, getAltura() - 20*escala, getTamanhoTile(), getTamanhoTile(), null);
+            caneta.drawImage(pacman.getImagemRepouso(), getLargura() - 30*escala, getAltura() - 10*escala, getTamanhoTile()/2, getTamanhoTile()/2, null);
         if (pacman.getVidas() >= 3)
-            caneta.drawImage(pacman.getImagemRepouso(), getLargura() - 60*escala, getAltura() - 20*escala, getTamanhoTile(), getTamanhoTile(), null);
+            caneta.drawImage(pacman.getImagemRepouso(), getLargura() - 50*escala, getAltura() - 10*escala, getTamanhoTile()/2, getTamanhoTile()/2, null);
 
         painelExterno.setTextoLabelPontos(String.format("Pontuação: %d", getPontuacao()));
         
         caneta.dispose();
     }
 
-    
     public void novoJogo(int mapaAtual) {
         setTratadorMapa(new TratadorMapa(mapaAtual));
         mapa = tratadorMapa.atribuirMapa();
         setNumeroColunas(tratadorMapa.getMapaLargura()); // numero de linhas de tiles
         setNumeroLinhas(tratadorMapa.getMapaAltura()); // numero de colunas de tiles
+        resetarValores();
 
         Rectangle tamanhoTela = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration().getBounds();
         int escalaPossivel1 = (int) (tamanhoTela.width)/ (numeroColunas * tamanhoPadraoTile);
@@ -459,6 +457,16 @@ public class PainelJogo extends JPanel implements Runnable {
         this.carregarElementos();
     }
 
+    public void resetarValores() {
+        vaiRecomecar = false;
+        terminouTransicaoFase = true;
+        gameOver = false;
+        vaiGameOver = false;
+        setPontuacao(0);
+        setNumeroMapaAtual(0);
+        setGameOver(false);
+    }
+
 
     public void resetPosicoes() {
         pacman.irPosicaoInicial();
@@ -482,6 +490,10 @@ public class PainelJogo extends JPanel implements Runnable {
 
     public void setVaiRecomecar(boolean vaiRecomecar) {
         this.vaiRecomecar = vaiRecomecar;
+    }
+
+    public void setGameOver(boolean gameOver) {
+        this.gameOver = gameOver;
     }
 
     public void setPontuacao(int pontuacao) {
