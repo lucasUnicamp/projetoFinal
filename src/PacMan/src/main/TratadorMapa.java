@@ -20,7 +20,7 @@ public class TratadorMapa implements Serializable{
     private final int maxAltura;
     public int numeroMapas;
     private File mapaArquivo;
-    private char[] charValidos = {'#', '.', ' ', '<', 'P', 'V', 'R', 'G'};      // Lista de caracteres válidos no mapa
+    private char[] charValidos = {'#', '.', 'O', ' ', '<', 'P', 'V', 'R', 'G'};      // Lista de caracteres válidos no mapa
 
     public TratadorMapa(int mapaEscolhido) {
         contarMapas();
@@ -94,7 +94,7 @@ public class TratadorMapa implements Serializable{
     public void checarMapa() {
         int altura = 0;
         int largura, larguraUltima = 0;
-        boolean comecouTunelHorizontal;
+        boolean comecouTunelHorizontal, temPacMan = false;
         boolean[] comecouTuneis = new boolean[maxLargura];
 
         System.out.println("Checando mapa...");
@@ -126,7 +126,7 @@ public class TratadorMapa implements Serializable{
 
                     // Caso algum tunel seja posto no interior do mapa ao invés de só nas bordas
                     if (((altura != 0 && scan.hasNextLine()) && (i != 0 && i != largura - 1)) && linha.charAt(i) == '<')
-                        throw new ArquivoCorrompidoException(String.format("TÚ  NEL COLOCADO NO INTERIOR DO MAPA NA LINHA %d, COLUNA %d", altura + 1, i + 1));
+                        throw new ArquivoCorrompidoException(String.format("TÚNEL COLOCADO NO INTERIOR DO MAPA NA LINHA %d, COLUNA %d", altura + 1, i + 1));
 
                     // Caso em que apenas uma parte do túnel tenha sido posta horizontalmente
                     if (i == 0 && linha.charAt(i) == '<')
@@ -139,7 +139,20 @@ public class TratadorMapa implements Serializable{
                         comecouTuneis[i] = true;
                     if ((!scan.hasNextLine() && comecouTuneis[i] && linha.charAt(i) != '<') || (!scan.hasNextLine() && !comecouTuneis[i] && linha.charAt(i) == '<'))
                         throw new ArquivoCorrompidoException(String.format("TÚNEL COMEÇADO MAS NÃO ACABADO NA COLUNA %d", i + 1));
+
+                    // Checa se o mapa tem pelo menos um Pac-Man
+                    if (linha.charAt(i) == 'P') {
+                        // Mas não pode ter mais de um
+                        if (temPacMan)
+                            throw new ArquivoCorrompidoException(String.format("MAIS DE UM PACMAN ENCONTRADO NA LINHA %d, COLUNA %d", altura + 1, i + 1));
+                        else
+                            temPacMan = true;
+                    }
                 }
+                // Mapa não pode não ter Pac-Man
+                if(!temPacMan)
+                    throw new ArquivoCorrompidoException(String.format("NENHUM PACMAN ENCONTRADO NO MAPA"));
+                
                 larguraUltima = largura;
                 altura++;
             }

@@ -57,6 +57,7 @@ public class PainelOpcoes extends JPanel implements ActionListener, ChangeListen
         if (e.getSource() == this.pausar) {
             if (musicaPausada) {
                 clip.start();
+                clip.loop(Clip.LOOP_CONTINUOUSLY);
                 this.pausar.setText("Pausar Música");
                 
             } else {

@@ -1,7 +1,5 @@
 package modelo;
 
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -9,7 +7,6 @@ import javax.imageio.ImageIO;
 import main.PainelJogo;
 
 public final class FantasmaVermelho extends Fantasma{
-    private transient BufferedImage fantasma, fugindo, olhos;
 
     public FantasmaVermelho(PainelJogo painel){
         super(painel);
@@ -24,15 +21,55 @@ public final class FantasmaVermelho extends Fantasma{
     @Override
     public void getImagem() {
         try {
-            fantasma = ImageIO.read(new File(Paths.get("resources", "imagens", "fantasmaVermelho.png").toString()));
-            fugindo = ImageIO.read(new File(Paths.get("resources", "imagens", "fantasmaFoge.png").toString()));
-            olhos = ImageIO.read(new File(Paths.get("resources", "imagens", "fantasmaOlhos.png").toString()));
+            imagemFantasma = ImageIO.read(new File(Paths.get("resources", "imagens", "fantasmaVermelho.png").toString()));
+            imagemFugindo = ImageIO.read(new File(Paths.get("resources", "imagens", "fantasmaFoge.png").toString()));
+            imagemOlhos = ImageIO.read(new File(Paths.get("resources", "imagens", "fantasmaOlhos.png").toString()));
         } catch (IOException erro) {
             System.err.println("!!! ERRO NA IMPORTAÇÃO DOS SPRITES DO FANTASMA !!!");
         }
     }
+
+    public void funcaoRetorno() {
+        //coordenadas do pac man
+        int x = getPainelJogo().getPacMan().getX();
+        int y = getPainelJogo().getPacMan().getY();
+        //coordenadas do fantasma na matriz
+        int xf = getX()/getPainelJogo().getTamanhoTile();
+        int yf = getY()/getPainelJogo().getTamanhoTile();
+        //coordenadas do destino na matriz
+        int xm = x/getPainelJogo().getTamanhoTile();
+        int ym = y/getPainelJogo().getTamanhoTile();
+
+
+        //perseguir(x, y): caso o fantasma e seu destino nao estejam no mesmo ponto da matriz
+        if(xf != xm || yf != ym){
+            if(getCorrecoesPendentes() > 0){
+                if(getDirecao().equals("direita"))
+                    setX(getX() + getVelocidade());
+                else  if(getDirecao().equals("esquerda"))
+                    setX(getX() - getVelocidade());
+                else if(getDirecao().equals("cima"))
+                    setY(getY() - getVelocidade());
+                else if(getDirecao().equals("baixo"))
+                    setY(getY() + getVelocidade());
+                setCorrecoesPendentes(getCorrecoesPendentes() - getVelocidade());
+                if(getCorrecoesPendentes() <= 0){
+                    setX(xf * getPainelJogo().getTamanhoTile() + getPainelJogo().getTamanhoTile()/2);
+                    setY(yf * getPainelJogo().getTamanhoTile() + getPainelJogo().getTamanhoTile()/2);  
+                }
+                return;
+            }
+            buscarPonto();
+        }  
+        if(getMetaCaminho() == 0)
+            setEstadoPerseguicao(EstadoPerseguicao.DISPERSO);
+    }
+
     @Override
     public void executarfuncao(){
+        if(getEstadoPerseguicao() == EstadoPerseguicao.MORTO) {
+            funcaoRetorno();
+        }
         //coordenadas do pac man
         int x = getPainelJogo().getPacMan().getX();
         int y = getPainelJogo().getPacMan().getY();
@@ -66,12 +103,6 @@ public final class FantasmaVermelho extends Fantasma{
                 menorCaminho(xm, ym);
             buscarPonto();
         }  
-    }
-
-    @Override
-    public void desenhar(Graphics2D caneta) {
-        BufferedImage imagem = fantasma;
-        caneta.drawImage(imagem, getX()  - (getPainelJogo().getTamanhoTile())/2, getY() - (getPainelJogo().getTamanhoTile())/2, getPainelJogo().getTamanhoTile(), getPainelJogo().getTamanhoTile(), null);
     }
 
 }

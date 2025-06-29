@@ -1,8 +1,6 @@
 package modelo;
 
 import interfaces.Elemento;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -12,7 +10,6 @@ import javax.imageio.ImageIO;
 import main.PainelJogo;
 
 public final class FantasmaRosa extends Fantasma{
-    private transient BufferedImage fantasma, fugindo, olhos;
     private int xbusca, ybusca;
     private int distancia;
 
@@ -35,9 +32,9 @@ public final class FantasmaRosa extends Fantasma{
     @Override
     public void getImagem() {
         try {
-            fantasma = ImageIO.read(new File(Paths.get("resources", "imagens", "fantasmaRosa.png").toString()));
-            fugindo = ImageIO.read(new File(Paths.get("resources", "imagens", "fantasmaFoge.png").toString()));
-            olhos = ImageIO.read(new File(Paths.get("resources", "imagens", "fantasmaOlhos.png").toString()));
+            imagemFantasma = ImageIO.read(new File(Paths.get("resources", "imagens", "fantasmaRosa.png").toString()));
+            imagemFugindo = ImageIO.read(new File(Paths.get("resources", "imagens", "fantasmaFoge.png").toString()));
+            imagemOlhos = ImageIO.read(new File(Paths.get("resources", "imagens", "fantasmaOlhos.png").toString()));
         } catch (IOException erro) {
             System.err.println("!!! ERRO NA IMPORTAÇÃO DOS SPRITES DO FANTASMA !!!");
         }
@@ -104,7 +101,7 @@ public final class FantasmaRosa extends Fantasma{
             if(getCorrecoesPendentes() > 0){
                 if(getDirecao().equals("direita"))
                     setX(getX() + getVelocidade());
-                else  if(getDirecao().equals("esquerda"))
+                else if(getDirecao().equals("esquerda"))
                     setX(getX() - getVelocidade());
                 else if(getDirecao().equals("cima"))
                     setY(getY() - getVelocidade());
@@ -124,19 +121,88 @@ public final class FantasmaRosa extends Fantasma{
 
     }
 
-     @Override
-    public void executarfuncao(){
-        if (getEstadoPerseguicao()){
-            funcaoPerseguicao();
-        }
-        else{
-            funcaoFuga();
+    public void funcaoFuga(){
+        //implementamos a fuga da mesma maneira que implementamos a busca: o mesmo algoritmo foi implementado
+        //a diferenca eh que na busca o fantasma vermelho busca o menor caminho ate o pacman (perseguicao)
+        //na fuga, por sua vez, o fantasma esta buscando o maior caminho ate o pacman, que atualizado repetidamente se assemelha a uma fuga
+        //coordenadas do pac man
+        int x = getPainelJogo().getPacMan().getX();
+        int y = getPainelJogo().getPacMan().getY();
+        //coordenadas do fantasma na matriz
+        int xf = getX()/getPainelJogo().getTamanhoTile();
+        int yf = getY()/getPainelJogo().getTamanhoTile();
+        //coordenadas do destino na matriz
+        int xm = x/getPainelJogo().getTamanhoTile();
+        int ym = y/getPainelJogo().getTamanhoTile();
+
+
+        //perseguir(x, y): caso o fantasma e seu destino nao estejam no mesmo ponto da matriz
+        if(xf != xm || yf != ym){
+            if(getCorrecoesPendentes() > 0){
+                if(getDirecao().equals("direita"))
+                    setX(getX() + getVelocidade());
+                else  if(getDirecao().equals("esquerda"))
+                    setX(getX() - getVelocidade());
+                else if(getDirecao().equals("cima"))
+                    setY(getY() - getVelocidade());
+                else if(getDirecao().equals("baixo"))
+                    setY(getY() + getVelocidade());
+                setCorrecoesPendentes(getCorrecoesPendentes() - getVelocidade());
+                if(getCorrecoesPendentes() <= 0){
+                    setX(xf * getPainelJogo().getTamanhoTile() + getPainelJogo().getTamanhoTile()/2);
+                    setY(yf * getPainelJogo().getTamanhoTile() + getPainelJogo().getTamanhoTile()/2);  
+                }
+                return;
+            }
+            if(getMetaCaminho() == 0)
+                menorCaminho(xm, ym);
+            buscarPonto();
         }
     }
+
+    public void funcaoRetorno() { // função para retornar à base pelo menor caminho
+        //coordenadas do fantasma na matriz
+        int xf = getX()/getPainelJogo().getTamanhoTile();
+        int yf = getY()/getPainelJogo().getTamanhoTile();
+        //coordenadas do destino na matriz
+        int xm = getXInicial()/getPainelJogo().getTamanhoTile();
+        int ym = getYInicial()/getPainelJogo().getTamanhoTile();
+
+
+        //perseguir(x, y): caso o fantasma e seu destino nao estejam no mesmo ponto da matriz
+        if(xf != xm || yf != ym){
+            if(getCorrecoesPendentes() > 0){
+                if(getDirecao().equals("direita"))
+                    setX(getX() + getVelocidade());
+                else  if(getDirecao().equals("esquerda"))
+                    setX(getX() - getVelocidade());
+                else if(getDirecao().equals("cima"))
+                    setY(getY() - getVelocidade());
+                else if(getDirecao().equals("baixo"))
+                    setY(getY() + getVelocidade());
+                setCorrecoesPendentes(getCorrecoesPendentes() - getVelocidade());
+                if(getCorrecoesPendentes() <= 0){
+                    setX(xf * getPainelJogo().getTamanhoTile() + getPainelJogo().getTamanhoTile()/2);
+                    setY(yf * getPainelJogo().getTamanhoTile() + getPainelJogo().getTamanhoTile()/2);  
+                }
+                return;
+            }
+            buscarPonto();
+        }
+        if(getMetaCaminho() == 0)
+            setEstadoPerseguicao(EstadoPerseguicao.PERSEGUINDO);
+        System.out.println(getMetaCaminho());
+    }
+
     @Override
-    public void desenhar(Graphics2D caneta) {
-        BufferedImage imagem = fantasma;
-        caneta.drawImage(imagem, getX()  - (getPainelJogo().getTamanhoTile())/2, getY() - (getPainelJogo().getTamanhoTile())/2, getPainelJogo().getTamanhoTile(), getPainelJogo().getTamanhoTile(), null);
+    public void executarfuncao(){
+        if (getEstadoPerseguicao().getEstadoPerseguicao()){
+            funcaoPerseguicao();
+        } else if (getEstadoPerseguicao() == EstadoPerseguicao.DISPERSO){
+            funcaoFuga();
+        } else {
+            funcaoRetorno();
+        }
     }
 
 }
