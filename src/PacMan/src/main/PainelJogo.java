@@ -370,7 +370,8 @@ public class PainelJogo extends JPanel implements Runnable {
         if (estaPerseguindo && framePerseguicao <= 0) {
             pararPerseguicao();
             framePerseguicao = 7*FPS;
-        } else if (estaPerseguindo){
+            painelExterno.setTextoLabelCanto(String.format("Mapa %d", getNumeroMapaAtual()));
+        } else if (estaPerseguindo && !pacman.getEstaMorto()){
             framePerseguicao--;
             painelExterno.setTextoLabelCanto(String.format("Super Fruta por %d", framePerseguicao/FPS + 1));
         }
@@ -439,7 +440,6 @@ public class PainelJogo extends JPanel implements Runnable {
             if(fantasma.getEstadoPerseguicao() != EstadoPerseguicao.MORTO)
                 fantasma.encerrarFuga();
         }
-        painelExterno.setTextoLabelCanto(String.format("Mapa %d", getNumeroMapaAtual()));
         estaPerseguindo = false;
     }
 
@@ -521,10 +521,10 @@ public class PainelJogo extends JPanel implements Runnable {
     }
 
     public void resetPosicoes() {
+        pararPerseguicao();
         pacman.irPosicaoInicial();
         for(Fantasma fantasma: fantasmas) {
             fantasma.setSpawn(fantasma.getXInicial()/getTamanhoTile(), fantasma.getYInicial()/getTamanhoTile());
-            fantasma.setEstadoPerseguicao(EstadoPerseguicao.PERSEGUINDO);
             fantasma.setMetaCaminho(0); 
         }
     }
