@@ -287,12 +287,17 @@ public class PainelJogo extends JPanel implements Runnable {
         }
     }
 
+    /**
+     * Método para criar um delay e atualizar o pacman 
+     */
     public void pacmanMorreu() {
         setPausado(true);
         try {
             pacman.morrer();
+            repaint();
             painelExterno.setTextoLabelComeco(String.format("Ouch!"));
-            Thread.sleep(30000/FPS);
+            Thread.sleep(30000/FPS); 
+            pacman.setEstaMorto(false);
         } catch (InterruptedException erro) {
             System.err.println("!!! ERRO NA INTERRUPÇÃO DA THREAD !!!");
         }

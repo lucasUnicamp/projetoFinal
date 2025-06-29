@@ -15,9 +15,9 @@ import main.PainelJogo;
 public class PacMan extends Entidade{
     private int estadoBoca; // boca aberta ou fechada
     private int contadorSprite; // usado para saber quando mudar o sprite (animação)
-    private transient BufferedImage cima, baixo, esquerda, direita, repouso;
+    private transient BufferedImage cima, baixo, esquerda, direita, repouso, dano;
     private String direcaoDesejada;
-    private Boolean morreu;
+    private Boolean estaMorto;
 
     private int vidas;
 
@@ -25,7 +25,7 @@ public class PacMan extends Entidade{
 
     public PacMan(PainelJogo painelJogo, LeitorTeclado leitor) {
         super(painelJogo);
-        setMorreu(false);
+        setEstaMorto(false);
         vidas = 3;
 
         getImagem();
@@ -108,9 +108,11 @@ public class PacMan extends Entidade{
     public void desenhar(Graphics2D caneta) {
         BufferedImage imagem = null;
 
-        if (estadoBoca == 0) {
+        if (getEstaMorto()) {
+            imagem = dano;
+        } else if (estadoBoca == 0) {
             imagem = repouso;
-        } else {
+        } else { 
             switch (getDirecao()) {
                 case "cima":
                     imagem = cima;
@@ -132,7 +134,6 @@ public class PacMan extends Entidade{
         caneta.drawImage(imagem, getX()  - (getPainelJogo().getTamanhoTile())/2, getY() - (getPainelJogo().getTamanhoTile())/2, getPainelJogo().getTamanhoTile(), getPainelJogo().getTamanhoTile(), null);
     }
 
-
     public void setDirecaoDesejada(String direcao) {
         if(direcao != null && (direcao.equals("direita") || direcao.equals("esquerda") || direcao.equals("cima") || direcao.equals("baixo"))) 
             this.direcaoDesejada = direcao;
@@ -145,12 +146,12 @@ public class PacMan extends Entidade{
     }
 
     public void morrer() {
-        setMorreu(true);
+        setEstaMorto(true);
         setVidas(getVidas() - 1);
     }
 
-    public void setMorreu(Boolean morreu) {
-        this.morreu = morreu;
+    public void setEstaMorto(Boolean estaMorto) {
+        this.estaMorto = estaMorto;
     }
 
     public String getDirecaoDesejada() {
@@ -161,8 +162,8 @@ public class PacMan extends Entidade{
         return vidas;
     }
 
-    public Boolean getMorreu() {
-        return morreu;
+    public Boolean getEstaMorto() {
+        return estaMorto;
     }
 
     // importa os sprites
@@ -173,6 +174,7 @@ public class PacMan extends Entidade{
             direita = ImageIO.read(new File(Paths.get("resources", "imagens", "pacmanLeste.png").toString()));
             esquerda = ImageIO.read(new File(Paths.get("resources", "imagens", "pacmanOeste.png").toString()));
             repouso = ImageIO.read(new File(Paths.get("resources", "imagens", "pacmanParado.png").toString()));
+            dano = ImageIO.read(new File(Paths.get("resources", "imagens", "pacmanDano.png").toString()));
 
         } catch (IOException e) {
             System.err.println("!!! ERRO NA IMPORTAÇÃO DOS SPRITES DO PACMAN !!!");
