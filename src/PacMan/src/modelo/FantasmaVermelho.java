@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import javax.imageio.ImageIO;
+
+import enums.EstadoPerseguicao;
 import main.PainelJogo;
 
 public final class FantasmaVermelho extends Fantasma{

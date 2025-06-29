@@ -13,11 +13,12 @@ import java.util.ArrayList;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.Timer;
+
+import enums.EstadoPerseguicao;
 import menuPrincipal.PainelExterno;
 import modelo.Comestivel;
 import modelo.Comida;
 import modelo.EspacoVazio;
-import modelo.EstadoPerseguicao;
 import modelo.Fantasma;
 import modelo.FantasmaRosa;
 import modelo.FantasmaVerde;

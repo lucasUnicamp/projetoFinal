@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import javax.swing.Timer;
 
+import enums.EstadoPerseguicao;
 import main.PainelJogo;
 
 public abstract class Fantasma extends Entidade {
