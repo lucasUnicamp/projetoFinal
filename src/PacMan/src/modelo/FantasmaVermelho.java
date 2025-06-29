@@ -1,7 +1,5 @@
 package modelo;
 
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -9,7 +7,6 @@ import javax.imageio.ImageIO;
 import main.PainelJogo;
 
 public final class FantasmaVermelho extends Fantasma{
-    private transient BufferedImage fantasma, fugindo, olhos;
 
     public FantasmaVermelho(PainelJogo painel){
         super(painel);
@@ -24,9 +21,9 @@ public final class FantasmaVermelho extends Fantasma{
     @Override
     public void getImagem() {
         try {
-            fantasma = ImageIO.read(new File(Paths.get("resources", "imagens", "fantasmaVermelho.png").toString()));
-            fugindo = ImageIO.read(new File(Paths.get("resources", "imagens", "fantasmaFoge.png").toString()));
-            olhos = ImageIO.read(new File(Paths.get("resources", "imagens", "fantasmaOlhos.png").toString()));
+            imagemFantasma = ImageIO.read(new File(Paths.get("resources", "imagens", "fantasmaVermelho.png").toString()));
+            imagemFugindo = ImageIO.read(new File(Paths.get("resources", "imagens", "fantasmaFoge.png").toString()));
+            imagemOlhos = ImageIO.read(new File(Paths.get("resources", "imagens", "fantasmaOlhos.png").toString()));
         } catch (IOException erro) {
             System.err.println("!!! ERRO NA IMPORTAÇÃO DOS SPRITES DO FANTASMA !!!");
         }
@@ -66,12 +63,6 @@ public final class FantasmaVermelho extends Fantasma{
                 menorCaminho(xm, ym);
             buscarPonto();
         }  
-    }
-
-    @Override
-    public void desenhar(Graphics2D caneta) {
-        BufferedImage imagem = fantasma;
-        caneta.drawImage(imagem, getX()  - (getPainelJogo().getTamanhoTile())/2, getY() - (getPainelJogo().getTamanhoTile())/2, getPainelJogo().getTamanhoTile(), getPainelJogo().getTamanhoTile(), null);
     }
 
 }

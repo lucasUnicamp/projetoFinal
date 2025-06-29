@@ -12,6 +12,7 @@ public class Entidade implements Serializable{
     private int posicaoY;
     private int posicaoXInicial;
     private int posicaoYInicial;
+    private int velocidadePadrao;
     private int velocidade; // pixels por frame
     private String direcao;
     private int alturaHitBox;
@@ -226,6 +227,14 @@ public class Entidade implements Serializable{
 
     public void setY(int y) {
         posicaoY = y;
+    }
+
+    public void setVelocidadePadrao(int vel) {
+        velocidadePadrao = vel;
+    }
+
+    public int getVelocidadePadrao() {
+        return velocidadePadrao;
     }
 
     public int getXInicial() {

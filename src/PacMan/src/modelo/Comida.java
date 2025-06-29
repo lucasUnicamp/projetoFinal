@@ -6,25 +6,20 @@ import main.PainelJogo;
 
 import java.awt.Color;
 
-public class Comida{
-    private int posicaoX;
-    private int posicaoY;
+public class Comida extends Comestivel{
 
-    public Comida(int x, int y, PainelJogo painelJogo) {
-        setX(x);
-        setY(y);
+    public Comida(PainelJogo painelJogo, int x, int y) {
+        super(painelJogo, x, y);
     }
 
     public void desenhar(Graphics2D g) {
+        int escala = getPainelJogo().getEscala();
         g.setColor(Color.WHITE);
-        g.fillOval(posicaoX, posicaoY, 10, 10);
+        g.fillOval(getX(), getY(), 5*escala, 5*escala);
     }
 
-    public void setX(int x) {
-        posicaoX = x;
-    }
-
-    public void setY(int y) {
-        posicaoY = y;
+    @Override
+    public char getRepresentacao() {
+        return '.';
     }
 }
