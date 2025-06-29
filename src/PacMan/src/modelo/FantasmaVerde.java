@@ -1,8 +1,6 @@
 package modelo;
 
 import interfaces.Elemento;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -98,7 +96,7 @@ public final class FantasmaVerde extends Fantasma{
             buscarPonto();
         }
         else{
-            menorCaminho(cantos.get(prox).getX(), cantos.get(prox).getY());
+            melhorCaminho(cantos.get(prox).getX(), cantos.get(prox).getY());
             setMetaCaminho(getCaminhoatual().size());
             buscarPonto();
         }
@@ -110,7 +108,7 @@ public final class FantasmaVerde extends Fantasma{
             funcaoPerseguicao();
         }
         else{
-            funcaoFuga();
+            funcaoMovimento(getPainelJogo().getPacMan().getX()/getPainelJogo().getTamanhoTile(), getPainelJogo().getPacMan().getY()/getPainelJogo().getTamanhoTile());
         }
     }
 

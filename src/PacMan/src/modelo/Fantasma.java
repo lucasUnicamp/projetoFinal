@@ -156,7 +156,7 @@ public abstract class Fantasma extends Entidade {
         return caminhoAtual;
     }
 
-    public void menorCaminho(int x, int y){
+    public void melhorCaminho(int x, int y){
         ArrayList<Ponto> visitados = new ArrayList<>();
         ArrayList<Ponto> abertos = new ArrayList<>();
 
@@ -268,7 +268,7 @@ public abstract class Fantasma extends Entidade {
     public void perder(){
         setEstadoPerseguicao(EstadoPerseguicao.MORTO);
         perdeu = true;
-        menorCaminho(getXInicial()/getPainelJogo().getTamanhoTile(), getYInicial()/getPainelJogo().getTamanhoTile());
+        melhorCaminho(getXInicial()/getPainelJogo().getTamanhoTile(), getYInicial()/getPainelJogo().getTamanhoTile());
         metaCaminho = caminhoAtual.size();
         
     }
@@ -284,45 +284,37 @@ public abstract class Fantasma extends Entidade {
         metaCaminho = 0;
     }
 
-    public void funcaoFuga(){
+    public void funcaoMovimento(int xm, int ym){
         //implementamos a fuga da mesma maneira que implementamos a busca: o mesmo algoritmo foi implementado
         //a diferenca eh que na busca o fantasma vermelho busca o menor caminho ate o pacman (perseguicao)
         //na fuga, por sua vez, o fantasma esta buscando o maior caminho ate o pacman, que atualizado repetidamente se assemelha a uma fuga
-        //coordenadas do pac man
-        int x = getPainelJogo().getPacMan().getX();
-        int y = getPainelJogo().getPacMan().getY();
+        //xm e ym sao coordenadas destino dos fantasmas
+    
         //coordenadas do fantasma na matriz
         int xf = getX()/getPainelJogo().getTamanhoTile();
         int yf = getY()/getPainelJogo().getTamanhoTile();
-        if(!perdeu){
-            //coordenadas do destino na matriz
-            int xm = x/getPainelJogo().getTamanhoTile();
-            int ym = y/getPainelJogo().getTamanhoTile();
-
-
-            //perseguir(x, y): caso o fantasma e seu destino nao estejam no mesmo ponto da matriz
-            if(xf != xm || yf != ym){
-                if(getCorrecoesPendentes() > 0){
-                    if(getDirecao().equals("direita"))
-                        setX(getX() + getVelocidade());
-                    else  if(getDirecao().equals("esquerda"))
-                        setX(getX() - getVelocidade());
-                    else if(getDirecao().equals("cima"))
-                        setY(getY() - getVelocidade());
-                    else if(getDirecao().equals("baixo"))
-                        setY(getY() + getVelocidade());
-                    setCorrecoesPendentes(getCorrecoesPendentes() - getVelocidade());
-                    if(getCorrecoesPendentes() <= 0){
-                        setX(xf * getPainelJogo().getTamanhoTile() + getPainelJogo().getTamanhoTile()/2);
-                        setY(yf * getPainelJogo().getTamanhoTile() + getPainelJogo().getTamanhoTile()/2);  
-                    }
-                    return;
+        //perseguir(x, y): caso o fantasma e seu destino nao estejam no mesmo ponto da matriz
+        if(xf != xm || yf != ym){
+            if(getCorrecoesPendentes() > 0){
+                if(getDirecao().equals("direita"))
+                    setX(getX() + getVelocidade());
+                else  if(getDirecao().equals("esquerda"))
+                    setX(getX() - getVelocidade());
+                else if(getDirecao().equals("cima"))
+                    setY(getY() - getVelocidade());
+                else if(getDirecao().equals("baixo"))
+                    setY(getY() + getVelocidade());
+                setCorrecoesPendentes(getCorrecoesPendentes() - getVelocidade());
+                if(getCorrecoesPendentes() <= 0){
+                    setX(xf * getPainelJogo().getTamanhoTile() + getPainelJogo().getTamanhoTile()/2);
+                    setY(yf * getPainelJogo().getTamanhoTile() + getPainelJogo().getTamanhoTile()/2);  
                 }
+                return;
             }
-            if(getMetaCaminho() == 0)
-                menorCaminho(xm, ym);
-            buscarPonto();
         }
+        if(getMetaCaminho() == 0)
+            melhorCaminho(xm, ym);
+        buscarPonto();
     }
 
     public void encerrarFuga(){
