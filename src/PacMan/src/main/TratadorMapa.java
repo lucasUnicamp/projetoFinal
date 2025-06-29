@@ -96,7 +96,6 @@ public class TratadorMapa implements Serializable{
         int largura, larguraUltima = 0;
         boolean comecouTunelHorizontal;
         boolean[] comecouTuneis = new boolean[maxLargura];
-        boolean[] temFantasmas = new boolean[4];
 
         System.out.println("Checando mapa...");
         try (Scanner scan = new Scanner(new FileReader(getMapaArquivo()))) {
@@ -140,8 +139,6 @@ public class TratadorMapa implements Serializable{
                         comecouTuneis[i] = true;
                     if ((!scan.hasNextLine() && comecouTuneis[i] && linha.charAt(i) != '<') || (!scan.hasNextLine() && !comecouTuneis[i] && linha.charAt(i) == '<'))
                         throw new ArquivoCorrompidoException(String.format("TÚNEL COMEÇADO MAS NÃO ACABADO NA COLUNA %d", i + 1));
-
-                    // IMPLEMENTAR CHEQUE PARA MÚLTIPLOS FANTASMAS DO MESMO TIPO 
                 }
                 larguraUltima = largura;
                 altura++;
