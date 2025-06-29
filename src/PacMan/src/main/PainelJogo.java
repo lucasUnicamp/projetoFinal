@@ -9,23 +9,22 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
-import java.awt.Toolkit;
 import java.util.ArrayList;
 import javax.swing.JComponent;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-import javax.tools.Tool;
 
 import menuPrincipal.PainelExterno;
 import modelo.Comestivel;
+import modelo.Comida;
 import modelo.EspacoVazio;
+import modelo.EstadoPerseguicao;
 import modelo.Fantasma;
 import modelo.FantasmaRosa;
 import modelo.FantasmaVerde;
 import modelo.FantasmaVermelho;
 import modelo.PacMan;
 import modelo.Parede;
+import modelo.SuperComida;
 import modelo.Tunel;
 
 public class PainelJogo extends JPanel implements Runnable {
@@ -42,6 +41,7 @@ public class PainelJogo extends JPanel implements Runnable {
     private int numeroMapaAtual = 0;
     private boolean pausado;
     private boolean vaiRecomecar, terminouTransicao = true;
+    private boolean estaPerseguindo = false;
     
     public Elemento[][] elementos;
     public ArrayList<Parede> paredes;
@@ -86,6 +86,7 @@ public class PainelJogo extends JPanel implements Runnable {
         double delta = 0;
         long ultimoTempo = System.nanoTime();
         long tempoAtual;
+        int framesPerseguicao = 0;
 
         delayComeco();
         
@@ -135,6 +136,12 @@ public class PainelJogo extends JPanel implements Runnable {
                     }
                 }
                 delta--;
+                if(estaPerseguindo && framesPerseguicao >= 30*FPS) {
+                    pararPerseguicao();
+                    framesPerseguicao = 0;
+                } else if(estaPerseguindo){
+                    framesPerseguicao++;
+                }
                 try{
                     Thread.sleep(1000/FPS);
                 } catch(InterruptedException e) {
@@ -240,11 +247,15 @@ public class PainelJogo extends JPanel implements Runnable {
 
                     case '.':     //comestiveis
                         // - 5 pois é o raio do comestível
-                        Comestivel comestivel = new Comestivel(this, j * tamanhoTile + tamanhoTile / 2 - 5, i * tamanhoTile + tamanhoTile / 2 - 5);
-                        comestiveis.add(comestivel);
-                        elementos[i][j] = comestivel;
+                        Comestivel comida = new Comida(this, j * tamanhoTile + tamanhoTile / 2 - 5, i * tamanhoTile + tamanhoTile / 2 - 5);
+                        comestiveis.add(comida);
+                        elementos[i][j] = comida;
                         break;
-                    
+                    case 'O':
+                        Comestivel supercomida = new SuperComida(this, j * tamanhoTile + tamanhoTile / 2 - 5, i * tamanhoTile + tamanhoTile / 2 - 5);
+                        comestiveis.add(supercomida);
+                        elementos[i][j] = supercomida;
+                        break;
                     case '<':
                         Tunel tunel = new Tunel(this, j, i);
                         elementos[i][j] = tunel;
@@ -297,13 +308,13 @@ public class PainelJogo extends JPanel implements Runnable {
         for (Fantasma fantasma : fantasmas) {
             // Tem que ver se o fantasma não está comestível, se tiver o pacman não deve morrer 
             if (Math.abs(getPacMan().getX() - fantasma.getX()) <= getTamanhoTile() && Math.abs(getPacMan().getY() - fantasma.getY()) <= getTamanhoTile()) {
-                // if (fantasma.getEstadoPerseguicao() == 0)
+                if (fantasma.getEstadoPerseguicao().getEstadoPerseguicao()) {
                     pacmanMorreu();
                     resetPosicoes();
                     setVaiRecomecar(true);
-            
-                //else
-                // pacman tem que comer o fantasma
+                } else if(fantasma.getEstadoPerseguicao() == EstadoPerseguicao.DISPERSO){
+                    fantasma.perder();
+                }
             }
         }
         pacman.atualizar();
@@ -327,6 +338,22 @@ public class PainelJogo extends JPanel implements Runnable {
             System.err.println("!!! ERRO NA INTERRUPÇÃO DA THREAD !!!");
         }
         setPausado(false);
+    }
+
+    public void ativaPerseguicao() {
+        for(Fantasma fantasma : fantasmas) {
+            if(fantasma.getEstadoPerseguicao() != EstadoPerseguicao.MORTO)
+                fantasma.acionarFuga();
+        }
+        estaPerseguindo = true;
+    }
+
+    public void pararPerseguicao() {
+        for(Fantasma fantasma : fantasmas) {
+            if(fantasma.getEstadoPerseguicao() != EstadoPerseguicao.MORTO)
+                fantasma.encerrarFuga();
+        }
+        estaPerseguindo = false;
     }
 
     // desenha tudo na tela

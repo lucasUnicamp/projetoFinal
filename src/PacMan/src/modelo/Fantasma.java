@@ -2,6 +2,7 @@ package modelo;
 
 import interfaces.Elemento;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -13,6 +14,7 @@ public abstract class Fantasma extends Entidade {
     private int metaCaminho;
     private transient ArrayList<Ponto> caminhoAtual;
     private int correcoesPendentes;
+    BufferedImage imagemFantasma, imagemFugindo, imagemOlhos;
 
     // 'comestivel' para quando o pacman comer uma super fruta; talvez fazer com que o pacman mude uma variável do painelJogo e o fantasma acesse ela  
     private boolean comestivel;
@@ -22,9 +24,10 @@ public abstract class Fantasma extends Entidade {
         correcoesPendentes = 0;
         caminhoAtual = new ArrayList<>();
         metaCaminho = 0;
-        perseguicao = EstadoPerseguicao.DISPERSO;
+        perseguicao = EstadoPerseguicao.PERSEGUINDO;
         perdeu = false;
         setVelocidade((60 * getPainelJogo().getEscala()) / getPainelJogo().getFPS()); 
+        setVelocidadePadrao(getVelocidade());
     }
 
     public Fantasma(PainelJogo painel, int x, int y, int velocidade, String direcao) {
@@ -32,15 +35,15 @@ public abstract class Fantasma extends Entidade {
         correcoesPendentes = 0;
         caminhoAtual = new ArrayList<>();
         metaCaminho = 0;
-        perseguicao = EstadoPerseguicao.DISPERSO;
+        perseguicao = EstadoPerseguicao.PERSEGUINDO;
     }
 
     public int getMetaCaminho(){
         return metaCaminho;
     }
 
-    public boolean getEstadoPerseguicao(){
-        return perseguicao.getEstadoPerseguicao();
+    public EstadoPerseguicao getEstadoPerseguicao(){
+        return perseguicao;
     }
 
     public int getCorrecoesPendentes(){
@@ -51,7 +54,21 @@ public abstract class Fantasma extends Entidade {
         correcoesPendentes = x;
     }
 
-    public abstract void desenhar(Graphics2D caneta);
+    public void desenhar(Graphics2D caneta) {
+        BufferedImage imagem = imagemFantasma;
+        switch (getEstadoPerseguicao()) {
+            case PERSEGUINDO:
+                imagem = imagemFantasma;
+                break;
+            case DISPERSO:
+                imagem = imagemFugindo;
+                break;
+            case MORTO:
+                imagem = imagemOlhos;
+                break;
+        }
+        caneta.drawImage(imagem, getX()  - (getPainelJogo().getTamanhoTile())/2, getY() - (getPainelJogo().getTamanhoTile())/2, getPainelJogo().getTamanhoTile(), getPainelJogo().getTamanhoTile(), null);
+    };
 
     public int calculaDistancia(int x1, int y1, int x2, int y2){
         //retorna o valor numerico da distancia entre dois pontos caso fosse possivel executar o percurso sem colisao
@@ -127,7 +144,7 @@ public abstract class Fantasma extends Entidade {
                 adicionarPonto(busca, atual, x1 - 1, y1, distanciaesquerda);
             }
         } catch (IndexOutOfBoundsException e){}
-        Collections.sort(busca, Comparator.comparingInt(ponto -> ponto.getHeuristica(this.perseguicao.getEstadoPerseguicao())));
+        Collections.sort(busca, Comparator.comparingInt(ponto -> ponto.getHeuristica(this.getEstadoPerseguicao().ehHeuristicaNegativa())));
     }
 
     public void montarCaminho(Ponto destino){
@@ -151,7 +168,7 @@ public abstract class Fantasma extends Entidade {
 
 
         while(!abertos.isEmpty()){
-            Collections.sort(abertos, Comparator.comparingInt(ponto -> ponto.getHeuristica(this.perseguicao.getEstadoPerseguicao())));
+            Collections.sort(abertos, Comparator.comparingInt(ponto -> ponto.getHeuristica(this.getEstadoPerseguicao().ehHeuristicaNegativa())));
 
             Ponto atual = abertos.get(0);
             visitados.add(atual);
@@ -252,7 +269,7 @@ public abstract class Fantasma extends Entidade {
     }
 
     public void perder(){
-        perseguicao = EstadoPerseguicao.PERSEGUINDO;
+        setEstadoPerseguicao(EstadoPerseguicao.MORTO);
         perdeu = true;
         setVelocidade((100 * getPainelJogo().getEscala()) / getPainelJogo().getFPS());
         menorCaminho(getXInicial()/getPainelJogo().getTamanhoTile(), getYInicial()/getPainelJogo().getTamanhoTile());
@@ -260,12 +277,12 @@ public abstract class Fantasma extends Entidade {
     }
 
     public void acionarFuga(){
-        perseguicao = EstadoPerseguicao.DISPERSO;
+        setEstadoPerseguicao(EstadoPerseguicao.DISPERSO);
         metaCaminho = 0;
     }
 
     public void encerrarFuga(){
-        perseguicao = EstadoPerseguicao.PERSEGUINDO;
+        setEstadoPerseguicao(EstadoPerseguicao.PERSEGUINDO);
         metaCaminho = 0;
     }
 
@@ -294,5 +311,19 @@ public abstract class Fantasma extends Entidade {
 
     public abstract void getImagem();
 
-    
+    public void setEstadoPerseguicao(EstadoPerseguicao estado) {
+        switch (estado) {
+            case PERSEGUINDO:
+                setVelocidade(getVelocidadePadrao());
+                break;
+            case DISPERSO:
+                setVelocidade(getVelocidadePadrao());
+                break;
+            case MORTO:
+                setVelocidade(2*getVelocidadePadrao());
+            default:
+                break;
+        }
+        perseguicao = estado;
+    }
 }
