@@ -40,7 +40,8 @@ public class PainelJogo extends JPanel implements Runnable {
     private int pontuacao;
     private int numeroMapaAtual = 0;
     private boolean pausado;
-    private boolean vaiRecomecar, terminouTransicao = true, gameOver = false;
+    private boolean vaiRecomecar, terminouTransicaoFase = true;
+    private boolean gameOver = false, vaiGameOver, terminouTransicaoGameOver = true;
     private boolean estaPerseguindo = false;
     
     public Elemento[][] elementos;
@@ -91,12 +92,9 @@ public class PainelJogo extends JPanel implements Runnable {
         delayComeco();
         
         while (gameThread != null && !gameThread.isInterrupted()) { // loop principal do jogo
-            if (gameOver) {
-                voltarMenuSemSalvar();
-            }
             // Quando morre, muda o 'vaiRecomecar' para 'true', assim consegue colocar o delay do começo
-            // como primeira ação 
-            if (vaiRecomecar && terminouTransicao) {
+            // como primeira ação. Cheque de 'gameOver' para não ter erro de interrupção na Thread
+            if (vaiRecomecar && terminouTransicaoFase && !gameOver) {
                 delayComeco();
                 setVaiRecomecar(false);
             }
@@ -110,16 +108,21 @@ public class PainelJogo extends JPanel implements Runnable {
                 if(!estaPausado()) {
                     atualizar();
                     repaint();
-
                     if (pacman.getVidas() <= 0) {
                         setPausado(true);
-                        setVaiRecomecar(true);
                         gameOver = true;
+
                         mostrarTransicao("GAME OVER", () -> {
-                           
+                            voltarMenuSemSalvar();
+                            terminouTransicaoGameOver = false;
+                            vaiGameOver = true;
+                            mostrarTransicao("Saindo...", () -> {
+                                setPausado(false);
+                                terminouTransicaoGameOver = true;
+                            });
                         });
                     }
-                    
+
 
                     if (comestiveis.isEmpty()) {
                         setPausado(true);
@@ -132,12 +135,12 @@ public class PainelJogo extends JPanel implements Runnable {
                                 novoJogo(proximoMapa);
                                 // Esse label que faz com que o mapa apareça na posição certa durante o load
                                 painelExterno.setTextoLabelComeco(String.format("Preparando..."));
-                                terminouTransicao = false;
+                                terminouTransicaoFase = false;
                                 setVaiRecomecar(true);
                                 // Segunda transição para o fade out
                                 mostrarTransicao("Carregando próximo mapa...", () -> {
                                     setPausado(false);
-                                    terminouTransicao = true;
+                                    terminouTransicaoFase = true;
                                 });
                             });
                         } else {
@@ -156,7 +159,7 @@ public class PainelJogo extends JPanel implements Runnable {
                 }
                 
                 delta--;
-                try{
+                try {
                     Thread.sleep(1000/FPS);
                 } catch(InterruptedException e) {
                     Thread.currentThread().interrupt();
@@ -176,11 +179,17 @@ public class PainelJogo extends JPanel implements Runnable {
         painelVidro.setLayout(new BorderLayout());
         painelVidro.add(transicao, BorderLayout.CENTER);
         painelVidro.setVisible(true);
-        
+
         if (gameOver) {
-            transicao.setOpacidade(0f);
-            transicao.iniciar();
-        }
+            if (!vaiGameOver) {
+                transicao.setOpacidade(0f);
+                transicao.iniciar();
+            }
+            else {
+                transicao.setOpacidade(1f);
+                transicao.finalizar();
+            }
+        } else {
         // Jogo registra que deve recomeçar apenas após o fade in, então começa fazendo o fade in
         if (!vaiRecomecar) {
             transicao.setOpacidade(0f);
@@ -190,6 +199,7 @@ public class PainelJogo extends JPanel implements Runnable {
             transicao.setOpacidade(1f);
             transicao.finalizar();
         }
+    }
 }
 
     /**
@@ -208,7 +218,7 @@ public class PainelJogo extends JPanel implements Runnable {
             Thread.sleep(30000/FPS);
             painelExterno.setTextoLabelComeco(String.format("Mapa %s", getNumeroMapaAtual()));
         } catch (InterruptedException erro) {
-            System.err.println("!!! ERRO NA INTERRUPÇÃO DA THREAD !!!");
+            System.err.println("!!! ERRO NA INTERRUPÇÃO DA THREAD DELAY COMECO !!!");
         }
         setPausado(false);
     }
@@ -334,8 +344,13 @@ public class PainelJogo extends JPanel implements Runnable {
             if (Math.abs(getPacMan().getX() - fantasma.getX()) <= getTamanhoTile() && Math.abs(getPacMan().getY() - fantasma.getY()) <= getTamanhoTile()) {
                 if (fantasma.getEstadoPerseguicao().getEstadoPerseguicao()) {
                     pacmanMorreu();
-                    resetPosicoes();
-                    setVaiRecomecar(true);
+                    // Se é a última vida do pacman, não quero que as posições sejam resetadas pois ficaria estranhao
+                    if (pacman.getVidas() > 0) {
+                        resetPosicoes();
+                        setVaiRecomecar(true);
+                    } else {
+                        setPausado(true);
+                    }
                 } else if (fantasma.getEstadoPerseguicao() == EstadoPerseguicao.DISPERSO){
                     fantasma.perder();
                 }
@@ -483,8 +498,8 @@ public class PainelJogo extends JPanel implements Runnable {
         numeroMapaAtual = num;
     }
     
-    public void setTerminouTransicao(boolean b) {
-        terminouTransicao = b;
+    public void setTerminouTransicaoFase(boolean b) {
+        terminouTransicaoFase = b;
     }
 
     public void setTratadorMapa(TratadorMapa tratadorMapa) {
@@ -541,8 +556,8 @@ public class PainelJogo extends JPanel implements Runnable {
         return numeroMapaAtual;
     }
 
-    public boolean getTerminouTransicao() {
-        return terminouTransicao;
+    public boolean getTerminouTransicaoFase() {
+        return terminouTransicaoFase;
     }
 
     public int getFPS() {
