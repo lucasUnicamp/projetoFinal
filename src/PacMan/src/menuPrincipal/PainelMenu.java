@@ -99,6 +99,7 @@ public class PainelMenu extends JPanel implements ActionListener{
     
             AudioInputStream decodedStream = AudioSystem.getAudioInputStream(decodedFormat, originalStream);
             clip.open(decodedStream);
+            clip.start();
             clip.loop(Clip.LOOP_CONTINUOUSLY);
     
             System.out.println("Música carregada e tocando!");

@@ -271,7 +271,6 @@ public abstract class Fantasma extends Entidade {
     public void perder(){
         setEstadoPerseguicao(EstadoPerseguicao.MORTO);
         perdeu = true;
-        setVelocidade((100 * getPainelJogo().getEscala()) / getPainelJogo().getFPS());
         menorCaminho(getXInicial()/getPainelJogo().getTamanhoTile(), getYInicial()/getPainelJogo().getTamanhoTile());
         metaCaminho = caminhoAtual.size();
     }
