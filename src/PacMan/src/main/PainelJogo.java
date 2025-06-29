@@ -40,7 +40,7 @@ public class PainelJogo extends JPanel implements Runnable {
     private int pontuacao;
     private int numeroMapaAtual = 0;
     private boolean pausado;
-    private boolean vaiRecomecar, terminouTransicao = true;
+    private boolean vaiRecomecar, terminouTransicao = true, gameOver = false;
     private boolean estaPerseguindo = false;
     
     public Elemento[][] elementos;
@@ -91,6 +91,9 @@ public class PainelJogo extends JPanel implements Runnable {
         delayComeco();
         
         while (gameThread != null && !gameThread.isInterrupted()) { // loop principal do jogo
+            if (gameOver) {
+                voltarMenuSemSalvar();
+            }
             // Quando morre, muda o 'vaiRecomecar' para 'true', assim consegue colocar o delay do começo
             // como primeira ação 
             if (vaiRecomecar && terminouTransicao) {
@@ -107,6 +110,15 @@ public class PainelJogo extends JPanel implements Runnable {
                 if(!estaPausado()) {
                     atualizar();
                     repaint();
+
+                    if (pacman.getVidas() <= 0) {
+                        setPausado(true);
+                        setVaiRecomecar(true);
+                        gameOver = true;
+                        mostrarTransicao("GAME OVER", () -> {
+                           
+                        });
+                    }
                     
 
                     if (comestiveis.isEmpty()) {
@@ -129,19 +141,21 @@ public class PainelJogo extends JPanel implements Runnable {
                                 });
                             });
                         } else {
-                            mostrarTransicao("Parabéns, Você venceu!", () -> {
-                                voltarMenu();
+                            mostrarTransicao("Parabéns, você venceu!", () -> {
+                                voltarMenuSemSalvar();
                             });
                         }
                     }
                 }
-                delta--;
-                if(estaPerseguindo && framesPerseguicao >= 30*FPS) {
+                
+                if (estaPerseguindo && framesPerseguicao >= 30*FPS) {
                     pararPerseguicao();
                     framesPerseguicao = 0;
-                } else if(estaPerseguindo){
+                } else if (estaPerseguindo){
                     framesPerseguicao++;
                 }
+                
+                delta--;
                 try{
                     Thread.sleep(1000/FPS);
                 } catch(InterruptedException e) {
@@ -157,11 +171,16 @@ public class PainelJogo extends JPanel implements Runnable {
             painelVidro.setVisible(false); // esconde a transição
             proximaAcao.run();             // executa o que vier depois
         });
-
+        
         painelVidro.removeAll();
         painelVidro.setLayout(new BorderLayout());
         painelVidro.add(transicao, BorderLayout.CENTER);
         painelVidro.setVisible(true);
+        
+        if (gameOver) {
+            transicao.setOpacidade(0f);
+            transicao.iniciar();
+        }
         // Jogo registra que deve recomeçar apenas após o fade in, então começa fazendo o fade in
         if (!vaiRecomecar) {
             transicao.setOpacidade(0f);
@@ -195,7 +214,6 @@ public class PainelJogo extends JPanel implements Runnable {
     }
 
     public void carregarJogo() {
-
         pacman = new PacMan(this, leitor);
         fantasmas = new ArrayList<>();
         comestiveis = new ArrayList<>();
@@ -229,6 +247,12 @@ public class PainelJogo extends JPanel implements Runnable {
 
     public void voltarMenu() {
         salvarJogo();
+        painelVidro.setVisible(false);
+        ((CardLayout) cards.getLayout()).show(cards, "painelMenu");
+        getThread().interrupt();
+    }
+
+    public void voltarMenuSemSalvar() {
         painelVidro.setVisible(false);
         ((CardLayout) cards.getLayout()).show(cards, "painelMenu");
         getThread().interrupt();
@@ -312,7 +336,7 @@ public class PainelJogo extends JPanel implements Runnable {
                     pacmanMorreu();
                     resetPosicoes();
                     setVaiRecomecar(true);
-                } else if(fantasma.getEstadoPerseguicao() == EstadoPerseguicao.DISPERSO){
+                } else if (fantasma.getEstadoPerseguicao() == EstadoPerseguicao.DISPERSO){
                     fantasma.perder();
                 }
             }

@@ -16,9 +16,6 @@ public abstract class Fantasma extends Entidade {
     private int correcoesPendentes;
     BufferedImage imagemFantasma, imagemFugindo, imagemOlhos;
 
-    // 'comestivel' para quando o pacman comer uma super fruta; talvez fazer com que o pacman mude uma variável do painelJogo e o fantasma acesse ela  
-    private boolean comestivel;
-
     public Fantasma(PainelJogo painel) {
         super(painel);
         correcoesPendentes = 0;
@@ -273,6 +270,7 @@ public abstract class Fantasma extends Entidade {
         perdeu = true;
         menorCaminho(getXInicial()/getPainelJogo().getTamanhoTile(), getYInicial()/getPainelJogo().getTamanhoTile());
         metaCaminho = caminhoAtual.size();
+        
     }
 
     public void acionarFuga(){
