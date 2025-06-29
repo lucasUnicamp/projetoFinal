@@ -37,7 +37,7 @@ public class PainelJogo extends JPanel implements Runnable {
     private int larguraTela; // largura em pixels do painel
     private int alturaTela; // altura em pixels do painel
 
-    private int vidasPacMan, pontuacao, pontuacaoAux, contadorFrame;
+    private int vidasPacMan, pontuacao, pontuacaoAux, frameTimerOneUP, framePerseguicao;
     private int numeroMapaAtual = 0;
     private boolean estaEmJogo = false, pausado = false;
     private boolean vaiRecomecar = false, terminouTransicaoFase = true;
@@ -162,14 +162,7 @@ public class PainelJogo extends JPanel implements Runnable {
                         }
                     }
                 }
-                
-                if (estaPerseguindo && framesPerseguicao >= 30*FPS) {
-                    pararPerseguicao();
-                    framesPerseguicao = 0;
-                } else if (estaPerseguindo){
-                    framesPerseguicao++;
-                }
-                
+         
                 delta--;
                 try {
                     Thread.sleep(1000/FPS);
@@ -373,9 +366,17 @@ public class PainelJogo extends JPanel implements Runnable {
                 }
             }
         }
+
+        if (estaPerseguindo && framePerseguicao <= 0) {
+            pararPerseguicao();
+            framePerseguicao = 7*FPS;
+        } else if (estaPerseguindo){
+            framePerseguicao--;
+            painelExterno.setTextoLabelCanto(String.format("Super Fruta por %d", framePerseguicao/FPS + 1));
+        }
     
         pacman.atualizar();
-        //OneUP();
+        OneUP();
         for (Fantasma fantasma : fantasmas) {
             fantasma.executarfuncao();
         }
@@ -389,17 +390,17 @@ public class PainelJogo extends JPanel implements Runnable {
             if (timer == null) {
                 timer = new Timer(100, e -> {
                     painelExterno.setTextoLabelPontos(String.format("1 UP!"));       
-                    contadorFrame++;
-                    System.out.println(contadorFrame);
-                    if (contadorFrame >= 10) {
-                        contadorFrame = 0;
+                    frameTimerOneUP++;
+                    System.out.println(frameTimerOneUP);
+                    if (frameTimerOneUP >= 10) {
+                        frameTimerOneUP = 0;
                         timer.stop();
                     }
                 });
             }
             // Timer para mostrar '1 UP!' no label do canto por alguns segundos
             timer.start();
-            System.out.println(contadorFrame);
+            System.out.println(frameTimerOneUP);
             int total = getPontuacaoAux() / 1000;       // Quantas vidas ele deve ganhar naquele frame (provavelmente vai ser sempre 1)
             pacman.ganharVida(total);
             setPontuacaoAux(getPontuacaoAux() - 1000 * total);      // Caso ganhe mais do que exatamente 1000 pontos, guarda o excesso
@@ -424,11 +425,11 @@ public class PainelJogo extends JPanel implements Runnable {
     }
 
     public void ativaPerseguicao() {
+        framePerseguicao = 7*FPS;
         for(Fantasma fantasma : fantasmas) {
             if(fantasma.getEstadoPerseguicao() != EstadoPerseguicao.MORTO)
                 fantasma.acionarFuga();
         }
-        painelExterno.setTextoLabelCanto(String.format("Super Fruta!"));
         estaPerseguindo = true;
         framesPerseguicao = 0;
     }
@@ -463,7 +464,7 @@ public class PainelJogo extends JPanel implements Runnable {
             caneta.drawImage(pacman.getImagemRepouso(), getLargura() - mult*escala, getAltura() - 10*escala - 5, getTamanhoTile()/2, getTamanhoTile()/2, null);
         }
         
-        if (contadorFrame == 0)
+        if (frameTimerOneUP == 0)
             painelExterno.setTextoLabelPontos(String.format("Pontuação: %d", getPontuacao()));
         
         caneta.dispose();
