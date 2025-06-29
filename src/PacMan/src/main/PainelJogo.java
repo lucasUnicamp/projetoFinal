@@ -43,7 +43,6 @@ public class PainelJogo extends JPanel implements Runnable {
     private boolean vaiRecomecar = false, terminouTransicaoFase = true;
     private boolean gameOver = false, vaiGameOver = false;
     private boolean estaPerseguindo = false;
-    int framesPerseguicao = 0;
     private Timer timer;
     
     public Elemento[][] elementos;
@@ -371,7 +370,7 @@ public class PainelJogo extends JPanel implements Runnable {
             pararPerseguicao();
             framePerseguicao = 7*FPS;
             painelExterno.setTextoLabelCanto(String.format("Mapa %d", getNumeroMapaAtual()));
-        } else if (estaPerseguindo && !pacman.getEstaMorto()){
+        } else if (estaPerseguindo){
             framePerseguicao--;
             painelExterno.setTextoLabelCanto(String.format("Super Fruta por %d", framePerseguicao/FPS + 1));
         }
@@ -392,7 +391,6 @@ public class PainelJogo extends JPanel implements Runnable {
                 timer = new Timer(100, e -> {
                     painelExterno.setTextoLabelPontos(String.format("1 UP!"));       
                     frameTimerOneUP++;
-                    System.out.println(frameTimerOneUP);
                     if (frameTimerOneUP >= 10) {
                         frameTimerOneUP = 0;
                         timer.stop();
@@ -400,8 +398,7 @@ public class PainelJogo extends JPanel implements Runnable {
                 });
             }
             // Timer para mostrar '1 UP!' no label do canto por alguns segundos
-            timer.start();
-            System.out.println(frameTimerOneUP);
+            timer.start();  
             int total = getPontuacaoAux() / 1000;       // Quantas vidas ele deve ganhar naquele frame (provavelmente vai ser sempre 1)
             pacman.ganharVida(total);
             setPontuacaoAux(getPontuacaoAux() - 1000 * total);      // Caso ganhe mais do que exatamente 1000 pontos, guarda o excesso
@@ -432,13 +429,13 @@ public class PainelJogo extends JPanel implements Runnable {
                 fantasma.acionarFuga();
         }
         estaPerseguindo = true;
-        framesPerseguicao = 0;
     }
 
     public void pararPerseguicao() {
+    
         for(Fantasma fantasma : fantasmas) {
             if(fantasma.getEstadoPerseguicao() != EstadoPerseguicao.MORTO)
-                fantasma.encerrarFuga();
+                fantasma.forcarEncerrarFuga();
         }
         estaPerseguindo = false;
     }

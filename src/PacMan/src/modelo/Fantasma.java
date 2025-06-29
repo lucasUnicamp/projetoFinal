@@ -6,6 +6,8 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import javax.swing.Timer;
+
 import main.PainelJogo;
 
 public abstract class Fantasma extends Entidade {
@@ -13,6 +15,8 @@ public abstract class Fantasma extends Entidade {
     private int metaCaminho;
     private transient ArrayList<Ponto> caminhoAtual;
     private int correcoesPendentes;
+    private Timer timerParar;
+    private int frame = 0;
     BufferedImage imagemFantasma, imagemFugindo, imagemOlhos;
 
     public Fantasma(PainelJogo painel) {
@@ -327,6 +331,23 @@ public abstract class Fantasma extends Entidade {
     }
 
     public void encerrarFuga(){
+        if (timerParar == null) {
+            timerParar = new Timer(100, e -> {
+                frame++;
+                System.out.println(frame);
+                if (frame >= 5) {
+                    setEstadoPerseguicao(EstadoPerseguicao.PERSEGUINDO);
+                    metaCaminho = 0;
+                    frame = 0;
+                    timerParar.stop();
+                }
+            });
+        }
+        
+        timerParar.start();
+    }
+
+    public void forcarEncerrarFuga() {
         setEstadoPerseguicao(EstadoPerseguicao.PERSEGUINDO);
         metaCaminho = 0;
     }
