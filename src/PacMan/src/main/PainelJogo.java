@@ -299,11 +299,13 @@ public class PainelJogo extends JPanel implements Runnable {
                         comestiveis.add(comida);
                         elementos[i][j] = comida;
                         break;
+
                     case 'O':
-                        Comestivel supercomida = new SuperComida(this, j * tamanhoTile + tamanhoTile / 2 - 5, i * tamanhoTile + tamanhoTile / 2 - 5);
+                        Comestivel supercomida = new SuperComida(this, j * tamanhoTile + tamanhoTile / 2 - 8, i * tamanhoTile + tamanhoTile / 2 - 8);
                         comestiveis.add(supercomida);
                         elementos[i][j] = supercomida;
                         break;
+
                     case '<':
                         Tunel tunel = new Tunel(this, j, i);
                         elementos[i][j] = tunel;
@@ -377,7 +379,6 @@ public class PainelJogo extends JPanel implements Runnable {
         for (Fantasma fantasma : fantasmas) {
             fantasma.executarfuncao();
         }
-        
     }
 
     /**
@@ -405,7 +406,6 @@ public class PainelJogo extends JPanel implements Runnable {
         }
     }
 
-
     /**
      * Método para criar um delay e atualizar o estado do pacman após levar dano 
      */
@@ -428,6 +428,7 @@ public class PainelJogo extends JPanel implements Runnable {
             if(fantasma.getEstadoPerseguicao() != EstadoPerseguicao.MORTO)
                 fantasma.acionarFuga();
         }
+        painelExterno.setTextoLabelCanto(String.format("Super Fruta!"));
         estaPerseguindo = true;
     }
 
@@ -436,6 +437,7 @@ public class PainelJogo extends JPanel implements Runnable {
             if(fantasma.getEstadoPerseguicao() != EstadoPerseguicao.MORTO)
                 fantasma.encerrarFuga();
         }
+        painelExterno.setTextoLabelCanto(String.format("Mapa %d", getNumeroMapaAtual()));
         estaPerseguindo = false;
     }
 

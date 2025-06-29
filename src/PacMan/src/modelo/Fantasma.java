@@ -358,7 +358,7 @@ public abstract class Fantasma extends Entidade {
                 setVelocidade(getVelocidadePadrao());
                 break;
             case DISPERSO:
-                setVelocidade(getVelocidadePadrao());
+                setVelocidade((int)(getVelocidadePadrao() * 0.8));
                 break;
             case MORTO:
                 setVelocidade(2*getVelocidadePadrao());
