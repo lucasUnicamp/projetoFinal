@@ -6,18 +6,18 @@ public enum EstadoPerseguicao {
     MORTO(false, true);
 
     private boolean estaPerseguindo;
-    private boolean heuristicaNegativa;
+    private boolean heuristicaPositiva;
 
-    private EstadoPerseguicao(boolean estaPerseguindo, boolean heuristicaNegativa) {
+    private EstadoPerseguicao(boolean estaPerseguindo, boolean heuristicaPositiva) {
         this.estaPerseguindo = estaPerseguindo;
-        this.heuristicaNegativa = heuristicaNegativa;
+        this.heuristicaPositiva = heuristicaPositiva;
     }
 
     public boolean getEstadoPerseguicao() {
         return this.estaPerseguindo;
     }
 
-    public boolean ehHeuristicaNegativa() {
-        return this.heuristicaNegativa;
+    public boolean ehHeuristicaPositiva() {
+        return this.heuristicaPositiva;
     }
 }

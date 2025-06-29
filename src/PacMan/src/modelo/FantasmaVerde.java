@@ -104,11 +104,13 @@ public final class FantasmaVerde extends Fantasma{
 
     @Override
     public void executarfuncao(){
-        if(getEstadoPerseguicao().getEstadoPerseguicao()){
+        if(getEstadoPerseguicao() == EstadoPerseguicao.PERSEGUINDO){
             funcaoPerseguicao();
         }
-        else{
+        else if (getEstadoPerseguicao() == EstadoPerseguicao.DISPERSO){
             funcaoMovimento(getPainelJogo().getPacMan().getX()/getPainelJogo().getTamanhoTile(), getPainelJogo().getPacMan().getY()/getPainelJogo().getTamanhoTile());
+        } else if(getEstadoPerseguicao() == EstadoPerseguicao.MORTO) {
+            funcaoMovimento(getXInicial()/getPainelJogo().getTamanhoTile(), getYInicial()/getPainelJogo().getTamanhoTile());
         }
     }
 
