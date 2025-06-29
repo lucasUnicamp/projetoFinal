@@ -37,10 +37,11 @@ public class PainelJogo extends JPanel implements Runnable {
     private int numeroLinhas; // numero de colunas de tiles
     private int larguraTela; // largura em pixels do painel
     private int alturaTela; // altura em pixels do painel
-    private boolean vaiRecomecar, terminouTransicao = true;
 
     private int pontuacao;
+    private int numeroMapaAtual = 0;
     private boolean pausado;
+    private boolean vaiRecomecar, terminouTransicao = true;
     
     public Elemento[][] elementos;
     public ArrayList<Parede> paredes;
@@ -112,10 +113,12 @@ public class PainelJogo extends JPanel implements Runnable {
                         int proximoMapa = tratadorMapa.getMapaEscolhido() + 1;
 
                         if (proximoMapa <= getTratadorMapa().getNumeroMapas()) {
+                            setNumeroMapaAtual(getNumeroMapaAtual() + 1);
                             // Primeira transição para o fade in
                             mostrarTransicao("Fase Concluída!", () -> {
-                                terminouTransicao = false;
                                 novoJogo(proximoMapa);
+                                painelExterno.setTextoLabelComeco(String.format("Preparando..."));
+                                terminouTransicao = false;
                                 setVaiRecomecar(true);
                                 // Segunda transição para o fade out
                                 mostrarTransicao("Carregando próximo mapa...", () -> {
@@ -123,7 +126,6 @@ public class PainelJogo extends JPanel implements Runnable {
                                     terminouTransicao = true;
                                 });
                             });
-                            
                         } else {
                             mostrarTransicao("Parabéns, Você venceu!", () -> {
                                 voltarMenu();
@@ -138,8 +140,6 @@ public class PainelJogo extends JPanel implements Runnable {
                     Thread.currentThread().interrupt();
                 }
             }
-        
-        //feito por joao pedro frare, que é burro, pode ser que esteja errado...
         }
     }
 
@@ -179,7 +179,7 @@ public class PainelJogo extends JPanel implements Runnable {
             Thread.sleep(30000/FPS);
             painelExterno.setTextoLabelComeco(String.format("1..."));
             Thread.sleep(30000/FPS);
-            painelExterno.setTextoLabelComeco(String.format("Mapa %s", getTratadorMapa().getNumMapa()));
+            painelExterno.setTextoLabelComeco(String.format("Mapa %s", getNumeroMapaAtual()));
         } catch (InterruptedException erro) {
             System.err.println("!!! ERRO NA INTERRUPÇÃO DA THREAD !!!");
         }
@@ -349,7 +349,6 @@ public class PainelJogo extends JPanel implements Runnable {
         this.carregarElementos();
     }
 
-    
 
     public void resetPosicoes() {
         pacman.irPosicaoInicial();
@@ -385,6 +384,14 @@ public class PainelJogo extends JPanel implements Runnable {
 
     public void setNumeroColunas(int colunas) {
         numeroColunas = colunas;
+    }
+
+    public void setNumeroMapaAtual(int num) {
+        numeroMapaAtual = num;
+    }
+    
+    public void setTerminouTransicao(boolean b) {
+        terminouTransicao = b;
     }
 
     public void setTratadorMapa(TratadorMapa tratadorMapa) {
@@ -435,6 +442,14 @@ public class PainelJogo extends JPanel implements Runnable {
 
     public int getPontuacao() {
         return pontuacao;
+    }
+
+    public int getNumeroMapaAtual() {
+        return numeroMapaAtual;
+    }
+
+    public boolean getTerminouTransicao() {
+        return terminouTransicao;
     }
 
     public int getFPS() {
