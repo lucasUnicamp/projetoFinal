@@ -330,6 +330,10 @@ public abstract class Fantasma extends Entidade {
         }
     }
 
+    /**
+     * Muda o estado do Fantasma de volta para Perseguindo com um delay. Esse delay serve para
+     * o fantasma não renascer imediatamente depois de voltar ao spawn
+     */
     public void encerrarFuga(){
         if (timerParar == null) {
             timerParar = new Timer(100, e -> {
@@ -347,6 +351,10 @@ public abstract class Fantasma extends Entidade {
         timerParar.start();
     }
 
+    /**
+     * Também muda o estados do Fantasma de volta par Perseguido, mas sem o delay. Serve para
+     * quando Pac-Man morre enquanto outros fantasmas estão fugindo
+     */
     public void forcarEncerrarFuga() {
         setEstadoPerseguicao(EstadoPerseguicao.PERSEGUINDO);
         metaCaminho = 0;
