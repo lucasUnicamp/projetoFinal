@@ -2,8 +2,6 @@ package modelo;
 
 import java.io.Serializable;
 
-import javax.xml.xpath.XPathFactoryConfigurationException;
-
 import interfaces.Elemento;
 import main.PainelJogo;
 
