@@ -15,7 +15,7 @@ import main.PainelJogo;
 public class PacMan extends Entidade{
     private int estadoBoca; // boca aberta ou fechada
     private int contadorSprite; // usado para saber quando mudar o sprite (animação)
-    private transient BufferedImage cima, baixo, esquerda, direita, repouso, frameMorte;
+    private transient BufferedImage cima, baixo, esquerda, direita, repouso;
     private String direcaoDesejada;
     private Boolean morreu;
 
@@ -176,16 +176,6 @@ public class PacMan extends Entidade{
 
         } catch (IOException e) {
             System.err.println("!!! ERRO NA IMPORTAÇÃO DOS SPRITES DO PACMAN !!!");
-        }
-    }
-
-    public void setFrameAnimacao(int frame) {
-        String numero = Integer.toString(frame) + ".png";
-
-        try {
-            frameMorte = ImageIO.read(new File(Paths.get("resources", "imagens", "pacmanMorte", numero).toString())); 
-        } catch (IOException e) {
-            System.err.println("!!! ERRO NA IMPORTAÇÃO DOS SPRITES DE MORTE DO PACMAN !!!");
         }
     }
 
