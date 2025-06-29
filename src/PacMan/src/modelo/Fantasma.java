@@ -10,7 +10,6 @@ import main.PainelJogo;
 
 public abstract class Fantasma extends Entidade {
     private EstadoPerseguicao perseguicao; // 1 se o fantasma estiver perseguindo o pacman e 0 caso esteja no modo dispersando
-    private boolean perdeu;
     private int metaCaminho;
     private transient ArrayList<Ponto> caminhoAtual;
     private int correcoesPendentes;
@@ -22,7 +21,6 @@ public abstract class Fantasma extends Entidade {
         caminhoAtual = new ArrayList<>();
         metaCaminho = 0;
         perseguicao = EstadoPerseguicao.PERSEGUINDO;
-        perdeu = false;
         setVelocidade((60 * getPainelJogo().getEscala()) / getPainelJogo().getFPS()); 
         setVelocidadePadrao(getVelocidade());
     }
@@ -287,14 +285,12 @@ public abstract class Fantasma extends Entidade {
 
     public void perder(){
         setEstadoPerseguicao(EstadoPerseguicao.MORTO);
-        perdeu = true;
         melhorCaminho(getXInicial()/getPainelJogo().getTamanhoTile(), getYInicial()/getPainelJogo().getTamanhoTile());
         metaCaminho = caminhoAtual.size();
         
     }
 
     public void resetar(){
-        perdeu = false;
         setVelocidade((60 * getPainelJogo().getEscala()) / getPainelJogo().getFPS());
         metaCaminho = 0;
     }
