@@ -129,7 +129,7 @@ public class PainelJogo extends JPanel implements Runnable {
                         setPausado(true);
                         int proximoMapa = tratadorMapa.getMapaEscolhido() + 1;
 
-                        if (proximoMapa <= getTratadorMapa().getNumeroMapas()) {
+                        if (proximoMapa < getTratadorMapa().getNumeroMapas()) {
                             setNumeroMapaAtual(getNumeroMapaAtual() + 1);
                             setVidasPacMan(pacman.getVidas());
 
@@ -147,9 +147,16 @@ public class PainelJogo extends JPanel implements Runnable {
                                 });
                             });
                         } else {
+                            setPausado(true);
+                            setGameOver(true);
+
                             mostrarTransicao("Parabéns, você venceu!", () -> {
-                                voltarMenuSemSalvar();
+                            voltarMenuSemSalvar();
+                            vaiGameOver = true;
+                            mostrarTransicao("Saindo...", () -> {
+                                setPausado(false);   
                             });
+                        });
                         }
                     }
                 }
