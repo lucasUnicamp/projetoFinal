@@ -1,6 +1,9 @@
 package menuPrincipal;
 
 import javax.swing.JPanel;
+
+import main.Som;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.sound.sampled.*;
@@ -22,11 +25,11 @@ public class PainelMenu extends JPanel implements ActionListener{
 
     //frame que contém os paineis
     private MenuPrincipal frame;
-    private Clip clip;
+    private Som som;
 
-    public PainelMenu (Clip clip, MenuPrincipal frame) {
+    public PainelMenu (Som som, MenuPrincipal frame) {
         setPreferredSize(new Dimension (500, 500));
-        this.clip = clip;
+        this.som = som;
         this.frame = frame;
 
         this.tocarMusica();
@@ -73,31 +76,16 @@ public class PainelMenu extends JPanel implements ActionListener{
     }
 
     private void tocarMusica() {
-        try {
-            File arquivo = new File(Paths.get("resources", "sons", "musica.wav").toString());
-    
-            if (!arquivo.exists()) {
-                System.out.println("Arquivo não encontrado: " + arquivo.getAbsolutePath());
-                return;
-            }
-    
-            AudioInputStream originalStream = AudioSystem.getAudioInputStream(arquivo);
-            clip.open(originalStream);
-            clip.start();
-            clip.loop(Clip.LOOP_CONTINUOUSLY);
-    
-            System.out.println("Música carregada e tocando!");
-    
-        } catch (LineUnavailableException e) {
-            System.out.println("Erro ao carregar música:");
-            e.printStackTrace();
-        } catch (IOException e) {
-            System.out.println("Erro ao carregar música:");
-            e.printStackTrace();
-        } catch (UnsupportedAudioFileException e) {
-            System.out.println("Erro ao carregar música:");
-            e.printStackTrace();
+
+        File arquivo = new File(Paths.get("resources", "sons", "musica.wav").toString());
+
+        if (!arquivo.exists()) {
+            System.out.println("Arquivo não encontrado: " + arquivo.getAbsolutePath());
+            return;
         }
+
+        som.tocarMusica(0);
+    
 
     }
     

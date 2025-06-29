@@ -9,10 +9,13 @@ import javax.swing.JButton;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
+import main.Som;
+
 import java.awt.GridLayout;
 
 public class PainelOpcoes extends JPanel implements ActionListener, ChangeListener{
-    private Clip clip;
+    private Som som;
     private JButton pausar;
     private JButton voltar;
     private JSlider slider;
@@ -21,9 +24,9 @@ public class PainelOpcoes extends JPanel implements ActionListener, ChangeListen
     private MenuPrincipal frame;
 
 
-    public PainelOpcoes(Clip clip, MenuPrincipal frame) {
+    public PainelOpcoes(Som som, MenuPrincipal frame) {
         this.frame = frame;
-        this.clip = clip;
+        this.som = som;
         
         setLayout(new GridLayout(2,1));
 
@@ -33,8 +36,8 @@ public class PainelOpcoes extends JPanel implements ActionListener, ChangeListen
         pausar.addActionListener(this);
         
         //controlador de volume
-        if (clip.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
-            controleVolume = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+        if (som.getClip().isControlSupported(FloatControl.Type.MASTER_GAIN)) {
+            controleVolume = (FloatControl) som.getClip().getControl(FloatControl.Type.MASTER_GAIN);
             slider = new JSlider(0, 100, 70); // 0 a 100, começa em 70
             slider.setMajorTickSpacing(10);
             slider.setPaintTicks(true);
@@ -56,13 +59,10 @@ public class PainelOpcoes extends JPanel implements ActionListener, ChangeListen
     @Override public void actionPerformed(ActionEvent e) {
         if (e.getSource() == this.pausar) {
             if (musicaPausada) {
-                clip.start();
-                clip.loop(Clip.LOOP_CONTINUOUSLY);
-                this.pausar.setText("Pausar Música");
+                som.tocarMusica(0);
                 
             } else {
-                clip.stop();
-                this.pausar.setText("Retomar Música");
+                som.parar();
             }
     
             musicaPausada = !musicaPausada;

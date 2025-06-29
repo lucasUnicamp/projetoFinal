@@ -51,6 +51,7 @@ public class PainelJogo extends JPanel implements Runnable {
     private String[] mapa;
 
     private GameLoader gameLoader;
+    private Som som;
 
     int FPS = 30;
     PacMan pacman;
@@ -62,12 +63,13 @@ public class PainelJogo extends JPanel implements Runnable {
 
     private Thread gameThread;
 
-    public PainelJogo(LeitorTeclado leitor, PainelExterno painelExterno, JPanel cards, JComponent painelVidro) {
+    public PainelJogo(LeitorTeclado leitor, PainelExterno painelExterno, JPanel cards, JComponent painelVidro, Som som) {
         this.cards = cards;
         this.leitor = leitor;
         this.painelExterno = painelExterno;
         this.painelVidro = painelVidro;
 
+        this.som = som;
         this.gameLoader = new GameLoader(this);
 
         setPreferredSize(new Dimension(larguraTela, alturaTela));
@@ -559,5 +561,9 @@ public class PainelJogo extends JPanel implements Runnable {
 
     public JComponent getPainelVidro() {
         return painelVidro;
+    }
+
+    public Som getSom() {
+        return som;
     }
 }

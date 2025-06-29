@@ -11,6 +11,7 @@ import javax.swing.KeyStroke;
 
 import main.LeitorTeclado;
 import main.PainelJogo;
+import main.Som;
 
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -27,17 +28,12 @@ public class MenuPrincipal extends JFrame{
     PainelJogo painelJogo;
     PainelExterno painelExternoJogo;
     PainelMenu painelMenu;
-    Clip clip;
+    Som som;
     LeitorTeclado leitor = new LeitorTeclado(this);
     JComponent painelVidro;
 
     public MenuPrincipal() {
-        try {
-            this.clip = AudioSystem.getClip();
-        } catch(LineUnavailableException e) {
-            System.out.println("Erro ao carregar música:");
-            e.printStackTrace();
-        }
+        som = new Som();
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(true);
@@ -60,12 +56,12 @@ public class MenuPrincipal extends JFrame{
         cards.addKeyListener(leitor);
         cards.setFocusable(true);
 
-        painelExternoJogo = new PainelExterno(leitor, getCards(), painelVidro);
+        painelExternoJogo = new PainelExterno(leitor, getCards(), painelVidro, som);
         painelExternoJogo.setBackground(Color.BLACK);
 
-        painelMenu = new PainelMenu(clip, this);
+        painelMenu = new PainelMenu(som, this);
         
-        painelOpcoes = new PainelOpcoes(clip, this);
+        painelOpcoes = new PainelOpcoes(som, this);
 
         getCards().add(painelMenu, "painelMenu");
         getCards().add(painelOpcoes, "painelOpcoes");
