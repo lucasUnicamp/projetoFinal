@@ -26,7 +26,6 @@ public class SuperComida extends Comestivel{
         getPainelJogo().aumentaPontuacao(50);
         getPainelJogo().ativaPerseguicao();
         getPainelJogo().comestiveis.removeFirst();
-        getPainelJogo().getSom().tocarEfeito(1);
     }
 
     @Override

@@ -25,7 +25,6 @@ public abstract class Comestivel implements Elemento, Serializable{
         painelJogo.elementos[linhaMatriz][colunaMatriz] = new EspacoVazio();
         painelJogo.aumentaPontuacao(10);
         painelJogo.comestiveis.removeFirst();
-        painelJogo.getSom().tocarEfeito(1);
     }
 
     public boolean ehColidivel() {
