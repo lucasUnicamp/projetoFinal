@@ -3,9 +3,6 @@ package main;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-
 import menuPrincipal.MenuPrincipal;
 
 public class LeitorTeclado implements KeyListener{
