@@ -141,7 +141,7 @@ public abstract class Fantasma extends Entidade {
                 adicionarPonto(busca, atual, x1 - 1, y1, distanciaesquerda);
             }
         } catch (IndexOutOfBoundsException e){}
-        Collections.sort(busca, Comparator.comparingInt(ponto -> ponto.getHeuristica(this.getEstadoPerseguicao().ehHeuristicaNegativa())));
+        Collections.sort(busca, Comparator.comparingInt(ponto -> ponto.getHeuristica(this.getEstadoPerseguicao().ehHeuristicaPositiva())));
     }
 
     public void montarCaminho(Ponto destino){
@@ -165,7 +165,7 @@ public abstract class Fantasma extends Entidade {
 
 
         while(!abertos.isEmpty()){
-            Collections.sort(abertos, Comparator.comparingInt(ponto -> ponto.getHeuristica(this.getEstadoPerseguicao().ehHeuristicaNegativa())));
+            Collections.sort(abertos, Comparator.comparingInt(ponto -> ponto.getHeuristica(this.getEstadoPerseguicao().ehHeuristicaPositiva())));
 
             Ponto atual = abertos.get(0);
             visitados.add(atual);
@@ -315,6 +315,9 @@ public abstract class Fantasma extends Entidade {
         if(getMetaCaminho() == 0)
             melhorCaminho(xm, ym);
         buscarPonto();
+        if(getEstadoPerseguicao() == EstadoPerseguicao.MORTO && getX()/getPainelJogo().getTamanhoTile() == xm && getY()/getPainelJogo().getTamanhoTile() == ym){
+            encerrarFuga();
+        }
     }
 
     public void encerrarFuga(){
