@@ -372,6 +372,7 @@ public class PainelJogo extends JPanel implements Runnable {
             framePerseguicao = 7*FPS;
         } else if (estaPerseguindo){
             framePerseguicao--;
+            painelExterno.setTextoLabelCanto(String.format("Super Fruta por %d", framePerseguicao/FPS + 1));
         }
     
         pacman.atualizar();
@@ -429,7 +430,6 @@ public class PainelJogo extends JPanel implements Runnable {
             if(fantasma.getEstadoPerseguicao() != EstadoPerseguicao.MORTO)
                 fantasma.acionarFuga();
         }
-        painelExterno.setTextoLabelCanto(String.format("Super Fruta!"));
         estaPerseguindo = true;
         framesPerseguicao = 0;
     }
