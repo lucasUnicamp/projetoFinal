@@ -82,23 +82,7 @@ public class PainelMenu extends JPanel implements ActionListener{
             }
     
             AudioInputStream originalStream = AudioSystem.getAudioInputStream(arquivo);
-            AudioFormat baseFormat = originalStream.getFormat();
-    
-            System.out.println("Formato original: " + baseFormat);
-    
-            // Converte para um formato compatível com Clip
-            AudioFormat decodedFormat = new AudioFormat(
-                AudioFormat.Encoding.PCM_SIGNED,
-                baseFormat.getSampleRate(),
-                16,
-                baseFormat.getChannels(),
-                baseFormat.getChannels() * 2,
-                baseFormat.getSampleRate(),
-                false // little-endian
-            );
-    
-            AudioInputStream decodedStream = AudioSystem.getAudioInputStream(decodedFormat, originalStream);
-            clip.open(decodedStream);
+            clip.open(originalStream);
             clip.start();
             clip.loop(Clip.LOOP_CONTINUOUSLY);
     

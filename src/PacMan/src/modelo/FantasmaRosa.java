@@ -1,8 +1,6 @@
 package modelo;
 
 import interfaces.Elemento;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -196,7 +194,7 @@ public final class FantasmaRosa extends Fantasma{
         System.out.println(getMetaCaminho());
     }
 
-     @Override
+    @Override
     public void executarfuncao(){
         if (getEstadoPerseguicao().getEstadoPerseguicao()){
             funcaoPerseguicao();
