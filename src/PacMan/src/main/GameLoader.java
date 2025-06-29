@@ -9,6 +9,10 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import interfaces.Elemento;
+import modelo.Fantasma;
+import modelo.FantasmaRosa;
+import modelo.FantasmaVerde;
+import modelo.FantasmaVermelho;
 
 public class GameLoader {
 
@@ -39,6 +43,8 @@ public class GameLoader {
 
             dados.mapa = mapa;
             dados.mapaAtual = painelJogo.getTratadorMapa().getMapaEscolhido();
+            dados.numeroLinhas = painelJogo.getNumeroLinhas();
+            dados.numeroColunas = painelJogo.getNumeroColunas();
             dados.pontuacao = painelJogo.getPontuacao();
             dados.xPacMan = painelJogo.getPacMan().getX();
             dados.yPacMan = painelJogo.getPacMan().getY();
@@ -46,6 +52,7 @@ public class GameLoader {
             dados.yInicialPacMan = painelJogo.getPacMan().getYInicial();
             dados.direcaoPacMan = painelJogo.getPacMan().getDirecao();
 
+            dados.tiposFantasmas = new ArrayList<>();
             dados.xFantasmas = new ArrayList<>();
             dados.yFantasmas = new ArrayList<>();
             dados.direcaoFantasmas = new ArrayList<>();
@@ -53,11 +60,19 @@ public class GameLoader {
             dados.yInicialFantasmas = new ArrayList<>();
 
             for(int i = 0; i < painelJogo.fantasmas.size(); i++) {
-                dados.xFantasmas.add(painelJogo.fantasmas.get(i).getX());
-                dados.yFantasmas.add(painelJogo.fantasmas.get(i).getY());
-                dados.direcaoFantasmas.add(painelJogo.fantasmas.get(i).getDirecao());
-                dados.xInicialFantasmas.add(painelJogo.fantasmas.get(i).getXInicial());
-                dados.yInicialFantasmas.add(painelJogo.fantasmas.get(i).getYInicial());
+                Fantasma fantasmaAtual = painelJogo.fantasmas.get(i);
+                if(fantasmaAtual instanceof FantasmaRosa) {
+                    dados.tiposFantasmas.add(TipoFantasma.ROSA);
+                } else if(fantasmaAtual instanceof FantasmaVerde) {
+                    dados.tiposFantasmas.add(TipoFantasma.VERDE);
+                } else if(fantasmaAtual instanceof FantasmaVermelho) {
+                    dados.tiposFantasmas.add(TipoFantasma.VERMELHO);
+                }
+                dados.xFantasmas.add(fantasmaAtual.getX());
+                dados.yFantasmas.add(fantasmaAtual.getY());
+                dados.direcaoFantasmas.add(fantasmaAtual.getDirecao());
+                dados.xInicialFantasmas.add(fantasmaAtual.getXInicial());
+                dados.yInicialFantasmas.add(fantasmaAtual.getYInicial());
             }
             dados.vidasPacMan = painelJogo.getPacMan().getVidas();
 
@@ -78,6 +93,9 @@ public class GameLoader {
 
             painelJogo.setTratadorMapa(new TratadorMapa(dados.mapaAtual));
             painelJogo.setMapa(dados.mapa);
+            painelJogo.setNumeroLinhas(dados.numeroLinhas);
+            painelJogo.setNumeroColunas(dados.numeroColunas);
+            painelJogo.elementos = new Elemento[dados.numeroLinhas][dados.numeroColunas];
             painelJogo.carregarElementos();
             painelJogo.getPacMan().setVidas(dados.vidasPacMan);
             painelJogo.setPontuacao(dados.pontuacao);
@@ -88,7 +106,18 @@ public class GameLoader {
             painelJogo.getPacMan().setDirecao(dados.direcaoPacMan.toString());
             
 
-            for(int i = 0; i < painelJogo.fantasmas.size(); i++) {
+            for(int i = 0; i < dados.tiposFantasmas.size(); i++) {
+                switch (dados.tiposFantasmas.get(i)) {
+                    case VERDE:
+                        painelJogo.fantasmas.add(new FantasmaVerde(painelJogo));
+                        break;
+                    case ROSA:
+                        painelJogo.fantasmas.add(new FantasmaRosa(painelJogo));
+                        break;
+                    case VERMELHO:
+                        painelJogo.fantasmas.add(new FantasmaVermelho(painelJogo));
+                        break;
+                }
                 painelJogo.fantasmas.get(i).setX(dados.xFantasmas.get(i));
                 painelJogo.fantasmas.get(i).setY(dados.yFantasmas.get(i));
                 painelJogo.fantasmas.get(i).setXInicial(dados.xInicialFantasmas.get(i));

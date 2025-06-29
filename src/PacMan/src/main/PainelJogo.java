@@ -188,7 +188,32 @@ public class PainelJogo extends JPanel implements Runnable {
     }
 
     public void carregarJogo() {
+
+        pacman = new PacMan(this, leitor);
+        fantasmas = new ArrayList<>();
+        comestiveis = new ArrayList<>();
+        paredes = new ArrayList<>();
         gameLoader.load();
+
+        Rectangle tamanhoTela = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration().getBounds();
+        int escalaPossivel1 = (int) (tamanhoTela.width)/ (numeroColunas * tamanhoPadraoTile);
+        int escalaPossivel2 = (int) (0.9*tamanhoTela.height) / (numeroLinhas * tamanhoPadraoTile);
+
+        if(escalaPossivel1 > escalaPossivel2) {
+            escala = escalaPossivel2;
+        } else {
+            escala = escalaPossivel1;
+        }
+
+        if(escala <= 0) {
+            escala = 1;
+        }
+
+        tamanhoTile = tamanhoPadraoTile * escala;
+        larguraTela = tamanhoTile * numeroColunas; // largura em pixels do painel
+        alturaTela = tamanhoTile * numeroLinhas; // altura em pixels do painel
+
+        setPreferredSize(new Dimension(larguraTela, alturaTela));
     }
 
     public void salvarJogo() {

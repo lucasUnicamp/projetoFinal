@@ -7,7 +7,7 @@ import java.io.Serializable;
 import main.PainelJogo;
 import interfaces.Elemento;
 
-public class Comestivel implements Elemento, Serializable{
+public abstract class Comestivel implements Elemento, Serializable{
     private int posicaoX;
     private int posicaoY;
     private transient PainelJogo painelJogo;
@@ -19,11 +19,7 @@ public class Comestivel implements Elemento, Serializable{
         this.painelJogo = painelJogo;
     }
 
-    @Override public void desenhar(Graphics2D g) {
-        int escala = painelJogo.getEscala();
-        g.setColor(Color.WHITE);
-        g.fillOval(posicaoX, posicaoY, 5*escala, 5*escala);
-    }
+    @Override public abstract void desenhar(Graphics2D g);
 
     public void comer() {
         int linhaMatriz = getY()/painelJogo.getTamanhoTile();
@@ -37,8 +33,10 @@ public class Comestivel implements Elemento, Serializable{
         return colidivel;
     }
     
-    public char getRepresentacao() {
-        return '.';
+    public abstract char getRepresentacao();
+
+    public PainelJogo getPainelJogo() {
+        return painelJogo;
     }
 
     public int getX() {
