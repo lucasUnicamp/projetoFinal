@@ -26,7 +26,10 @@ public class PacMan extends Entidade{
     public PacMan(PainelJogo painelJogo, LeitorTeclado leitor) {
         super(painelJogo);
         setEstaMorto(false);
-        vidas = 3;
+        if (painelJogo.estaJogando())
+            vidas = painelJogo.getVidasPacMan();
+        else
+            vidas = 3;
 
         getImagem();
 
@@ -140,9 +143,13 @@ public class PacMan extends Entidade{
     }
 
     public void setVidas(int vidas) {
-        if(vidas <= 3 && vidas >= 0) {
+        if(vidas >= 0) {
             this.vidas = vidas;
         }
+    }
+
+    public void ganharVida(int vidas) {
+        setVidas(getVidas() + vidas);
     }
 
     public void morrer() {

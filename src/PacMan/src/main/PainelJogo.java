@@ -37,9 +37,9 @@ public class PainelJogo extends JPanel implements Runnable {
     private int larguraTela; // largura em pixels do painel
     private int alturaTela; // altura em pixels do painel
 
-    private int pontuacao;
+    private int vidasPacMan, pontuacao, pontuacaoAux;
     private int numeroMapaAtual = 0;
-    private boolean pausado;
+    private boolean estaEmJogo = false, pausado = false;
     private boolean vaiRecomecar = false, terminouTransicaoFase = true;
     private boolean gameOver = false, vaiGameOver = false;
     private boolean estaPerseguindo = false;
@@ -91,6 +91,7 @@ public class PainelJogo extends JPanel implements Runnable {
         long tempoAtual;
         int framesPerseguicao = 0;
 
+        setEstaEmJogo(true);
         delayComeco();
         
         while (gameThread != null && !gameThread.isInterrupted()) { // loop principal do jogo
@@ -130,6 +131,8 @@ public class PainelJogo extends JPanel implements Runnable {
 
                         if (proximoMapa <= getTratadorMapa().getNumeroMapas()) {
                             setNumeroMapaAtual(getNumeroMapaAtual() + 1);
+                            setVidasPacMan(pacman.getVidas());
+
                             // Primeira transição para o fade in
                             mostrarTransicao("Fase Concluída!", () -> {
                                 novoJogo(proximoMapa);
@@ -256,6 +259,7 @@ public class PainelJogo extends JPanel implements Runnable {
     }
 
     public void voltarMenu() {
+        setEstaEmJogo(false);
         salvarJogo();
         painelVidro.setVisible(false);
         ((CardLayout) cards.getLayout()).show(cards, "painelMenu");
@@ -263,6 +267,7 @@ public class PainelJogo extends JPanel implements Runnable {
     }
 
     public void voltarMenuSemSalvar() {
+        setEstaEmJogo(false);
         painelVidro.setVisible(false);
         ((CardLayout) cards.getLayout()).show(cards, "painelMenu");
         getThread().interrupt();
@@ -357,6 +362,11 @@ public class PainelJogo extends JPanel implements Runnable {
             }
         }
         pacman.atualizar();
+        if (getPontuacaoAux() >= 1000) {
+            int total = getPontuacaoAux() / 1000;       // Quantas vidas ele deve ganhar naquele frame (provavelmente vai ser sempre 1)
+            pacman.ganharVida(total);
+            setPontuacaoAux(getPontuacaoAux() - 1000 * total);      // Caso ganhe mais do que exatamente 1000 pontos, guarda o excesso
+        }
         for (Fantasma fantasma : fantasmas) {
             fantasma.executarfuncao();
         }
@@ -411,13 +421,11 @@ public class PainelJogo extends JPanel implements Runnable {
             fantasma.desenhar(caneta);
         pacman.desenhar(caneta);
 
-        if (pacman.getVidas() >= 1)
-            caneta.drawImage(pacman.getImagemRepouso(), getLargura() - 10*escala, getAltura() - 10*escala, getTamanhoTile()/2, getTamanhoTile()/2, null);
-        if (pacman.getVidas() >= 2) 
-            caneta.drawImage(pacman.getImagemRepouso(), getLargura() - 30*escala, getAltura() - 10*escala, getTamanhoTile()/2, getTamanhoTile()/2, null);
-        if (pacman.getVidas() >= 3)
-            caneta.drawImage(pacman.getImagemRepouso(), getLargura() - 50*escala, getAltura() - 10*escala, getTamanhoTile()/2, getTamanhoTile()/2, null);
-
+        for (int i = 1; i <= pacman.getVidas(); i++) {
+            int mult = i == 1 ? i * 10 : i * 15 - 5;
+            caneta.drawImage(pacman.getImagemRepouso(), getLargura() - mult*escala, getAltura() - 10*escala - 5, getTamanhoTile()/2, getTamanhoTile()/2, null);
+        }
+        
         painelExterno.setTextoLabelPontos(String.format("Pontuação: %d", getPontuacao()));
         
         caneta.dispose();
@@ -462,11 +470,15 @@ public class PainelJogo extends JPanel implements Runnable {
         terminouTransicaoFase = true;
         gameOver = false;
         vaiGameOver = false;
-        setPontuacao(0);
-        setNumeroMapaAtual(0);
-        setGameOver(false);
-    }
 
+        // Só reseta esses valores caso o 'novoJogo' tenha sido chamado pelo menu (e não na transição de fases) 
+        if (!estaEmJogo) {
+            setPontuacao(0);
+            setPontuacaoAux(0);
+            setNumeroMapaAtual(0);
+            setGameOver(false);
+        }
+    }
 
     public void resetPosicoes() {
         pacman.irPosicaoInicial();
@@ -478,14 +490,23 @@ public class PainelJogo extends JPanel implements Runnable {
 
     public void aumentaPontuacao(int aumento) {
         pontuacao += aumento;
+        pontuacaoAux += aumento;
     }
 
     public boolean estaPausado() {
         return pausado;
     }
 
+    public boolean estaJogando() {
+        return estaEmJogo;
+    }
+
     public void setPausado(boolean pausado) {
         this.pausado = pausado;
+    }
+
+    public void setEstaEmJogo(boolean esta) {
+        this.estaEmJogo = esta;
     }
 
     public void setVaiRecomecar(boolean vaiRecomecar) {
@@ -496,8 +517,16 @@ public class PainelJogo extends JPanel implements Runnable {
         this.gameOver = gameOver;
     }
 
+    public void setVidasPacMan(int vidas) {
+        this.vidasPacMan = vidas;
+    }
+
     public void setPontuacao(int pontuacao) {
         this.pontuacao = pontuacao;
+    }
+
+    public void setPontuacaoAux(int pontuacao) {
+        this.pontuacaoAux = pontuacao;
     }
 
     public void setNumeroLinhas(int linhas) {
@@ -562,8 +591,16 @@ public class PainelJogo extends JPanel implements Runnable {
         return larguraTela;
     }
 
+    public int getVidasPacMan() {
+        return vidasPacMan;
+    }
+
     public int getPontuacao() {
         return pontuacao;
+    }
+
+    public int getPontuacaoAux() {
+        return pontuacaoAux;
     }
 
     public int getNumeroMapaAtual() {
