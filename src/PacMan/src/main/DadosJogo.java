@@ -3,6 +3,8 @@ package main;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import modelo.EstadoPerseguicao;
+
 public class DadosJogo implements Serializable{
     public String[] mapa;
     public int numeroLinhas;
@@ -15,6 +17,7 @@ public class DadosJogo implements Serializable{
     public int yInicialPacMan;
     public int mapaAtual;
     public String direcaoPacMan;
+    public ArrayList<EstadoPerseguicao> estadosFantasmas;
     public ArrayList<TipoFantasma> tiposFantasmas;
     public ArrayList<Integer> xFantasmas;
     public ArrayList<Integer> yFantasmas;

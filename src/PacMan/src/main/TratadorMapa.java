@@ -195,17 +195,21 @@ public class TratadorMapa implements Serializable{
 
     /**
      * Faz uma lista com o diretório dos mapas, percorrendo-os para contar quantos existem.
-     * No momento é redundante mas talvez tenha que mudar
+     * Considera apenas arquivos de texto
      */
     public void contarMapas() {
         int numero = 0;
+        String extension = ""; 
         File pasta = new File(Paths.get("resources", "mapas").toString());
         File[] listaMapas = pasta.listFiles();
 
         if (listaMapas != null) {
             for (File mapa: listaMapas) {
-                // Checagem aqui?
-                numero++;
+                int i = mapa.getName().lastIndexOf('.');
+                if (i > 0)
+                    extension = mapa.getName().substring(i + 1);
+                if (extension.equals("txt"))
+                    numero++;
             }
         }
         setNumeroMapas(numero);

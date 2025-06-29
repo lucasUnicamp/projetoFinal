@@ -10,7 +10,6 @@ import javax.imageio.ImageIO;
 import main.PainelJogo;
 
 public final class FantasmaVerde extends Fantasma{
-    private int xbusca, ybusca;
     private ArrayList<Coordenada> cantos;
 
     public FantasmaVerde(PainelJogo painel){
