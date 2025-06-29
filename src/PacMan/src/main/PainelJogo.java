@@ -117,6 +117,7 @@ public class PainelJogo extends JPanel implements Runnable {
                             // Primeira transição para o fade in
                             mostrarTransicao("Fase Concluída!", () -> {
                                 novoJogo(proximoMapa);
+                                // Esse label que faz com que o mapa apareça na posição certa durante o load
                                 painelExterno.setTextoLabelComeco(String.format("Preparando..."));
                                 terminouTransicao = false;
                                 setVaiRecomecar(true);
@@ -272,7 +273,7 @@ public class PainelJogo extends JPanel implements Runnable {
             // Tem que ver se o fantasma não está comestível, se tiver o pacman não deve morrer 
             if (Math.abs(getPacMan().getX() - fantasma.getX()) <= getTamanhoTile() && Math.abs(getPacMan().getY() - fantasma.getY()) <= getTamanhoTile()) {
                 // if (fantasma.getEstadoPerseguicao() == 0)
-                    pacman.morrer();
+                    pacmanMorreu();
                     resetPosicoes();
                     setVaiRecomecar(true);
             
@@ -284,7 +285,18 @@ public class PainelJogo extends JPanel implements Runnable {
         for (Fantasma fantasma : fantasmas) {
             fantasma.executarfuncao();
         }
+    }
 
+    public void pacmanMorreu() {
+        setPausado(true);
+        try {
+            pacman.morrer();
+            painelExterno.setTextoLabelComeco(String.format("Ouch!"));
+            Thread.sleep(30000/FPS);
+        } catch (InterruptedException erro) {
+            System.err.println("!!! ERRO NA INTERRUPÇÃO DA THREAD !!!");
+        }
+        setPausado(false);
     }
 
     // desenha tudo na tela
