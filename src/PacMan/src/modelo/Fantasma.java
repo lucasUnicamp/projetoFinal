@@ -2,13 +2,12 @@ package modelo;
 
 import interfaces.Elemento;
 import java.awt.Graphics2D;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import main.PainelJogo;
 
-public abstract class Fantasma extends Entidade implements Serializable{
+public abstract class Fantasma extends Entidade {
     private EstadoPerseguicao perseguicao; // 1 se o fantasma estiver perseguindo o pacman e 0 caso esteja no modo dispersando
     private boolean perdeu;
     private int metaCaminho;
