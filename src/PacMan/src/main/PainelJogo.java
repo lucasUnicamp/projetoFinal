@@ -463,8 +463,8 @@ public class PainelJogo extends JPanel implements Runnable {
         pacman.desenhar(caneta);
 
         for (int i = 1; i <= pacman.getVidas(); i++) {
-            int mult = i == 1 ? i * 10 : i * 15 - 5;
-            caneta.drawImage(pacman.getImagemRepouso(), getLargura() - mult*escala, getAltura() - 10*escala - 5, getTamanhoTile()/2, getTamanhoTile()/2, null);
+            int mult = i * 12;
+            caneta.drawImage(pacman.getImagemRepouso(), getLargura() - mult*escala, getAltura() - 12*escala, getTamanhoTile()/2, getTamanhoTile()/2, null);
         }
         
         if (frameTimerOneUP == 0)
