@@ -38,6 +38,7 @@ public class PainelMenu extends JPanel implements ActionListener{
     public PainelMenu (Som som, MenuPrincipal frame) {
         setPreferredSize(new Dimension (800, 500));
         setBackground(Color.BLACK);
+        fonte = carregarFonte();
         this.som = som;
         this.frame = frame;
 
@@ -115,7 +116,7 @@ public class PainelMenu extends JPanel implements ActionListener{
         titulo = new ImageIcon(Paths.get("resources", "imagens", "logoGrande.png").toString());
     } 
 
-    public void carregarFonte() {
+    public Font carregarFonte() {
 
         try {
             // '.deriveFont' é o tamanho da fonte
@@ -129,6 +130,7 @@ public class PainelMenu extends JPanel implements ActionListener{
             System.err.println("!!! ERRO NA FONTE !!!");
         }
 
+        return fonte;
     }
     
 
