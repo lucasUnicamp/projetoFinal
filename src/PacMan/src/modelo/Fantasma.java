@@ -215,6 +215,10 @@ public abstract class Fantasma extends Entidade {
         }
     }
 
+    public boolean naoehVizinho(int xf, int yf){
+        return (xf != caminhoAtual.get(0).getX() && yf != caminhoAtual.get(0).getY());
+    }
+
     public void buscarPonto(){
         //posicoes iniciais do fantasma na matriz
         int xm = getX()/getPainelJogo().getTamanhoTile();
@@ -316,6 +320,10 @@ public abstract class Fantasma extends Entidade {
         }
         if(getMetaCaminho() == 0)
             melhorCaminho(xm, ym);
+        else if(!caminhoAtual.isEmpty()){
+            if(naoehVizinho(xf, yf))
+                melhorCaminho(xm, ym);
+        }
         buscarPonto();
         if(getEstadoPerseguicao() == EstadoPerseguicao.MORTO && getX()/getPainelJogo().getTamanhoTile() == xm && getY()/getPainelJogo().getTamanhoTile() == ym){
             encerrarFuga();
