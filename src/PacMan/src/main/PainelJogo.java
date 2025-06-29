@@ -12,6 +12,7 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 import menuPrincipal.PainelExterno;
 import modelo.Comestivel;
@@ -37,12 +38,13 @@ public class PainelJogo extends JPanel implements Runnable {
     private int larguraTela; // largura em pixels do painel
     private int alturaTela; // altura em pixels do painel
 
-    private int vidasPacMan, pontuacao, pontuacaoAux;
+    private int vidasPacMan, pontuacao, pontuacaoAux, contadorFrame;
     private int numeroMapaAtual = 0;
     private boolean estaEmJogo = false, pausado = false;
     private boolean vaiRecomecar = false, terminouTransicaoFase = true;
     private boolean gameOver = false, vaiGameOver = false;
     private boolean estaPerseguindo = false;
+    private Timer timer;
     
     public Elemento[][] elementos;
     public ArrayList<Parede> paredes;
@@ -127,6 +129,7 @@ public class PainelJogo extends JPanel implements Runnable {
 
                     if (comestiveis.isEmpty()) {
                         setPausado(true);
+                        painelExterno.setTextoLabelCanto(String.format("Venceu!", getNumeroMapaAtual()));
                         int proximoMapa = tratadorMapa.getMapaEscolhido() + 1;
 
                         if (proximoMapa < getTratadorMapa().getNumeroMapas()) {
@@ -363,21 +366,61 @@ public class PainelJogo extends JPanel implements Runnable {
                     } else {
                         setPausado(true);
                     }
-                } else if (fantasma.getEstadoPerseguicao() == EstadoPerseguicao.DISPERSO){
+                } else if (fantasma.getEstadoPerseguicao() == EstadoPerseguicao.DISPERSO) {
+                    aumentaPontuacao(100);
                     fantasma.perder();
                 }
             }
         }
+
+        
         pacman.atualizar();
-        if (getPontuacaoAux() >= 1000) {
-            int total = getPontuacaoAux() / 1000;       // Quantas vidas ele deve ganhar naquele frame (provavelmente vai ser sempre 1)
+        if (getPontuacaoAux() >= 50) {
+            timer = new Timer(100, e -> {
+                painelExterno.setTextoLabelPontos(String.format("1 UP!"));       
+                contadorFrame++;
+                System.out.println(contadorFrame);
+                if (contadorFrame >= 10) {
+                    contadorFrame = 0;
+                    timer.stop();
+                }
+            });
+            timer.start();
+            System.out.println(contadorFrame);
+            int total = getPontuacaoAux() / 50;       // Quantas vidas ele deve ganhar naquele frame (provavelmente vai ser sempre 1)
             pacman.ganharVida(total);
-            setPontuacaoAux(getPontuacaoAux() - 1000 * total);      // Caso ganhe mais do que exatamente 1000 pontos, guarda o excesso
+            setPontuacaoAux(getPontuacaoAux() - 50 * total);      // Caso ganhe mais do que exatamente 1000 pontos, guarda o excesso
         }
+        OneUP();
         for (Fantasma fantasma : fantasmas) {
             fantasma.executarfuncao();
         }
+        
     }
+
+    /**
+     * Método para checar se o Pac-Man vai ganhar uma vida. Se sim, aumenta a vida e mostra na UI
+     */
+    public void OneUP() {
+        if (getPontuacaoAux() >= 50) {
+            // Timer para mostrar '1 UP!' no label do canto por alguns segundos
+            timer = new Timer(100, e -> {
+                painelExterno.setTextoLabelPontos(String.format("1 UP!"));       
+                contadorFrame++;
+                System.out.println(contadorFrame);
+                if (contadorFrame >= 10) {
+                    contadorFrame = 0;
+                    timer.stop();
+                }
+            });
+            timer.start();
+            System.out.println(contadorFrame);
+            int total = getPontuacaoAux() / 50;       // Quantas vidas ele deve ganhar naquele frame (provavelmente vai ser sempre 1)
+            pacman.ganharVida(total);
+            setPontuacaoAux(getPontuacaoAux() - 50 * total);      // Caso ganhe mais do que exatamente 1000 pontos, guarda o excesso
+        }
+    }
+
 
     /**
      * Método para criar um delay e atualizar o estado do pacman após levar dano 
@@ -433,7 +476,8 @@ public class PainelJogo extends JPanel implements Runnable {
             caneta.drawImage(pacman.getImagemRepouso(), getLargura() - mult*escala, getAltura() - 10*escala - 5, getTamanhoTile()/2, getTamanhoTile()/2, null);
         }
         
-        painelExterno.setTextoLabelPontos(String.format("Pontuação: %d", getPontuacao()));
+        if (contadorFrame == 0)
+            painelExterno.setTextoLabelPontos(String.format("Pontuação: %d", getPontuacao()));
         
         caneta.dispose();
     }
