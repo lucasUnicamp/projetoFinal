@@ -138,7 +138,7 @@ public final class FantasmaVerde extends Fantasma{
                 }
                 return;
             }
-            if(getMetaCaminho() == 0 || calculaDistancia(xm, ym, xf, yf) < 5)
+            if(getMetaCaminho() == 0 || calculaDistancia(xm, ym, xf, yf) < 4)
                 menorCaminho(xm, ym);
             buscarPonto();
         }
