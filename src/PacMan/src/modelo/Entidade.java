@@ -160,7 +160,9 @@ public class Entidade implements Serializable{
 
     public void irPosicaoInicial() {
         setX(getXInicial());
+        centralizarX();
         setY(getYInicial());
+        centralizarY();
     }
 
     public void atualizarPosicaoInicial() {
