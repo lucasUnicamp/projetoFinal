@@ -89,7 +89,7 @@ public final class FantasmaRosa extends Fantasma{
         }
         
     }
-
+/* 
     public void funcaoPerseguicao(){
         //coordenadas do fantasma na matriz
         int xf = getX()/getPainelJogo().getTamanhoTile();
@@ -193,15 +193,17 @@ public final class FantasmaRosa extends Fantasma{
             setEstadoPerseguicao(EstadoPerseguicao.PERSEGUINDO);
         System.out.println(getMetaCaminho());
     }
+*/
 
     @Override
     public void executarfuncao(){
         if (getEstadoPerseguicao().getEstadoPerseguicao()){
-            funcaoPerseguicao();
+            definirDestino();
+            funcaoMovimento(xbusca, ybusca);
         } else if (getEstadoPerseguicao() == EstadoPerseguicao.DISPERSO){
-            funcaoFuga();
+            funcaoMovimento(getPainelJogo().getPacMan().getX()/getPainelJogo().getTamanhoTile(), getPainelJogo().getPacMan().getY()/getPainelJogo().getTamanhoTile());
         } else {
-            funcaoRetorno();
+            funcaoMovimento(getXInicial()/getPainelJogo().getTamanhoTile(), getYInicial()/getPainelJogo().getTamanhoTile());
         }
     }
 
