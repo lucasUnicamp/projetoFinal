@@ -59,7 +59,7 @@ public class TratadorMapa implements Serializable{
             Formatter arquivoLog  = new Formatter(new FileWriter(Paths.get("resources", "mapas", "mapa0.txt").toString(), false));
             arquivoLog.format("###################\n" +
                               "#........#........#\n" +
-                              "#.##.###.#.###.##.#\n" +
+                              "#O##.###.#.###.##O#\n" +
                               "#.................#\n" +
                               "#.##.#.#####.#.##.#\n" +
                               "#....#...#...#....#\n" +
@@ -72,7 +72,7 @@ public class TratadorMapa implements Serializable{
                               "####.# ##### #.####\n" +
                               "#........#........#\n" +
                               "#.##.###.#.###.##.#\n" +
-                              "#..#.....P.....#..#\n" +
+                              "#O.#.....P.....#.O#\n" +
                               "##.#.#.#####.#.#.##\n" +
                               "#....#...#...#....#\n" +
                               "#.######.#.######.#\n" +
@@ -149,13 +149,12 @@ public class TratadorMapa implements Serializable{
                             temPacMan = true;
                     }
                 }
-                // Mapa não pode não ter Pac-Man
-                if(!temPacMan)
-                    throw new ArquivoCorrompidoException(String.format("NENHUM PACMAN ENCONTRADO NO MAPA"));
-                
                 larguraUltima = largura;
                 altura++;
             }
+            // Não pode não ter Pac-Man
+            if(!temPacMan)
+                throw new ArquivoCorrompidoException(String.format("NENHUM PACMAN ENCONTRADO NO MAPA"));
         } catch (IOException erro) {
             System.err.println("!!! ARQUIVO NÃO FOI ENCONTRADO PARA SER ATRIBUIDO !!!");
         } catch (ArquivoCorrompidoException erro) {
