@@ -509,6 +509,7 @@ public class PainelJogo extends JPanel implements Runnable {
         terminouTransicaoFase = true;
         gameOver = false;
         vaiGameOver = false;
+        framePerseguicao = 0;
 
         // Só reseta esses valores caso o 'novoJogo' tenha sido chamado pelo menu (e não na transição de fases) 
         if (!estaEmJogo) {
