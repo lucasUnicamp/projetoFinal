@@ -265,6 +265,11 @@ public abstract class Fantasma extends Entidade implements Serializable{
         metaCaminho = 0;
     }
 
+    public void encerrarFuga(){
+        perseguicao = EstadoPerseguicao.PERSEGUINDO;
+        metaCaminho = 0;
+    }
+
     public void voltarPosicaoInicial(){
         if(getCorrecoesPendentes() > 0){
             if(getDirecao().equals("direita"))
