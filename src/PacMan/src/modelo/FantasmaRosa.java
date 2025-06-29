@@ -196,7 +196,7 @@ public final class FantasmaRosa extends Fantasma{
         System.out.println(getMetaCaminho());
     }
 
-     @Override
+    @Override
     public void executarfuncao(){
         if (getEstadoPerseguicao().getEstadoPerseguicao()){
             funcaoPerseguicao();
