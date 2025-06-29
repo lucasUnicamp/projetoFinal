@@ -43,6 +43,7 @@ public class PainelJogo extends JPanel implements Runnable {
     private boolean vaiRecomecar = false, terminouTransicaoFase = true;
     private boolean gameOver = false, vaiGameOver = false;
     private boolean estaPerseguindo = false;
+    int framesPerseguicao = 0;
     private Timer timer;
     
     public Elemento[][] elementos;
@@ -90,7 +91,6 @@ public class PainelJogo extends JPanel implements Runnable {
         double delta = 0;
         long ultimoTempo = System.nanoTime();
         long tempoAtual;
-        int framesPerseguicao = 0;
 
         setEstaEmJogo(true);
         delayComeco();
@@ -430,6 +430,7 @@ public class PainelJogo extends JPanel implements Runnable {
         }
         painelExterno.setTextoLabelCanto(String.format("Super Fruta!"));
         estaPerseguindo = true;
+        framesPerseguicao = 0;
     }
 
     public void pararPerseguicao() {

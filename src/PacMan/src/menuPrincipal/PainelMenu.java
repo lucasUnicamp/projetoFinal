@@ -79,7 +79,7 @@ public class PainelMenu extends JPanel implements ActionListener{
             return;
         }
 
-        //som.tocarMusica(0);
+        som.tocarMusica(0);
     
 
     }
