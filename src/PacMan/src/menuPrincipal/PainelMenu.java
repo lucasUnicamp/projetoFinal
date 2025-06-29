@@ -1,20 +1,15 @@
 package menuPrincipal;
 
-import javax.swing.JPanel;
-
-import main.Som;
-
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.sound.sampled.*;
-
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Paths;
-import java.awt.event.ActionEvent;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import main.Som;
 
 public class PainelMenu extends JPanel implements ActionListener{
     //botões
@@ -84,7 +79,7 @@ public class PainelMenu extends JPanel implements ActionListener{
             return;
         }
 
-        som.tocarMusica(0);
+        //som.tocarMusica(0);
     
 
     }

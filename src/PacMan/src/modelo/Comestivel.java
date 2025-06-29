@@ -1,11 +1,9 @@
 package modelo;
 
-import java.awt.Color;
+import interfaces.Elemento;
 import java.awt.Graphics2D;
 import java.io.Serializable;
-
 import main.PainelJogo;
-import interfaces.Elemento;
 
 public abstract class Comestivel implements Elemento, Serializable{
     private int posicaoX;
@@ -27,7 +25,7 @@ public abstract class Comestivel implements Elemento, Serializable{
         painelJogo.elementos[linhaMatriz][colunaMatriz] = new EspacoVazio();
         painelJogo.aumentaPontuacao(10);
         painelJogo.comestiveis.removeFirst();
-        painelJogo.getSom().tocarEfeito(1);
+        //painelJogo.getSom().tocarEfeito(1);
     }
 
     public boolean ehColidivel() {

@@ -199,6 +199,22 @@ public abstract class Fantasma extends Entidade {
         metaCaminho = x;
     }
 
+    public void corrigirPosicao(int xf, int yf){
+        if(getDirecao().equals("direita"))
+            setX(getX() + getVelocidade());
+        else  if(getDirecao().equals("esquerda"))
+            setX(getX() - getVelocidade());
+        else if(getDirecao().equals("cima"))
+            setY(getY() - getVelocidade());
+        else if(getDirecao().equals("baixo"))
+            setY(getY() + getVelocidade());
+        setCorrecoesPendentes(getCorrecoesPendentes() - getVelocidade());
+        if(getCorrecoesPendentes() <= 0){
+            setX(xf * getPainelJogo().getTamanhoTile() + getPainelJogo().getTamanhoTile()/2);
+            setY(yf * getPainelJogo().getTamanhoTile() + getPainelJogo().getTamanhoTile()/2);  
+        }
+    }
+
     public void buscarPonto(){
         //posicoes iniciais do fantasma na matriz
         int xm = getX()/getPainelJogo().getTamanhoTile();
@@ -294,23 +310,9 @@ public abstract class Fantasma extends Entidade {
         int xf = getX()/getPainelJogo().getTamanhoTile();
         int yf = getY()/getPainelJogo().getTamanhoTile();
         //perseguir(x, y): caso o fantasma e seu destino nao estejam no mesmo ponto da matriz
-        if(xf != xm || yf != ym){
-            if(getCorrecoesPendentes() > 0){
-                if(getDirecao().equals("direita"))
-                    setX(getX() + getVelocidade());
-                else  if(getDirecao().equals("esquerda"))
-                    setX(getX() - getVelocidade());
-                else if(getDirecao().equals("cima"))
-                    setY(getY() - getVelocidade());
-                else if(getDirecao().equals("baixo"))
-                    setY(getY() + getVelocidade());
-                setCorrecoesPendentes(getCorrecoesPendentes() - getVelocidade());
-                if(getCorrecoesPendentes() <= 0){
-                    setX(xf * getPainelJogo().getTamanhoTile() + getPainelJogo().getTamanhoTile()/2);
-                    setY(yf * getPainelJogo().getTamanhoTile() + getPainelJogo().getTamanhoTile()/2);  
-                }
-                return;
-            }
+        if(getCorrecoesPendentes() > 0){
+            corrigirPosicao(xf, yf);
+            return;
         }
         if(getMetaCaminho() == 0)
             melhorCaminho(xm, ym);

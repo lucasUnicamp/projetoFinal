@@ -373,7 +373,7 @@ public class PainelJogo extends JPanel implements Runnable {
         }
     
         pacman.atualizar();
-        OneUP();
+        //OneUP();
         for (Fantasma fantasma : fantasmas) {
             fantasma.executarfuncao();
         }

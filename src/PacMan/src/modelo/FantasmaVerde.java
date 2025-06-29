@@ -84,6 +84,10 @@ public final class FantasmaVerde extends Fantasma{
     }
 
     public void funcaoPerseguicao(){
+        if(getCorrecoesPendentes() > 0){
+            corrigirPosicao(getX()/getPainelJogo().getTamanhoTile(), getY()/getPainelJogo().getTamanhoTile());
+            return;
+        }
         if (cantos.isEmpty()){
             definirCantos();
         }
