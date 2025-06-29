@@ -186,11 +186,6 @@ public abstract class Fantasma extends Entidade implements Serializable{
         metaCaminho = x;
     }
 
-    public void perseguir(int x, int y){
-        //usara a funcao buscar ponto de acordo com o tipo do fantasma quando este estiver perseguindo o pacman
-
-    }
-
     public void buscarPonto(){
         //posicoes iniciais do fantasma na matriz
         int xm = getX()/getPainelJogo().getTamanhoTile();
@@ -260,9 +255,14 @@ public abstract class Fantasma extends Entidade implements Serializable{
     public void perder(){
         perseguicao = EstadoPerseguicao.PERSEGUINDO;
         perdeu = true;
-        setVelocidade((60 * getPainelJogo().getEscala()) / getPainelJogo().getFPS());
-        metaCaminho = 1;
+        setVelocidade((100 * getPainelJogo().getEscala()) / getPainelJogo().getFPS());
         menorCaminho(getXInicial()/getPainelJogo().getTamanhoTile(), getYInicial()/getPainelJogo().getTamanhoTile());
+        metaCaminho = caminhoAtual.size();
+    }
+
+    public void acionarFuga(){
+        perseguicao = EstadoPerseguicao.DISPERSO;
+        metaCaminho = 0;
     }
 
     public void voltarPosicaoInicial(){
