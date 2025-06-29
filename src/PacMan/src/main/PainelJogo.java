@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.Timer;
-
 import menuPrincipal.PainelExterno;
 import modelo.Comestivel;
 import modelo.Comida;
