@@ -4,23 +4,21 @@ public class Ponto {
     private Ponto pai;
     private int distancia;
     private final int custo;
-    private final int x;
-    private final int y;
+    private final Coordenada coordenada;
 
     public Ponto(int xp, int yp, int c, int d, Ponto origem){
         pai = origem;
-        x = xp;
-        y = yp;
+        coordenada = new Coordenada(xp, yp);
         custo = c;
         distancia = d;
     }
 
     public int getX(){
-        return x;
+        return coordenada.getX();
     }
 
     public int getY(){
-        return y;
+        return coordenada.getY();
     }
 
     public Ponto getPai(){
