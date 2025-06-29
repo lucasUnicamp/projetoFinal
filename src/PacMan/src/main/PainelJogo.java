@@ -294,7 +294,7 @@ public class PainelJogo extends JPanel implements Runnable {
                         break;
 
                     case 'O':
-                        Comestivel supercomida = new SuperComida(this, j * tamanhoTile + tamanhoTile / 2 - 12, i * tamanhoTile + tamanhoTile / 2 - 12);
+                        Comestivel supercomida = new SuperComida(this, j * tamanhoTile + tamanhoTile / 2 - 8, i * tamanhoTile + tamanhoTile / 2 - 8);
                         comestiveis.add(supercomida);
                         elementos[i][j] = supercomida;
                         break;
@@ -305,8 +305,13 @@ public class PainelJogo extends JPanel implements Runnable {
                         break;
                     
                     case ' ':
-                        EspacoVazio espacoVazio = new EspacoVazio();
-                        elementos[i][j] = espacoVazio;
+                        EspacoVazio espacoVazio1 = new EspacoVazio();
+                        elementos[i][j] = espacoVazio1;
+                        break;
+
+                    case '_':
+                        EspacoVazio espacoVazio2 = new EspacoVazio();
+                        elementos[i][j] = espacoVazio2;
                         break;
 
                     case 'P':
