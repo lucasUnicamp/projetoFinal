@@ -140,9 +140,13 @@ public class PacMan extends Entidade{
     }
 
     public void setVidas(int vidas) {
-        if(vidas <= 3 && vidas >= 0) {
+        if(vidas >= 0) {
             this.vidas = vidas;
         }
+    }
+
+    public void ganharVida(int vidas) {
+        setVidas(getVidas() + vidas);
     }
 
     public void morrer() {

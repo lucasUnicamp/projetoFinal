@@ -37,7 +37,7 @@ public class PainelJogo extends JPanel implements Runnable {
     private int larguraTela; // largura em pixels do painel
     private int alturaTela; // altura em pixels do painel
 
-    private int pontuacao;
+    private int pontuacao, pontuacaoAux;
     private int numeroMapaAtual = 0;
     private boolean pausado;
     private boolean vaiRecomecar = false, terminouTransicaoFase = true;
@@ -357,6 +357,11 @@ public class PainelJogo extends JPanel implements Runnable {
             }
         }
         pacman.atualizar();
+        if (getPontuacaoAux() >= 1000) {
+            int total = getPontuacaoAux() / 1000;
+            pacman.ganharVida(total);
+            setPontuacaoAux(getPontuacaoAux() - 1000 * total);
+        }
         for (Fantasma fantasma : fantasmas) {
             fantasma.executarfuncao();
         }
@@ -411,13 +416,11 @@ public class PainelJogo extends JPanel implements Runnable {
             fantasma.desenhar(caneta);
         pacman.desenhar(caneta);
 
-        if (pacman.getVidas() >= 1)
-            caneta.drawImage(pacman.getImagemRepouso(), getLargura() - 10*escala, getAltura() - 10*escala, getTamanhoTile()/2, getTamanhoTile()/2, null);
-        if (pacman.getVidas() >= 2) 
-            caneta.drawImage(pacman.getImagemRepouso(), getLargura() - 30*escala, getAltura() - 10*escala, getTamanhoTile()/2, getTamanhoTile()/2, null);
-        if (pacman.getVidas() >= 3)
-            caneta.drawImage(pacman.getImagemRepouso(), getLargura() - 50*escala, getAltura() - 10*escala, getTamanhoTile()/2, getTamanhoTile()/2, null);
-
+        for (int i = 1; i <= pacman.getVidas(); i++) {
+            int mult = i == 1 ? i * 10 : i * 15 - 5;
+            caneta.drawImage(pacman.getImagemRepouso(), getLargura() - mult*escala, getAltura() - 10*escala - 5, getTamanhoTile()/2, getTamanhoTile()/2, null);
+        }
+        
         painelExterno.setTextoLabelPontos(String.format("Pontuação: %d", getPontuacao()));
         
         caneta.dispose();
@@ -478,6 +481,7 @@ public class PainelJogo extends JPanel implements Runnable {
 
     public void aumentaPontuacao(int aumento) {
         pontuacao += aumento;
+        pontuacaoAux += aumento;
     }
 
     public boolean estaPausado() {
@@ -498,6 +502,10 @@ public class PainelJogo extends JPanel implements Runnable {
 
     public void setPontuacao(int pontuacao) {
         this.pontuacao = pontuacao;
+    }
+
+    public void setPontuacaoAux(int pontuacao) {
+        this.pontuacaoAux = pontuacao;
     }
 
     public void setNumeroLinhas(int linhas) {
@@ -564,6 +572,10 @@ public class PainelJogo extends JPanel implements Runnable {
 
     public int getPontuacao() {
         return pontuacao;
+    }
+
+    public int getPontuacaoAux() {
+        return pontuacaoAux;
     }
 
     public int getNumeroMapaAtual() {
