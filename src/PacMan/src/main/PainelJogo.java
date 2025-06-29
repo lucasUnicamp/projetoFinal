@@ -288,7 +288,7 @@ public class PainelJogo extends JPanel implements Runnable {
     }
 
     /**
-     * Método para criar um delay e atualizar o pacman 
+     * Método para criar um delay e atualizar o estado do pacman após levar dano 
      */
     public void pacmanMorreu() {
         setPausado(true);
