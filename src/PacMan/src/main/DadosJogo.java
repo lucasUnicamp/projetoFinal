@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import enums.EstadoPerseguicao;
+import enums.TipoFantasma;
 
 public class DadosJogo implements Serializable{
     public String[] mapa;
