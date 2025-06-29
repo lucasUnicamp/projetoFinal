@@ -47,25 +47,25 @@ public final class FantasmaRosa extends Fantasma{
         int xpac = getPainelJogo().getPacMan().getX()/getPainelJogo().getTamanhoTile();
         int ypac = getPainelJogo().getPacMan().getY()/getPainelJogo().getTamanhoTile();
         //busca da area de iteracao: otimizacao para nao percorrer a matriz
-        if(xpac - distancia < 0)
+        if((xpac - distancia - 1) < 0)
             xmin = 0;
         else
-            xmin = xpac - distancia;
+            xmin = (xpac - distancia - 1);
         
-        if(ypac - distancia < 0)
+        if((ypac - distancia - 1) < 0)
             ymin = 0;
         else    
-            ymin = ypac - distancia;
+            ymin = ypac - distancia - 1;
     
-        if(xpac + distancia > getPainelJogo().getNumeroColunas())
+        if((xpac + distancia + 1) > getPainelJogo().getNumeroColunas())
             xmax = getPainelJogo().getNumeroColunas();
         else
-            xmax = xpac + distancia;
+            xmax = xpac + distancia + 1;
         
-        if(ypac + distancia > getPainelJogo().getNumeroLinhas())
+        if((ypac + distancia + 1) > getPainelJogo().getNumeroLinhas())
             ymax = getPainelJogo().getNumeroLinhas();
         else
-            ymax = ypac + distancia;
+            ymax = ypac + distancia + 1;
         
         for(int i = xmin; i < xmax; i++){
             for(int j = ymin; j < ymax; j++){

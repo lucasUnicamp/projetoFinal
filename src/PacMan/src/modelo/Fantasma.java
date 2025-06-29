@@ -318,7 +318,7 @@ public abstract class Fantasma extends Entidade {
             corrigirPosicao(xf, yf);
             return;
         }
-        if(getMetaCaminho() == 0)
+        if(getMetaCaminho() == 0 || caminhoAtual.isEmpty())
             melhorCaminho(xm, ym);
         else if(!caminhoAtual.isEmpty()){
             if(naoehVizinho(xf, yf))
