@@ -3,13 +3,11 @@ package modelo;
 public class Ponto {
     private Ponto pai;
     private int distancia;
-    private final int custo;
     private final Coordenada coordenada;
 
-    public Ponto(int xp, int yp, int c, int d, Ponto origem){
+    public Ponto(int xp, int yp, int d, Ponto origem){
         pai = origem;
         coordenada = new Coordenada(xp, yp);
-        custo = c;
         distancia = d;
     }
 
@@ -29,14 +27,11 @@ public class Ponto {
         pai = p;
     }
 
-    public int getCusto(){
-        return custo;
-    }
 
     public int getHeuristica(boolean modo){
         if(modo)
-            return (custo + distancia);
-        return -(custo + distancia);
+            return distancia;
+        return - distancia;
     }
 
     public int getDistancia(){

@@ -95,7 +95,7 @@ public abstract class Fantasma extends Entidade {
             }
         }
         if(!estava)
-            busca.add(new Ponto(x, y, 0, d, atual));
+            busca.add(new Ponto(x, y, d, atual));
     }
 
     private boolean jaVisitado(ArrayList<Ponto> visitados, int x, int y){
@@ -158,7 +158,7 @@ public abstract class Fantasma extends Entidade {
         ArrayList<Ponto> visitados = new ArrayList<>();
         ArrayList<Ponto> abertos = new ArrayList<>();
 
-        Ponto inicio = new Ponto(getX()/getPainelJogo().getTamanhoTile(), getY()/getPainelJogo().getTamanhoTile(), 0,  calculaDistancia(getX()/getPainelJogo().getTamanhoTile(), getY()/getPainelJogo().getTamanhoTile(), x, y), null);
+        Ponto inicio = new Ponto(getX()/getPainelJogo().getTamanhoTile(), getY()/getPainelJogo().getTamanhoTile(),  calculaDistancia(getX()/getPainelJogo().getTamanhoTile(), getY()/getPainelJogo().getTamanhoTile(), x, y), null);
         abertos.add(inicio);
 
 
