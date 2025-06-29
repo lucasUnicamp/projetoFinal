@@ -372,25 +372,8 @@ public class PainelJogo extends JPanel implements Runnable {
                 }
             }
         }
-
-        
+    
         pacman.atualizar();
-        if (getPontuacaoAux() >= 50) {
-            timer = new Timer(100, e -> {
-                painelExterno.setTextoLabelPontos(String.format("1 UP!"));       
-                contadorFrame++;
-                System.out.println(contadorFrame);
-                if (contadorFrame >= 10) {
-                    contadorFrame = 0;
-                    timer.stop();
-                }
-            });
-            timer.start();
-            System.out.println(contadorFrame);
-            int total = getPontuacaoAux() / 50;       // Quantas vidas ele deve ganhar naquele frame (provavelmente vai ser sempre 1)
-            pacman.ganharVida(total);
-            setPontuacaoAux(getPontuacaoAux() - 50 * total);      // Caso ganhe mais do que exatamente 1000 pontos, guarda o excesso
-        }
         OneUP();
         for (Fantasma fantasma : fantasmas) {
             fantasma.executarfuncao();
