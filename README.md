@@ -9,7 +9,7 @@ Feito pelos alunos:<br>
 
 ## Execução
 
-[...]
+Abra o arquivo no VS code e pressione o botão de executar
 
 IDE utilizada: VS Code<br>
 Versão do Java: 21.0.6<br>
