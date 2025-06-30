@@ -38,7 +38,6 @@ public class MenuPrincipal extends JFrame{
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
-                painelExternoJogo.painelJogo.salvarJogo();
                 if(painelExternoJogo.painelJogo.getThread() != null) {
                     painelExternoJogo.painelJogo.getThread().interrupt();
                 }
