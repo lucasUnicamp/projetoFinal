@@ -16,7 +16,7 @@ Versão do Java: 21.0.6<br>
 
 ## Diagrama de Classes
 
-[...]
+![UML](src/misc/diagramaProjetoFinal.png)
 
 ## O projeto
 ### Resumo
