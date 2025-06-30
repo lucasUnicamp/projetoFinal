@@ -288,13 +288,13 @@ public class PainelJogo extends JPanel implements Runnable {
 
                     case '.':     //comestiveis
                         // - 5 pois é o raio do comestível
-                        Comestivel comida = new Comida(this, j * tamanhoTile + tamanhoTile / 2 - 5, i * tamanhoTile + tamanhoTile / 2 - 5);
+                        Comestivel comida = new Comida(this, j * tamanhoTile + tamanhoTile / 2 - 2*escala, i * tamanhoTile + tamanhoTile / 2 - 2*escala);
                         comestiveis.add(comida);
                         elementos[i][j] = comida;
                         break;
 
                     case 'O':
-                        Comestivel supercomida = new SuperComida(this, j * tamanhoTile + tamanhoTile / 2 - 8, i * tamanhoTile + tamanhoTile / 2 - 8);
+                        Comestivel supercomida = new SuperComida(this, j * tamanhoTile + tamanhoTile / 2 - 4*escala, i * tamanhoTile + tamanhoTile / 2 - 4*escala);
                         comestiveis.add(supercomida);
                         elementos[i][j] = supercomida;
                         break;

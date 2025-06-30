@@ -15,7 +15,7 @@ public class SuperComida extends Comestivel{
     public void desenhar(Graphics2D g) {
         int escala = getPainelJogo().getEscala();
         g.setColor(Color.WHITE);
-        g.fillOval(getX(), getY(), 8*escala, 8*escala);
+        g.fillOval(getX(), getY(), 10*escala, 10*escala);
     }
 
     @Override
