@@ -19,9 +19,11 @@ Versão do Java: 21.0.6<br>
 [...]
 
 ## O projeto
+### Resumo
+Trata-se de uma recriação simplificada do jogo [Pac-Man][1] usando o conhecimento de Programação Orientada a Objetos adquirida na matéria MC322 durante o semestre.<br>
 
-Trata-se de uma recriação do jogo [Pac-Man][1] usando o conhecimento de Programação Orientada a Objetos adquirida durante o semestre.<br>
-Foram implementadas as funções mais crucias do jogo original, como Fantasmas perseguidores, sistema de pontuação, mapa com colisão e túneis, um meio de vencer e também de perder. Mas também foram feitas adições como mapas personalizáveis, opções de pausa e de salvamento.<br>
+### Funcionalidades
+Foram implementadas as funções mais crucias do jogo original, como Fantasmas perseguidores, sistema de pontuação e de vidas, mapa com colisão e túneis, um meio de vencer e também de perder. Além disso, foram feitas adições como labirintos personalizáveis por leitura de arquivos, opções de pausa e de salvamento/carregamento de progresso.<br>
 
 Mais informações podem ser encontradas na [Wiki][2].<br>
 

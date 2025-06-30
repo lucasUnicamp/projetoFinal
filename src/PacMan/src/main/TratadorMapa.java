@@ -20,7 +20,7 @@ public class TratadorMapa implements Serializable{
     private final int maxAltura;
     public int numeroMapas;
     private File mapaArquivo;
-    private char[] charValidos = {'#', '.', 'O', ' ', '<', 'P', 'V', 'R', 'G'};      // Lista de caracteres válidos no mapa
+    private char[] charValidos = {'#', '.', 'O', ' ', '_', '<', 'P', 'V', 'R', 'G'};      // Lista de caracteres válidos no mapa
 
     public TratadorMapa(int mapaEscolhido) {
         contarMapas();
@@ -65,8 +65,8 @@ public class TratadorMapa implements Serializable{
                               "#....#...#...#....#\n" +
                               "####.### # ###.####\n" +
                               "####.#       #.####\n" +
-                              "####.# ##V## #.####\n" +
-                              "<   .  #GR #  .   <\n" +
+                              "####.# ## ## #.####\n" +
+                              "<   .  #GRV#  .   <\n" +
                               "####.# ##### #.####\n" +
                               "####.#       #.####\n" +
                               "####.# ##### #.####\n" +

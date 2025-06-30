@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import javax.swing.Timer;
 
+import enums.EstadoPerseguicao;
 import main.PainelJogo;
 
 public abstract class Fantasma extends Entidade {
@@ -338,7 +339,6 @@ public abstract class Fantasma extends Entidade {
         if (timerParar == null) {
             timerParar = new Timer(100, e -> {
                 frame++;
-                System.out.println(frame);
                 if (frame >= 5) {
                     setEstadoPerseguicao(EstadoPerseguicao.PERSEGUINDO);
                     metaCaminho = 0;

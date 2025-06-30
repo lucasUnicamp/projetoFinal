@@ -13,11 +13,12 @@ import java.util.ArrayList;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.Timer;
+
+import enums.EstadoPerseguicao;
 import menuPrincipal.PainelExterno;
 import modelo.Comestivel;
 import modelo.Comida;
 import modelo.EspacoVazio;
-import modelo.EstadoPerseguicao;
 import modelo.Fantasma;
 import modelo.FantasmaRosa;
 import modelo.FantasmaVerde;
@@ -293,7 +294,7 @@ public class PainelJogo extends JPanel implements Runnable {
                         break;
 
                     case 'O':
-                        Comestivel supercomida = new SuperComida(this, j * tamanhoTile + tamanhoTile / 2 - 12, i * tamanhoTile + tamanhoTile / 2 - 12);
+                        Comestivel supercomida = new SuperComida(this, j * tamanhoTile + tamanhoTile / 2 - 8, i * tamanhoTile + tamanhoTile / 2 - 8);
                         comestiveis.add(supercomida);
                         elementos[i][j] = supercomida;
                         break;
@@ -304,8 +305,13 @@ public class PainelJogo extends JPanel implements Runnable {
                         break;
                     
                     case ' ':
-                        EspacoVazio espacoVazio = new EspacoVazio();
-                        elementos[i][j] = espacoVazio;
+                        EspacoVazio espacoVazio1 = new EspacoVazio();
+                        elementos[i][j] = espacoVazio1;
+                        break;
+
+                    case '_':
+                        EspacoVazio espacoVazio2 = new EspacoVazio();
+                        elementos[i][j] = espacoVazio2;
                         break;
 
                     case 'P':
@@ -457,8 +463,8 @@ public class PainelJogo extends JPanel implements Runnable {
         pacman.desenhar(caneta);
 
         for (int i = 1; i <= pacman.getVidas(); i++) {
-            int mult = i == 1 ? i * 10 : i * 15 - 5;
-            caneta.drawImage(pacman.getImagemRepouso(), getLargura() - mult*escala, getAltura() - 10*escala - 5, getTamanhoTile()/2, getTamanhoTile()/2, null);
+            int mult = i * 12;
+            caneta.drawImage(pacman.getImagemRepouso(), getLargura() - mult*escala, getAltura() - 12*escala, getTamanhoTile()/2, getTamanhoTile()/2, null);
         }
         
         if (frameTimerOneUP == 0)

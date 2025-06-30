@@ -7,6 +7,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Random;
 import javax.imageio.ImageIO;
+
+import enums.EstadoPerseguicao;
 import main.PainelJogo;
 
 public final class FantasmaRosa extends Fantasma{

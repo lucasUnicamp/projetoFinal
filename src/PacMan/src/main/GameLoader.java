@@ -8,6 +8,7 @@ import java.io.ObjectOutputStream;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
+import enums.TipoFantasma;
 import interfaces.Elemento;
 import modelo.Fantasma;
 import modelo.FantasmaRosa;

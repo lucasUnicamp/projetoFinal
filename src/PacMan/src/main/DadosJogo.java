@@ -3,7 +3,8 @@ package main;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import modelo.EstadoPerseguicao;
+import enums.EstadoPerseguicao;
+import enums.TipoFantasma;
 
 public class DadosJogo implements Serializable{
     public String[] mapa;
